@@ -68,6 +68,17 @@ body {
   margin: 16px auto 0;
 }
 
+/* ===== Section Titles ===== */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+
 /* ===== Projects Grid ===== */
 .projects-grid {
   display: grid;
