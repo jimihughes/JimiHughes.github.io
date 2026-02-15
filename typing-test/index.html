@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed Typing Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Speed Typing Test</h1>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Time</span>
+        <span class="stat-value" id="timer">60</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">WPM</span>
+        <span class="stat-value" id="wpm">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Accuracy</span>
+        <span class="stat-value" id="accuracy">100%</span>
+      </div>
+    </div>
+    <div id="text-display" class="text-display"></div>
+    <textarea id="input-field" class="input-field" placeholder="Start typing to begin..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus></textarea>
+    <button id="retry-btn" class="retry-btn" style="display:none;">Retry</button>
+  </div>
+  <div id="results" class="results" style="display:none;">
+    <h2>Results</h2>
+    <p>Words Per Minute: <strong id="final-wpm">0</strong></p>
+    <p>Accuracy: <strong id="final-accuracy">0%</strong></p>
+    <p>Characters Typed: <strong id="final-chars">0</strong></p>
+    <p>Correct Characters: <strong id="final-correct">0</strong></p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
