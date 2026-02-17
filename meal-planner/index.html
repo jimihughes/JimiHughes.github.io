@@ -479,6 +479,38 @@
             justify-content: center;
         }
 
+        /* ===== SERVINGS PICKER ===== */
+        .servings-picker {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .serving-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .serving-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .serving-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(232, 115, 74, 0.35);
+        }
+
         /* ===== BUTTONS ===== */
         .shopping-list-btn {
             margin-top: 1.5rem;
@@ -962,13 +994,13 @@ const meals = [
         servings: 4,
         tags: ["5-ingredient", "one-pan"],
         protein: "chicken",
-        ingredients: [
-            "4 chicken thighs",
-            "2 lemons (juiced + sliced)",
-            "3 tbsp olive oil",
-            "4 cloves garlic, minced",
-            "1 tsp dried oregano",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 4, unit: "", name: "chicken thighs", grams: 800 },
+            { qty: 2, unit: "", name: "lemons (juiced + sliced)" },
+            { qty: 3, unit: "tbsp", name: "olive oil" },
+            { qty: 4, unit: "", name: "cloves garlic, minced" },
+            { qty: 1, unit: "tsp", name: "dried oregano" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Chicken thighs", "Lemons x2", "Garlic", "Dried oregano"],
         steps: [
@@ -988,13 +1020,13 @@ const meals = [
         servings: 4,
         tags: ["5-ingredient", "vegetarian", "under-20-min"],
         protein: "none",
-        ingredients: [
-            "400g spaghetti",
-            "4 tbsp butter",
-            "5 cloves garlic, thinly sliced",
-            "1/2 tsp chili flakes",
-            "Parmesan cheese",
-            "Salt"
+        ingredientsData: [
+            { qty: 400, unit: "g", name: "spaghetti" },
+            { qty: 4, unit: "tbsp", name: "butter" },
+            { qty: 5, unit: "", name: "cloves garlic, thinly sliced" },
+            { qty: 0.5, unit: "tsp", name: "chili flakes" },
+            { qty: 0, unit: "", name: "Parmesan cheese" },
+            { qty: 0, unit: "", name: "Salt" }
         ],
         shopping: ["Spaghetti", "Butter", "Garlic", "Chili flakes", "Parmesan cheese"],
         steps: [
@@ -1014,15 +1046,15 @@ const meals = [
         servings: 4,
         tags: ["under-20-min", "high-protein"],
         protein: "beef",
-        ingredients: [
-            "500g beef strips",
-            "2 bell peppers, sliced",
-            "1 broccoli head, cut into florets",
-            "3 tbsp soy sauce",
-            "1 tbsp sesame oil",
-            "2 cloves garlic, minced",
-            "1 tbsp cornstarch",
-            "1 tbsp vegetable oil"
+        ingredientsData: [
+            { qty: 500, unit: "g", name: "beef strips", grams: 500 },
+            { qty: 2, unit: "", name: "bell peppers, sliced" },
+            { qty: 1, unit: "", name: "broccoli head, cut into florets" },
+            { qty: 3, unit: "tbsp", name: "soy sauce" },
+            { qty: 1, unit: "tbsp", name: "sesame oil" },
+            { qty: 2, unit: "", name: "cloves garlic, minced" },
+            { qty: 1, unit: "tbsp", name: "cornstarch" },
+            { qty: 1, unit: "tbsp", name: "vegetable oil" }
         ],
         shopping: ["Beef strips", "Bell peppers x2", "Broccoli", "Soy sauce", "Sesame oil", "Garlic"],
         steps: [
@@ -1043,13 +1075,13 @@ const meals = [
         servings: 4,
         tags: ["5-ingredient", "vegetarian", "budget"],
         protein: "none",
-        ingredients: [
-            "2 cans (800g) crushed tomatoes",
-            "1 onion, diced",
-            "2 cloves garlic",
-            "1 cup vegetable broth",
-            "2 tbsp olive oil",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 2, unit: "cans", name: "crushed tomatoes (800g)" },
+            { qty: 1, unit: "", name: "onion, diced" },
+            { qty: 2, unit: "", name: "cloves garlic" },
+            { qty: 1, unit: "cup", name: "vegetable broth" },
+            { qty: 2, unit: "tbsp", name: "olive oil" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Crushed tomatoes x2 cans", "Onion", "Garlic", "Vegetable broth"],
         steps: [
@@ -1069,13 +1101,13 @@ const meals = [
         servings: 2,
         tags: ["5-ingredient", "high-protein", "one-pan"],
         protein: "fish",
-        ingredients: [
-            "2 salmon fillets",
-            "2 cups green beans",
-            "1 tbsp olive oil",
-            "1 lemon",
-            "2 cloves garlic, minced",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 2, unit: "", name: "salmon fillets", grams: 300 },
+            { qty: 2, unit: "cups", name: "green beans" },
+            { qty: 1, unit: "tbsp", name: "olive oil" },
+            { qty: 1, unit: "", name: "lemon" },
+            { qty: 2, unit: "", name: "cloves garlic, minced" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Salmon fillets x2", "Green beans", "Lemon", "Garlic"],
         steps: [
@@ -1095,12 +1127,12 @@ const meals = [
         servings: 4,
         tags: ["under-20-min", "kid-friendly"],
         protein: "chicken",
-        ingredients: [
-            "2 cups cooked shredded chicken",
-            "4 large flour tortillas",
-            "2 cups shredded cheese",
-            "1/2 cup salsa",
-            "1 tbsp butter"
+        ingredientsData: [
+            { qty: 2, unit: "cups", name: "cooked shredded chicken", grams: 400 },
+            { qty: 4, unit: "", name: "large flour tortillas" },
+            { qty: 2, unit: "cups", name: "shredded cheese" },
+            { qty: 0.5, unit: "cup", name: "salsa" },
+            { qty: 1, unit: "tbsp", name: "butter" }
         ],
         shopping: ["Cooked chicken", "Flour tortillas x4", "Shredded cheese", "Salsa"],
         steps: [
@@ -1120,14 +1152,14 @@ const meals = [
         servings: 4,
         tags: ["vegetarian", "under-20-min", "budget"],
         protein: "none",
-        ingredients: [
-            "3 cups cooked rice (day-old is best)",
-            "2 eggs",
-            "1 cup frozen peas & carrots",
-            "3 tbsp soy sauce",
-            "2 green onions, sliced",
-            "1 tbsp sesame oil",
-            "1 tbsp vegetable oil"
+        ingredientsData: [
+            { qty: 3, unit: "cups", name: "cooked rice (day-old is best)" },
+            { qty: 2, unit: "", name: "eggs" },
+            { qty: 1, unit: "cup", name: "frozen peas & carrots" },
+            { qty: 3, unit: "tbsp", name: "soy sauce" },
+            { qty: 2, unit: "", name: "green onions, sliced" },
+            { qty: 1, unit: "tbsp", name: "sesame oil" },
+            { qty: 1, unit: "tbsp", name: "vegetable oil" }
         ],
         shopping: ["Cooked rice", "Eggs x2", "Frozen peas & carrots", "Soy sauce", "Green onions", "Sesame oil"],
         steps: [
@@ -1147,13 +1179,13 @@ const meals = [
         servings: 4,
         tags: ["one-pan", "5-ingredient", "kid-friendly"],
         protein: "pork",
-        ingredients: [
-            "6 sausages",
-            "3 potatoes, cubed",
-            "1 red onion, quartered",
-            "2 tbsp olive oil",
-            "1 tsp smoked paprika",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 6, unit: "", name: "sausages", grams: 480 },
+            { qty: 3, unit: "", name: "potatoes, cubed" },
+            { qty: 1, unit: "", name: "red onion, quartered" },
+            { qty: 2, unit: "tbsp", name: "olive oil" },
+            { qty: 1, unit: "tsp", name: "smoked paprika" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Sausages x6", "Potatoes x3", "Red onion", "Smoked paprika"],
         steps: [
@@ -1173,15 +1205,15 @@ const meals = [
         servings: 4,
         tags: ["high-protein"],
         protein: "chicken",
-        ingredients: [
-            "4 chicken breasts",
-            "1 cup sun-dried tomatoes",
-            "2 cups fresh spinach",
-            "1 cup heavy cream",
-            "3 cloves garlic, minced",
-            "1/2 cup Parmesan, grated",
-            "1 tbsp olive oil",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 4, unit: "", name: "chicken breasts", grams: 800 },
+            { qty: 1, unit: "cup", name: "sun-dried tomatoes" },
+            { qty: 2, unit: "cups", name: "fresh spinach" },
+            { qty: 1, unit: "cup", name: "heavy cream" },
+            { qty: 3, unit: "", name: "cloves garlic, minced" },
+            { qty: 0.5, unit: "cup", name: "Parmesan, grated" },
+            { qty: 1, unit: "tbsp", name: "olive oil" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Chicken breasts x4", "Sun-dried tomatoes", "Fresh spinach", "Heavy cream", "Garlic", "Parmesan"],
         steps: [
@@ -1201,13 +1233,13 @@ const meals = [
         servings: 4,
         tags: ["vegetarian", "under-20-min", "budget", "5-ingredient"],
         protein: "none",
-        ingredients: [
-            "1 can black beans, drained",
-            "8 small tortillas",
-            "1 avocado, sliced",
-            "1/2 cup salsa",
-            "Lime juice",
-            "Salt & cumin to taste"
+        ingredientsData: [
+            { qty: 1, unit: "can", name: "black beans, drained" },
+            { qty: 8, unit: "", name: "small tortillas" },
+            { qty: 1, unit: "", name: "avocado, sliced" },
+            { qty: 0.5, unit: "cup", name: "salsa" },
+            { qty: 0, unit: "", name: "Lime juice" },
+            { qty: 0, unit: "", name: "Salt & cumin to taste" }
         ],
         shopping: ["Black beans (canned)", "Small tortillas x8", "Avocado", "Salsa", "Lime"],
         steps: [
@@ -1226,13 +1258,13 @@ const meals = [
         servings: 4,
         tags: ["5-ingredient", "high-protein", "under-20-min"],
         protein: "pork",
-        ingredients: [
-            "4 pork chops",
-            "3 tbsp honey",
-            "3 cloves garlic, minced",
-            "2 tbsp soy sauce",
-            "1 tbsp olive oil",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 4, unit: "", name: "pork chops", grams: 800 },
+            { qty: 3, unit: "tbsp", name: "honey" },
+            { qty: 3, unit: "", name: "cloves garlic, minced" },
+            { qty: 2, unit: "tbsp", name: "soy sauce" },
+            { qty: 1, unit: "tbsp", name: "olive oil" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Pork chops x4", "Honey", "Garlic", "Soy sauce"],
         steps: [
@@ -1252,15 +1284,15 @@ const meals = [
         servings: 4,
         tags: ["vegetarian"],
         protein: "none",
-        ingredients: [
-            "1.5 cups arborio rice",
-            "300g mushrooms, sliced",
-            "4 cups vegetable broth (warm)",
-            "1 onion, finely diced",
-            "1/2 cup white wine (optional)",
-            "2 tbsp butter",
-            "1/2 cup Parmesan, grated",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 1.5, unit: "cups", name: "arborio rice" },
+            { qty: 300, unit: "g", name: "mushrooms, sliced" },
+            { qty: 4, unit: "cups", name: "vegetable broth (warm)" },
+            { qty: 1, unit: "", name: "onion, finely diced" },
+            { qty: 0.5, unit: "cup", name: "white wine (optional)" },
+            { qty: 2, unit: "tbsp", name: "butter" },
+            { qty: 0.5, unit: "cup", name: "Parmesan, grated" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Arborio rice", "Mushrooms 300g", "Vegetable broth", "Onion", "White wine", "Butter", "Parmesan"],
         steps: [
@@ -1281,14 +1313,14 @@ const meals = [
         servings: 4,
         tags: ["one-pan", "under-20-min", "high-protein"],
         protein: "fish",
-        ingredients: [
-            "500g shrimp, peeled",
-            "2 bell peppers, sliced",
-            "1 onion, sliced",
-            "2 tbsp fajita seasoning",
-            "2 tbsp olive oil",
-            "Tortillas for serving",
-            "Lime wedges"
+        ingredientsData: [
+            { qty: 500, unit: "g", name: "shrimp, peeled", grams: 500 },
+            { qty: 2, unit: "", name: "bell peppers, sliced" },
+            { qty: 1, unit: "", name: "onion, sliced" },
+            { qty: 2, unit: "tbsp", name: "fajita seasoning" },
+            { qty: 2, unit: "tbsp", name: "olive oil" },
+            { qty: 0, unit: "", name: "Tortillas for serving" },
+            { qty: 0, unit: "", name: "Lime wedges" }
         ],
         shopping: ["Shrimp 500g", "Bell peppers x2", "Onion", "Fajita seasoning", "Tortillas", "Limes"],
         steps: [
@@ -1307,14 +1339,14 @@ const meals = [
         servings: 2,
         tags: ["under-20-min", "budget", "vegetarian"],
         protein: "none",
-        ingredients: [
-            "200g egg noodles",
-            "2 eggs",
-            "2 tbsp soy sauce",
-            "1 tbsp sesame oil",
-            "2 green onions, sliced",
-            "1 carrot, julienned",
-            "1 tbsp vegetable oil"
+        ingredientsData: [
+            { qty: 200, unit: "g", name: "egg noodles" },
+            { qty: 2, unit: "", name: "eggs" },
+            { qty: 2, unit: "tbsp", name: "soy sauce" },
+            { qty: 1, unit: "tbsp", name: "sesame oil" },
+            { qty: 2, unit: "", name: "green onions, sliced" },
+            { qty: 1, unit: "", name: "carrot, julienned" },
+            { qty: 1, unit: "tbsp", name: "vegetable oil" }
         ],
         shopping: ["Egg noodles", "Eggs x2", "Soy sauce", "Sesame oil", "Green onions", "Carrot"],
         steps: [
@@ -1334,13 +1366,13 @@ const meals = [
         servings: 4,
         tags: ["5-ingredient", "high-protein"],
         protein: "chicken",
-        ingredients: [
-            "4 chicken breasts",
-            "4 slices fresh mozzarella",
-            "2 tomatoes, sliced",
-            "Fresh basil leaves",
-            "2 tbsp balsamic glaze",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 4, unit: "", name: "chicken breasts", grams: 800 },
+            { qty: 4, unit: "slices", name: "fresh mozzarella" },
+            { qty: 2, unit: "", name: "tomatoes, sliced" },
+            { qty: 0, unit: "", name: "Fresh basil leaves" },
+            { qty: 2, unit: "tbsp", name: "balsamic glaze" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Chicken breasts x4", "Fresh mozzarella", "Tomatoes x2", "Fresh basil", "Balsamic glaze"],
         steps: [
@@ -1360,16 +1392,16 @@ const meals = [
         servings: 6,
         tags: ["budget", "high-protein", "kid-friendly"],
         protein: "beef",
-        ingredients: [
-            "500g ground beef",
-            "1 can kidney beans, drained",
-            "1 can (400g) diced tomatoes",
-            "1 onion, diced",
-            "2 cloves garlic, minced",
-            "2 tbsp chili powder",
-            "1 tsp cumin",
-            "1 tbsp olive oil",
-            "Salt & pepper"
+        ingredientsData: [
+            { qty: 500, unit: "g", name: "ground beef", grams: 500 },
+            { qty: 1, unit: "can", name: "kidney beans, drained" },
+            { qty: 1, unit: "can", name: "diced tomatoes (400g)" },
+            { qty: 1, unit: "", name: "onion, diced" },
+            { qty: 2, unit: "", name: "cloves garlic, minced" },
+            { qty: 2, unit: "tbsp", name: "chili powder" },
+            { qty: 1, unit: "tsp", name: "cumin" },
+            { qty: 1, unit: "tbsp", name: "olive oil" },
+            { qty: 0, unit: "", name: "Salt & pepper" }
         ],
         shopping: ["Ground beef 500g", "Kidney beans (canned)", "Diced tomatoes (canned)", "Onion", "Garlic", "Chili powder", "Cumin"],
         steps: [
@@ -1382,6 +1414,55 @@ const meals = [
         ]
     }
 ];
+
+// Generate the old 'ingredients' array from ingredientsData for backward compat
+meals.forEach(m => {
+    if (m.ingredientsData && !m.ingredients) {
+        m.ingredients = m.ingredientsData.map(i => formatIngredient(i, 1));
+    }
+});
+
+// ============ INGREDIENT SCALING ============
+function formatQty(n) {
+    if (n === 0) return '';
+    if (n === Math.floor(n)) return String(n);
+    // common fractions
+    const fracs = {0.25:'\u00BC', 0.33:'\u2153', 0.5:'\u00BD', 0.67:'\u2154', 0.75:'\u00BE'};
+    const whole = Math.floor(n);
+    const dec = Math.round((n - whole) * 100) / 100;
+    for (const [k,v] of Object.entries(fracs)) {
+        if (Math.abs(dec - Number(k)) < 0.06) return whole ? `${whole}${v}` : v;
+    }
+    // round to 1 decimal
+    const r = Math.round(n * 10) / 10;
+    return r === Math.floor(r) ? String(Math.floor(r)) : String(r);
+}
+
+function formatIngredient(ing, scale) {
+    if (ing.qty === 0) return ing.name;
+    const scaled = ing.qty * scale;
+    const qtyStr = formatQty(scaled);
+    const gramsStr = ing.grams ? ` (${Math.round(ing.grams * scale)}g)` : '';
+    return `${qtyStr}${ing.unit ? ' ' + ing.unit : ''} ${ing.name}${gramsStr}`;
+}
+
+function getScaledIngredients(meal, chosenServings) {
+    const scale = chosenServings / meal.servings;
+    return meal.ingredientsData.map(i => formatIngredient(i, scale));
+}
+
+let currentModalIdx = null;
+let currentModalServings = null;
+
+function updateModalIngredients() {
+    const m = meals[currentModalIdx];
+    const items = getScaledIngredients(m, currentModalServings);
+    document.getElementById('modalIngredients').innerHTML = items.map(i => `<li>${i}</li>`).join('');
+    // Update serving buttons
+    document.querySelectorAll('.serving-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.servings) === currentModalServings);
+    });
+}
 
 // ============ SECTION SWITCHING ============
 function showSection(id, btn) {
@@ -1446,7 +1527,7 @@ function renderMeals() {
                 <div class="meal-card-meta">
                     <span>\u{23F1} ${m.time}</span>
                     <span>\u{1F464} ${m.servings}</span>
-                    <span>\u{1F955} ${m.ingredients.length}</span>
+                    <span>\u{1F955} ${m.ingredientsData.length}</span>
                 </div>
             </div>
         </div>`;
@@ -1456,6 +1537,12 @@ function renderMeals() {
 // ============ MODAL ============
 function openModal(idx) {
     const m = meals[idx];
+    currentModalIdx = idx;
+    currentModalServings = m.servings;
+    const servingsBtns = [1,2,3,4,5,6].map(n =>
+        `<button class="serving-btn${n === m.servings ? ' active' : ''}" data-servings="${n}" onclick="currentModalServings=${n};updateModalIngredients()">${n}</button>`
+    ).join('');
+    const ingredients = getScaledIngredients(m, m.servings);
     document.getElementById('modalHeader').style.background = m.color;
     document.getElementById('modalHeader').innerHTML = `
         <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -1464,12 +1551,14 @@ function openModal(idx) {
         <h2>${m.name}</h2>
         <div class="meta-row">
             <span>\u{23F1} ${m.time}</span>
-            <span>\u{1F464} ${m.servings} servings</span>
-            <span>\u{1F955} ${m.ingredients.length} ingredients</span>
+            <span>\u{1F464} ${m.servings} servings (default)</span>
+            <span>\u{1F955} ${m.ingredientsData.length} ingredients</span>
         </div>
         <div>${m.tags.map(t => `<span class="badge${t==='vegetarian'?' green':''}">${t}</span>`).join('')}</div>
+        <h4>Servings</h4>
+        <div class="servings-picker">${servingsBtns}</div>
         <h4>Ingredients</h4>
-        <ul>${m.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+        <ul id="modalIngredients">${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
         <h4>Instructions</h4>
         <ol>${m.steps.map(s => `<li>${s}</li>`).join('')}</ol>
         <button class="shopping-list-btn" onclick="toggleShopping(this, ${idx})">
