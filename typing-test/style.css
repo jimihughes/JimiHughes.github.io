@@ -74,23 +74,10 @@ h1 {
   overflow: hidden;
   letter-spacing: 0.5px;
   user-select: none;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
   white-space: normal;
   position: relative;
-}
-
-/* Fade out at bottom edge */
-.text-display::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background: linear-gradient(transparent, #0f3460);
-  pointer-events: none;
-  border-radius: 0 0 10px 10px;
 }
 
 .text-display .char {

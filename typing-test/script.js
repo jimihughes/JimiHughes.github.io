@@ -159,15 +159,9 @@ function renderText(typedLength) {
   // Auto-scroll to keep current character visible
   const currentChar = document.getElementById("current-char");
   if (currentChar) {
-    const displayRect = textDisplay.getBoundingClientRect();
-    const charRect = currentChar.getBoundingClientRect();
-    const charTop = charRect.top - displayRect.top + textDisplay.scrollTop;
-    const visibleTop = textDisplay.scrollTop;
-    const visibleBottom = visibleTop + textDisplay.clientHeight;
-
-    // Keep current line roughly in the top third of the display
-    const targetScroll = charTop - textDisplay.clientHeight * 0.3;
-    if (charTop < visibleTop + 20 || charTop > visibleBottom - 40) {
+    const charOffsetTop = currentChar.offsetTop;
+    const targetScroll = charOffsetTop - 20;
+    if (targetScroll > textDisplay.scrollTop) {
       textDisplay.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
     }
   }
