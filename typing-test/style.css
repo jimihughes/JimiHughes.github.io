@@ -74,10 +74,12 @@ h1 {
   overflow: hidden;
   letter-spacing: 0.5px;
   user-select: none;
-  overflow-wrap: normal;
-  word-break: normal;
-  white-space: normal;
   position: relative;
+}
+
+.text-display .word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .text-display .char {

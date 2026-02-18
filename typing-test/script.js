@@ -143,16 +143,38 @@ let totalCharsTyped = 0;
 let correctChars = 0;
 
 function renderText(typedLength) {
+  // Split passage into words, group chars into word spans so words don't break across lines
   let html = "";
-  for (let i = 0; i < passage.length; i++) {
-    let cls = "pending";
-    if (i < typedLength) {
-      cls = inputField.value[i] === passage[i] ? "correct" : "incorrect";
-    } else if (i === typedLength) {
-      cls = "current";
+  let i = 0;
+  while (i < passage.length) {
+    if (passage[i] === " ") {
+      // Render space as its own inline char
+      let cls = "pending";
+      if (i < typedLength) {
+        cls = inputField.value[i] === " " ? "correct" : "incorrect";
+      } else if (i === typedLength) {
+        cls = "current";
+      }
+      html += `<span class="char ${cls}" ${i === typedLength ? 'id="current-char"' : ''}> </span>`;
+      i++;
+    } else {
+      // Collect all chars of this word
+      let wordStart = i;
+      while (i < passage.length && passage[i] !== " ") i++;
+      // Build word html
+      let wordHtml = "";
+      for (let j = wordStart; j < i; j++) {
+        let cls = "pending";
+        if (j < typedLength) {
+          cls = inputField.value[j] === passage[j] ? "correct" : "incorrect";
+        } else if (j === typedLength) {
+          cls = "current";
+        }
+        const ch = escapeHtml(passage[j]);
+        wordHtml += `<span class="char ${cls}" ${j === typedLength ? 'id="current-char"' : ''}>${ch}</span>`;
+      }
+      html += `<span class="word">${wordHtml}</span>`;
     }
-    const ch = passage[i] === " " ? "&nbsp;" : escapeHtml(passage[i]);
-    html += `<span class="char ${cls}" ${i === typedLength ? 'id="current-char"' : ''}>${ch}</span>`;
   }
   textDisplay.innerHTML = html;
 
