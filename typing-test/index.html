@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Speed Typing Test</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="container">
     <h1>Speed Typing Test</h1>
     <div class="stats">
       <div class="stat">
@@ -24,7 +24,8 @@
       </div>
     </div>
     <div id="text-display" class="text-display"></div>
-    <textarea id="input-field" class="input-field" placeholder="Start typing to begin..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus></textarea>
+    <p class="tap-prompt" id="tapPrompt">Tap here and start typing</p>
+    <textarea id="input-field" class="input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     <button id="retry-btn" class="retry-btn" style="display:none;">Retry</button>
   </div>
   <div id="results" class="results" style="display:none;">

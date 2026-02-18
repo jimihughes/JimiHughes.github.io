@@ -132,6 +132,8 @@ const finalWpm = document.getElementById("final-wpm");
 const finalAccuracy = document.getElementById("final-accuracy");
 const finalChars = document.getElementById("final-chars");
 const finalCorrect = document.getElementById("final-correct");
+const containerEl = document.getElementById("container");
+const tapPrompt = document.getElementById("tapPrompt");
 
 let passage = "";
 let timerInterval = null;
@@ -150,9 +152,25 @@ function renderText(typedLength) {
       cls = "current";
     }
     const ch = passage[i] === " " ? "&nbsp;" : escapeHtml(passage[i]);
-    html += `<span class="char ${cls}">${ch}</span>`;
+    html += `<span class="char ${cls}" ${i === typedLength ? 'id="current-char"' : ''}>${ch}</span>`;
   }
   textDisplay.innerHTML = html;
+
+  // Auto-scroll to keep current character visible
+  const currentChar = document.getElementById("current-char");
+  if (currentChar) {
+    const displayRect = textDisplay.getBoundingClientRect();
+    const charRect = currentChar.getBoundingClientRect();
+    const charTop = charRect.top - displayRect.top + textDisplay.scrollTop;
+    const visibleTop = textDisplay.scrollTop;
+    const visibleBottom = visibleTop + textDisplay.clientHeight;
+
+    // Keep current line roughly in the top third of the display
+    const targetScroll = charTop - textDisplay.clientHeight * 0.3;
+    if (charTop < visibleTop + 20 || charTop > visibleBottom - 40) {
+      textDisplay.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
+    }
+  }
 }
 
 function escapeHtml(ch) {
@@ -162,6 +180,7 @@ function escapeHtml(ch) {
 
 function startTimer() {
   started = true;
+  if (tapPrompt) tapPrompt.classList.add('hidden');
   timerInterval = setInterval(() => {
     timeLeft--;
     timerEl.textContent = timeLeft;
@@ -175,8 +194,6 @@ function startTimer() {
 function updateLiveStats() {
   const elapsed = 60 - timeLeft;
   if (elapsed > 0) {
-    // Count correct words: split typed text into words, compare with passage words
-    const typedText = inputField.value;
     const wpm = Math.round((correctChars / 5) / (elapsed / 60));
     wpmEl.textContent = wpm;
   }
@@ -206,6 +223,10 @@ function endTest() {
   resultsDiv.style.display = "block";
 }
 
+function focusInput() {
+  inputField.focus();
+}
+
 function init() {
   passage = generatePassage();
   timeLeft = 60;
@@ -221,9 +242,11 @@ function init() {
   inputField.disabled = false;
   retryBtn.style.display = "none";
   resultsDiv.style.display = "none";
+  if (tapPrompt) tapPrompt.classList.remove('hidden');
 
   renderText(0);
-  inputField.focus();
+  textDisplay.scrollTop = 0;
+  focusInput();
 }
 
 inputField.addEventListener("input", () => {
@@ -255,7 +278,16 @@ inputField.addEventListener("input", () => {
 // Prevent pasting
 inputField.addEventListener("paste", (e) => e.preventDefault());
 
-retryBtn.addEventListener("click", init);
+// Tap anywhere on the container to focus the hidden input
+containerEl.addEventListener("click", () => {
+  if (!inputField.disabled) {
+    focusInput();
+  }
+});
+
+retryBtn.addEventListener("click", () => {
+  init();
+});
 
 // Initialize on load
 init();
