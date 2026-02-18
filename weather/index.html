@@ -182,7 +182,9 @@
             padding: 14px 16px;
             transition: border-color 0.2s;
         }
+        .day-row { cursor: pointer; }
         .day-row:hover { border-color: var(--accent); }
+        .day-row.selected { border-color: var(--accent); background: var(--card-hover); }
         .day-row .day-name { width: 80px; font-size: 14px; font-weight: 600; flex-shrink: 0; }
         .day-row .day-name small { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; }
         .day-row .day-icon { font-size: 24px; width: 36px; text-align: center; flex-shrink: 0; }
@@ -223,6 +225,9 @@
         .detail-card .detail-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
         .detail-card .detail-value { font-size: 20px; font-weight: 700; margin-top: 2px; }
         .detail-card .detail-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .details-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+        .details-header .section-label { margin-bottom: 0; }
+        .details-day-name { font-size: 13px; color: var(--accent); font-weight: 600; }
 
         /* Footer */
         .app-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--text-muted); }
@@ -302,6 +307,9 @@
 
         // ===== State =====
         let searchTimeout = null;
+        let selectedDayIdx = 0;
+        let cachedWeatherData = null;
+        let cachedName = '';
 
         // ===== DOM =====
         const contentEl = document.getElementById('content');
@@ -435,6 +443,9 @@
         }
 
         function renderWeather(data, name) {
+            cachedWeatherData = data;
+            cachedName = name;
+
             const c = data.current;
             const h = data.hourly;
             const d = data.daily;
@@ -442,9 +453,10 @@
             const now = new Date();
             const currentHourIdx = h.time.findIndex(t => new Date(t) >= now) || 0;
 
-            // Find today's daily data for UV / sunrise / sunset
+            // Find today's index and set as default selected
             const todayStr = now.toISOString().split('T')[0];
             const todayDayIdx = d.time.indexOf(todayStr) >= 0 ? d.time.indexOf(todayStr) : 0;
+            selectedDayIdx = todayDayIdx;
 
             // Temp range for daily bar chart
             const allMin = Math.min(...d.temperature_2m_min);
@@ -491,7 +503,7 @@
             html += `</div>`;
 
             // Daily
-            html += `<div class="section-label">7-Day Forecast</div><div class="daily-list">`;
+            html += `<div class="section-label">7-Day Forecast</div><div class="daily-list" id="dailyList">`;
             const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             for (let i = 0; i < d.time.length; i++) {
@@ -503,7 +515,7 @@
                 const left = ((lo - allMin) / tempRange) * 100;
                 const width = ((hi - lo) / tempRange) * 100;
                 html += `
-                <div class="day-row">
+                <div class="day-row${i === selectedDayIdx ? ' selected' : ''}" data-day-idx="${i}">
                     <div class="day-name">${isToday ? 'Today' : dayNames[dt.getDay()]}<small>${dt.getDate()} ${monthNames[dt.getMonth()]}</small></div>
                     <div class="day-icon">${dw.icon}</div>
                     <div class="day-temps">
@@ -517,25 +529,105 @@
             }
             html += `</div>`;
 
-            // Details
-            const sunrise = d.sunrise[todayDayIdx] ? new Date(d.sunrise[todayDayIdx]) : null;
-            const sunset = d.sunset[todayDayIdx] ? new Date(d.sunset[todayDayIdx]) : null;
-            const fmtTime = (dt) => dt ? dt.getHours().toString().padStart(2,'0') + ':' + dt.getMinutes().toString().padStart(2,'0') : '--';
-
-            html += `<div class="section-label">Details</div><div class="details-grid">`;
-            html += `
-                <div class="detail-card"><div class="detail-icon">🌅</div><div class="detail-label">Sunrise</div><div class="detail-value">${fmtTime(sunrise)}</div></div>
-                <div class="detail-card"><div class="detail-icon">🌇</div><div class="detail-label">Sunset</div><div class="detail-value">${fmtTime(sunset)}</div></div>
-                <div class="detail-card"><div class="detail-icon">☀️</div><div class="detail-label">UV Index</div><div class="detail-value">${d.uv_index_max[todayDayIdx] != null ? d.uv_index_max[todayDayIdx].toFixed(1) : '--'}</div><div class="detail-sub">${uvLabel(d.uv_index_max[todayDayIdx])}</div></div>
-                <div class="detail-card"><div class="detail-icon">☁️</div><div class="detail-label">Cloud Cover</div><div class="detail-value">${c.cloud_cover}%</div></div>
-                <div class="detail-card"><div class="detail-icon">👁️</div><div class="detail-label">Visibility</div><div class="detail-value">${h.visibility[currentHourIdx] != null ? (h.visibility[currentHourIdx] / 1000).toFixed(1) + ' km' : '--'}</div></div>
-                <div class="detail-card"><div class="detail-icon">💨</div><div class="detail-label">Wind Gusts</div><div class="detail-value">${h.wind_gusts_10m[currentHourIdx] != null ? Math.round(h.wind_gusts_10m[currentHourIdx]) + ' km/h' : '--'}</div></div>
-            `;
-            html += `</div>`;
+            // Details (rendered into a container that we can update)
+            html += `<div id="detailsSection"></div>`;
 
             html += `<div class="app-footer">Data from <a href="https://open-meteo.com/" style="color:var(--accent)" target="_blank">Open-Meteo</a></div>`;
 
             contentEl.innerHTML = html;
+
+            // Render initial details for today
+            renderDetails();
+
+            // Attach click listeners on day rows
+            document.getElementById('dailyList').addEventListener('click', (e) => {
+                const row = e.target.closest('.day-row');
+                if (!row) return;
+                const idx = parseInt(row.dataset.dayIdx, 10);
+                if (isNaN(idx)) return;
+                selectedDayIdx = idx;
+                // Update selected styling
+                document.querySelectorAll('.day-row').forEach(r => r.classList.remove('selected'));
+                row.classList.add('selected');
+                // Re-render details
+                renderDetails();
+            });
+        }
+
+        function renderDetails() {
+            const data = cachedWeatherData;
+            if (!data) return;
+
+            const d = data.daily;
+            const h = data.hourly;
+            const c = data.current;
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const todayDayIdx = d.time.indexOf(todayStr) >= 0 ? d.time.indexOf(todayStr) : 0;
+            const isToday = selectedDayIdx === todayDayIdx;
+
+            const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const dt = new Date(d.time[selectedDayIdx] + 'T00:00:00');
+            const dayLabel = isToday ? 'Today' : dayNames[dt.getDay()] + ' ' + dt.getDate() + ' ' + monthNames[dt.getMonth()];
+
+            const fmtTime = (dt) => dt ? dt.getHours().toString().padStart(2,'0') + ':' + dt.getMinutes().toString().padStart(2,'0') : '--';
+
+            // Sunrise / sunset / UV from daily data
+            const sunrise = d.sunrise[selectedDayIdx] ? new Date(d.sunrise[selectedDayIdx]) : null;
+            const sunset = d.sunset[selectedDayIdx] ? new Date(d.sunset[selectedDayIdx]) : null;
+            const uvMax = d.uv_index_max[selectedDayIdx];
+
+            // For cloud cover, visibility, wind gusts: use current values for today, or daily averages for other days
+            let cloudCover, visibility, windGusts;
+
+            if (isToday) {
+                const currentHourIdx = h.time.findIndex(t => new Date(t) >= now) || 0;
+                cloudCover = c.cloud_cover + '%';
+                visibility = h.visibility[currentHourIdx] != null ? (h.visibility[currentHourIdx] / 1000).toFixed(1) + ' km' : '--';
+                windGusts = h.wind_gusts_10m[currentHourIdx] != null ? Math.round(h.wind_gusts_10m[currentHourIdx]) + ' km/h' : '--';
+            } else {
+                // Find hourly indices for the selected day and compute averages
+                const dayStr = d.time[selectedDayIdx];
+                const dayHourIndices = [];
+                for (let i = 0; i < h.time.length; i++) {
+                    if (h.time[i].startsWith(dayStr)) dayHourIndices.push(i);
+                }
+
+                if (dayHourIndices.length > 0) {
+                    // Average cloud cover
+                    const avgCloud = dayHourIndices.reduce((s, i) => s + (h.cloud_cover[i] || 0), 0) / dayHourIndices.length;
+                    cloudCover = Math.round(avgCloud) + '%';
+
+                    // Min visibility (worst case for the day)
+                    const visValues = dayHourIndices.map(i => h.visibility[i]).filter(v => v != null);
+                    visibility = visValues.length > 0 ? (Math.min(...visValues) / 1000).toFixed(1) + ' km' : '--';
+
+                    // Max wind gusts
+                    const gustValues = dayHourIndices.map(i => h.wind_gusts_10m[i]).filter(v => v != null);
+                    windGusts = gustValues.length > 0 ? Math.round(Math.max(...gustValues)) + ' km/h' : '--';
+                } else {
+                    cloudCover = '--';
+                    visibility = '--';
+                    windGusts = '--';
+                }
+            }
+
+            let html = `
+                <div class="details-header">
+                    <div class="section-label">Details</div>
+                    <div class="details-day-name">— ${dayLabel}</div>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-card"><div class="detail-icon">🌅</div><div class="detail-label">Sunrise</div><div class="detail-value">${fmtTime(sunrise)}</div></div>
+                    <div class="detail-card"><div class="detail-icon">🌇</div><div class="detail-label">Sunset</div><div class="detail-value">${fmtTime(sunset)}</div></div>
+                    <div class="detail-card"><div class="detail-icon">☀️</div><div class="detail-label">UV Index</div><div class="detail-value">${uvMax != null ? uvMax.toFixed(1) : '--'}</div><div class="detail-sub">${uvLabel(uvMax)}</div></div>
+                    <div class="detail-card"><div class="detail-icon">☁️</div><div class="detail-label">Cloud Cover</div><div class="detail-value">${cloudCover}</div>${!isToday ? '<div class="detail-sub">Daily avg</div>' : ''}</div>
+                    <div class="detail-card"><div class="detail-icon">👁️</div><div class="detail-label">Visibility</div><div class="detail-value">${visibility}</div>${!isToday ? '<div class="detail-sub">Daily min</div>' : ''}</div>
+                    <div class="detail-card"><div class="detail-icon">💨</div><div class="detail-label">Wind Gusts</div><div class="detail-value">${windGusts}</div>${!isToday ? '<div class="detail-sub">Daily max</div>' : ''}</div>
+                </div>`;
+
+            document.getElementById('detailsSection').innerHTML = html;
         }
 
         function uvLabel(uv) {
