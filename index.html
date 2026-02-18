@@ -3,114 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects by Jimi Hughes</title>
+  <title>Jimi Hughes</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <header class="hero">
-    <div class="container">
-      <h1>Jimi Hughes</h1>
-      <p class="subtitle">Projects &amp; Apps</p>
-      <p class="intro">A collection of web apps and projects I've built. Each one is free to try right in your browser.</p>
-    </div>
-  </header>
+  <div class="layout">
 
-  <main class="container">
+    <!-- Left Panel (sticky) -->
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <h1>Jimi Hughes</h1>
+        <p class="role">Creator / AI Engineer</p>
 
-    <h2 class="section-title">Apps</h2>
-    <section class="projects-grid">
+        <nav class="contact-links">
+          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:jimifh0111@gmail.com">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+            Email
+          </a>
+        </nav>
 
-      <!-- Life Manager -->
-      <article class="project-card">
-        <div class="card-icon">&#128203;</div>
-        <div class="card-body">
-          <h2>Life Manager</h2>
-          <p class="card-description">A full life management system for organising tasks across every area of your life. Create custom lists for work, home, chores, and anything else. Nest lists inside lists for detailed organisation. Set deadlines, add notes, and configure tasks to repeat daily, weekly, or monthly. An upcoming view shows what's due soonest, and completed tasks are saved so you can track what you've done.</p>
-          <div class="card-tags">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
+        <p class="copyright">&copy; 2026 Jimi Hughes</p>
+      </div>
+    </aside>
+
+    <!-- Right Panel (scrollable projects) -->
+    <main class="content">
+
+      <a href="life-manager/index.html" class="project project-blue">
+        <div class="project-inner">
+          <div class="project-text">
+            <h2>Life Manager</h2>
+            <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
+            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
           </div>
-          <a href="life-manager/index.html" class="card-btn">Try it</a>
-        </div>
-      </article>
-
-      <!-- Meal Planner -->
-      <article class="project-card">
-        <div class="card-icon">&#127860;</div>
-        <div class="card-body">
-          <h2>Meal Planner</h2>
-          <p class="card-description">A meal planning app that helps you organise what you're eating throughout the week. Plan breakfasts, lunches, dinners, and snacks, then generate a shopping list based on your selections. Designed to take the daily decision-making out of food and make healthy eating easier to stick with.</p>
-          <div class="card-tags">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
+          <div class="project-preview">
+            <div class="device-frame">
+              <img src="images/life-manager.png" alt="Life Manager screenshot">
+            </div>
           </div>
-          <a href="meal-planner/index.html" class="card-btn">Try it</a>
         </div>
-      </article>
+      </a>
 
-      <!-- Weather App -->
-      <article class="project-card">
-        <div class="card-icon">&#127780;</div>
-        <div class="card-body">
-          <h2>Weather App</h2>
-          <p class="card-description">A live weather app that shows current conditions, an hourly forecast for today, and a 7-day outlook. Displays temperature, wind speed, humidity, rain chance, UV index, sunrise and sunset times, and more. Search any city or use your current location. Pulls real-time data from Open-Meteo.</p>
-          <div class="card-tags">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">API</span>
+      <a href="meal-planner/index.html" class="project project-orange">
+        <div class="project-inner">
+          <div class="project-text">
+            <h2>Meal Planner</h2>
+            <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
+            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
           </div>
-          <a href="weather/index.html" class="card-btn">Try it</a>
-        </div>
-      </article>
-
-      <!-- Brain Training Game -->
-      <article class="project-card">
-        <div class="card-icon">&#129504;</div>
-        <div class="card-body">
-          <h2>Brain Training Game</h2>
-          <p class="card-description">A cognitive training app designed to exercise your brain and help counteract the mental passivity that comes from relying on AI tools. Features exercises that challenge memory, focus, and problem-solving to keep your mind sharp.</p>
-          <div class="card-tags">
-            <span class="tag">Swift</span>
-            <span class="tag">Xcode</span>
-            <span class="tag">iOS</span>
+          <div class="project-preview">
+            <div class="device-frame">
+              <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
+            </div>
           </div>
-          <span class="card-btn card-btn-disabled">iOS App &mdash; Coming Soon</span>
         </div>
-      </article>
+      </a>
 
-    </section>
-
-    <h2 class="section-title">Games</h2>
-    <section class="projects-grid">
-
-      <!-- Typing Speed Test -->
-      <article class="project-card">
-        <div class="card-icon">&#9000;</div>
-        <div class="card-body">
-          <h2>Speed Typing Test</h2>
-          <p class="card-description">Test how fast and accurately you can type with this 60-second typing challenge. A random passage is generated and you type it out as quickly as you can. Live stats show your words per minute and accuracy in real time, with character-by-character highlighting so you can see exactly where you went wrong.</p>
-          <div class="card-tags">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
+      <a href="weather/index.html" class="project project-dark">
+        <div class="project-inner">
+          <div class="project-text">
+            <h2>Weather App</h2>
+            <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
+            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
           </div>
-          <a href="typing-test/index.html" class="card-btn">Try it</a>
+          <div class="project-preview">
+            <div class="device-frame">
+              <img src="images/weather.png" alt="Weather App screenshot">
+            </div>
+          </div>
         </div>
-      </article>
+      </a>
 
-    </section>
+      <div class="project project-purple project-disabled">
+        <div class="project-inner">
+          <div class="project-text">
+            <h2>Brain Training</h2>
+            <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
+            <span class="project-cta project-cta-muted">Coming Soon</span>
+          </div>
+          <div class="project-preview">
+            <div class="device-frame device-phone">
+              <img src="images/brain-training.png" alt="Brain Training screenshot">
+            </div>
+          </div>
+        </div>
+      </div>
 
-  </main>
+      <a href="typing-test/index.html" class="project project-teal">
+        <div class="project-inner">
+          <div class="project-text">
+            <h2>Speed Typing Test</h2>
+            <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
+            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          </div>
+          <div class="project-preview">
+            <div class="device-frame">
+              <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
+            </div>
+          </div>
+        </div>
+      </a>
 
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2026 Jimi Hughes</p>
-    </div>
-  </footer>
+    </main>
+
+  </div>
 
 </body>
 </html>
