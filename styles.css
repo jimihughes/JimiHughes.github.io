@@ -152,10 +152,10 @@ a {
 .project-dark    { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
 .project-purple  { background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #818cf8 100%); }
 .project-teal    { background: linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #14b8a6 100%); }
-.project-slate   { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%); }
-.project-amber   { background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%); }
-.project-emerald { background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #047857 100%); }
-.project-rose    { background: linear-gradient(135deg, #4c0519 0%, #881337 50%, #be123c 100%); }
+.project-slate   { background: #312e81; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%); }
+.project-amber   { background: #b45309; background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%); }
+.project-emerald { background: #064e3b; background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #047857 100%); }
+.project-rose    { background: #881337; background: linear-gradient(135deg, #4c0519 0%, #881337 50%, #be123c 100%); }
 
 /* Inner layout: text left, preview right */
 .project-inner {
