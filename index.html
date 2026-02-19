@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jimi Hughes</title>
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="shortcut icon" href="favicon.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Jimi Hughes — Creator / AI Engineer">
+  <meta property="og:description" content="Apps, games, and tools built for the web. Life Manager, Weather App, Snake, 2048, and more.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jimihughes.com">
+  <meta property="og:image" content="https://jimihughes.com/images/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jimi Hughes — Creator / AI Engineer">
+  <meta name="twitter:description" content="Apps, games, and tools built for the web.">
+  <meta name="description" content="Portfolio of Jimi Hughes — creator and AI engineer building apps, games, and tools for the web.">
 </head>
 <body>
 
@@ -17,6 +32,10 @@
         <p class="role">Creator / AI Engineer</p>
 
         <nav class="contact-links">
+          <a href="about/index.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            About
+          </a>
           <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
             LinkedIn
@@ -34,144 +53,263 @@
     <!-- Right Panel (scrollable projects) -->
     <main class="content">
 
-      <a href="life-manager/index.html" class="project project-blue">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Life Manager</h2>
-            <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/life-manager.png" alt="Life Manager screenshot">
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <a href="meal-planner/index.html" class="project project-orange">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Meal Planner</h2>
-            <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <a href="weather/index.html" class="project project-dark">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Weather App</h2>
-            <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/weather.png" alt="Weather App screenshot">
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <div class="project project-purple project-disabled">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Brain Training</h2>
-            <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
-            <span class="project-cta project-cta-muted">Coming Soon</span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame device-phone">
-              <img src="images/brain-training.png" alt="Brain Training screenshot">
-            </div>
-          </div>
-        </div>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="apps">Apps</button>
+        <button class="tab" data-tab="games">Games</button>
+        <button class="tab" data-tab="coming-soon">Coming Soon</button>
       </div>
 
-      <a href="typing-test/index.html" class="project project-teal">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Speed Typing Test</h2>
-            <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
-            </div>
-          </div>
-        </div>
-      </a>
+      <div class="tab-panels-wrap">
 
-      <a href="dashboard/index.html" class="project project-slate" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4338ca 100%)">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Personal Dashboard</h2>
-            <p>All-in-one homepage with live weather, clock, to-do list, bookmarks, and daily focus tracker.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/dashboard.png" alt="Personal Dashboard screenshot">
-            </div>
-          </div>
-        </div>
-      </a>
+      <!-- Apps -->
+      <div class="tab-panel active" id="tab-apps">
 
-      <a href="crossword/index.html" class="project project-amber" style="background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%)">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Crossword Puzzle</h2>
-            <p>Interactive crossword generator with clues, hints, check answers, and keyboard navigation.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/crossword.png" alt="Crossword Puzzle screenshot">
+        <a href="life-manager/index.html" class="project project-blue">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Life Manager</h2>
+              <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/life-manager.png" alt="Life Manager screenshot">
+              </div>
             </div>
           </div>
-        </div>
-      </a>
+        </a>
 
-      <a href="space-invaders/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#047857 100%)">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Space Invaders</h2>
-            <p>Classic arcade action with multiple alien types, shield barriers, levels, and high score tracking.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-          </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/space-invaders.png" alt="Space Invaders screenshot">
+        <a href="meal-planner/index.html" class="project project-orange">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Meal Planner</h2>
+              <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
+              </div>
             </div>
           </div>
-        </div>
-      </a>
+        </a>
 
-      <a href="platformer/index.html" class="project project-rose" style="background:linear-gradient(135deg,#4c0519 0%,#881337 50%,#be123c 100%)">
-        <div class="project-inner">
-          <div class="project-text">
-            <h2>Pixel Runner</h2>
-            <p>Side-scrolling platformer with procedural levels, coin collecting, and increasing difficulty.</p>
-            <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+        <a href="weather/index.html" class="project project-dark">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Weather App</h2>
+              <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/weather.png" alt="Weather App screenshot">
+              </div>
+            </div>
           </div>
-          <div class="project-preview">
-            <div class="device-frame">
-              <img src="images/platformer.png" alt="Pixel Runner screenshot">
+        </a>
+
+        <a href="typing-test/index.html" class="project project-teal">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Speed Typing Test</h2>
+              <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="dashboard/index.html" class="project project-slate" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4338ca 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Personal Dashboard</h2>
+              <p>All-in-one homepage with live weather, clock, to-do list, bookmarks, and daily focus tracker.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/dashboard.png" alt="Personal Dashboard screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="pomodoro/index.html" class="project project-rose" style="background:linear-gradient(135deg,#7f1d1d 0%,#b91c1c 50%,#ef4444 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Pomodoro Timer</h2>
+              <p>Focus timer with task list, short and long breaks, session tracking, and sound alerts.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/pomodoro.png" alt="Pomodoro Timer screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Games -->
+      <div class="tab-panel" id="tab-games">
+
+        <a href="crossword/index.html" class="project project-amber" style="background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Crossword Puzzle</h2>
+              <p>Interactive crossword generator with clues, hints, check answers, and keyboard navigation.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/crossword.png" alt="Crossword Puzzle screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="space-invaders/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#047857 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Space Invaders</h2>
+              <p>Classic arcade action with multiple alien types, shield barriers, levels, and high score tracking.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/space-invaders.png" alt="Space Invaders screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="snake/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#052e16 0%,#166534 50%,#22c55e 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Snake</h2>
+              <p>Classic snake game — eat food, grow longer, avoid the walls and your own tail.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/snake.png" alt="Snake screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="2048/index.html" class="project" style="background:linear-gradient(135deg,#78350f 0%,#d97706 50%,#fbbf24 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>2048</h2>
+              <p>Slide tiles, merge numbers, and reach the 2048 tile. Simple rules, addictive gameplay.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/2048.png" alt="2048 screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="quiz/index.html" class="project" style="background:linear-gradient(135deg,#2e1065 0%,#4c1d95 50%,#7c3aed 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Quiz Game</h2>
+              <p>6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/quiz.png" alt="Quiz Game screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="platformer/index.html" class="project project-rose" style="background:linear-gradient(135deg,#4c0519 0%,#881337 50%,#be123c 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Pixel Runner</h2>
+              <p>Side-scrolling platformer with procedural levels, coin collecting, and increasing difficulty.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/platformer.png" alt="Pixel Runner screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="tab-panel" id="tab-coming-soon">
+
+        <div class="project project-purple project-disabled">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Brain Training</h2>
+              <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
+              <span class="project-cta project-cta-muted">Coming Soon</span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame device-phone">
+                <img src="images/brain-training.png" alt="Brain Training screenshot">
+              </div>
             </div>
           </div>
         </div>
-      </a>
+
+      </div>
+
+      </div><!-- /tab-panels-wrap -->
 
     </main>
 
   </div>
+
+  <script>
+    // Loading animation
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Tab switching — fast crossfade
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        const newPanel = document.getElementById('tab-' + target);
+        const currentPanel = document.querySelector('.tab-panel.active');
+        if (currentPanel === newPanel) return;
+
+        // Update tab buttons
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Simultaneous crossfade — old out, new in at the same time
+        panels.forEach(p => p.classList.remove('active'));
+        newPanel.classList.add('active', 'switching');
+
+        // Clean up switching class after animation
+        setTimeout(() => newPanel.classList.remove('switching'), 150);
+
+        document.querySelector('.content').scrollTop = 0;
+      });
+    });
+  </script>
 
 </body>
 </html>
