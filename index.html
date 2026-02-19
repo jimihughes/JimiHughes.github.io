@@ -3,374 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Jimi Hughes</title>
+  <title>Jimi Hughes</title>
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="shortcut icon" href="../favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="shortcut icon" href="favicon.svg">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="About — Jimi Hughes">
-  <meta property="og:description" content="Self-taught developer and AI engineer building clean, functional products for the web.">
+  <meta property="og:title" content="Jimi Hughes — Creator / AI Engineer">
+  <meta property="og:description" content="Apps, games, and tools built for the web. Life Manager, Weather App, Snake, 2048, and more.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jimihughes.com/about">
+  <meta property="og:url" content="https://jimihughes.com">
   <meta property="og:image" content="https://jimihughes.com/images/og-cover.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About — Jimi Hughes">
-  <meta name="twitter:description" content="Self-taught developer and AI engineer building clean, functional products for the web.">
-  <meta name="description" content="About Jimi Hughes — self-taught developer and AI engineer building apps, games, and tools for the web.">
-
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #f2f2f2;
-      --sidebar-bg: #fafafa;
-      --text: #111;
-      --text-muted: #888;
-      --border: #e0e0e0;
-    }
-
-
-    html {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 16px;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body { min-height: 100vh; overflow: hidden; }
-    a { color: inherit; text-decoration: none; }
-
-
-    /* Layout */
-    .layout { display: flex; height: 100vh; }
-
-    /* Sidebar */
-    .sidebar {
-      width: 320px;
-      flex-shrink: 0;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      align-items: flex-end;
-      padding: 40px;
-    }
-
-    .sidebar-content { width: 100%; }
-
-    .sidebar-content h1 {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      line-height: 1.2;
-      margin-bottom: 2px;
-    }
-
-    .role {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-weight: 400;
-      margin-bottom: 28px;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-
-    .nav-links a {
-      font-size: 14px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity 0.2s;
-    }
-
-    .nav-links a:hover { opacity: 0.5; }
-    .nav-links svg { flex-shrink: 0; opacity: 0.5; }
-    .nav-links a.active { font-weight: 600; }
-    .nav-links a.active svg { opacity: 1; }
-
-
-    .copyright {
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.2px;
-    }
-
-    /* Content */
-    .content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 60px;
-      scroll-behavior: smooth;
-    }
-
-    .content::-webkit-scrollbar { width: 6px; }
-    .content::-webkit-scrollbar-track { background: transparent; }
-    .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-    /* About sections */
-    .about-header {
-      margin-bottom: 64px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-    }
-
-    .about-header h2 {
-      font-size: 48px;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-
-    .about-header p {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 480px;
-      line-height: 1.6;
-    }
-
-    .divider {
-      width: 40px;
-      height: 2px;
-      background: var(--text);
-      margin-bottom: 64px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
-    }
-
-    .section {
-      margin-bottom: 64px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .section:nth-child(2) { animation-delay: 0.15s; }
-    .section:nth-child(3) { animation-delay: 0.22s; }
-    .section:nth-child(4) { animation-delay: 0.29s; }
-    .section:nth-child(5) { animation-delay: 0.36s; }
-    .section:nth-child(6) { animation-delay: 0.43s; }
-    .section:nth-child(7) { animation-delay: 0.50s; }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .section-body {
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text);
-      max-width: 600px;
-    }
-
-
-    /* Now section */
-    .now-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 20px 24px;
-      background: var(--sidebar-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 600px;
-    }
-
-    .now-pulse {
-      margin-top: 4px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #22c55e;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .now-pulse::after {
-      content: '';
-      position: absolute;
-      top: -4px; left: -4px;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: rgba(34, 197, 94, 0.25);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.4); opacity: 0; }
-    }
-
-    .now-text {
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--text);
-    }
-
-
-    .now-text strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .now-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 10px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #16a34a;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
-    /* Skills grid */
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      max-width: 600px;
-    }
-
-    .skill-tag {
-      padding: 6px 14px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-
-    /* Built list */
-    .built-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 12px;
-      max-width: 600px;
-    }
-
-    .built-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-
-    .built-item:hover { border-color: #bbb; transform: translateY(-2px); }
-
-    .built-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* CTA */
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    .cta-btn-dark {
-      background: var(--text);
-      color: var(--bg);
-      border: 1px solid var(--text);
-    }
-
-    .cta-btn-dark:hover { opacity: 0.85; }
-
-    .cta-btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .cta-btn-outline:hover { border-color: var(--text); }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      body { overflow: auto; }
-      .layout { flex-direction: column; height: auto; }
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 28px 24px;
-        align-items: flex-start;
-      }
-      .role { margin-bottom: 16px; }
-      .nav-links { margin-bottom: 12px; }
-      .content { padding: 32px 24px; overflow-y: visible; }
-      .about-header h2 { font-size: 36px; }
-      .about-header p { font-size: 16px; }
-    }
-
-    @media (max-width: 480px) {
-      .content { padding: 24px 16px; }
-      .about-header h2 { font-size: 28px; }
-      .built-list { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+  <meta name="twitter:title" content="Jimi Hughes — Creator / AI Engineer">
+  <meta name="twitter:description" content="Apps, games, and tools built for the web.">
+  <meta name="description" content="Portfolio of Jimi Hughes — creator and AI engineer building apps, games, and tools for the web.">
 </head>
 <body>
 
   <div class="layout">
 
+    <!-- Left Panel (sticky) -->
     <aside class="sidebar">
       <div class="sidebar-content">
         <h1>Jimi Hughes</h1>
         <p class="role">Creator / AI Engineer</p>
 
-        <nav class="nav-links">
-          <a href="../index.html">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Projects
-          </a>
-          <a href="index.html" class="active">
+        <nav class="contact-links">
+          <a href="about/index.html">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             About
           </a>
@@ -388,90 +50,265 @@
       </div>
     </aside>
 
-    <main class="content" id="mainContent">
+    <!-- Right Panel (scrollable projects) -->
+    <main class="content">
 
-      <div class="about-header">
-        <h2>Hey, I'm Jimi.</h2>
-        <p>A creator and AI engineer who builds things for the web — apps, games, and tools that people can actually use.</p>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="apps">Apps</button>
+        <button class="tab" data-tab="games">Games</button>
+        <button class="tab" data-tab="coming-soon">Coming Soon</button>
       </div>
 
-      <div class="divider"></div>
+      <div class="tab-panels-wrap">
 
-      <div class="section">
-        <p class="section-label">Now</p>
-        <div class="now-card">
-          <div class="now-pulse"></div>
-          <p class="now-text">
-            Currently building <strong>Brain Training</strong> — a native iOS app built with Swift focused on cognitive exercises for memory, focus, and problem-solving.
-            <span class="now-badge">Coming soon to iOS</span>
-          </p>
+      <!-- Apps -->
+      <div class="tab-panel active" id="tab-apps">
+
+        <a href="life-manager/index.html" class="project project-blue">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Life Manager</h2>
+              <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/life-manager.png" alt="Life Manager screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="meal-planner/index.html" class="project project-orange">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Meal Planner</h2>
+              <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="weather/index.html" class="project project-dark">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Weather App</h2>
+              <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/weather.png" alt="Weather App screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="typing-test/index.html" class="project project-teal">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Speed Typing Test</h2>
+              <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="dashboard/index.html" class="project project-slate" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4338ca 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Personal Dashboard</h2>
+              <p>All-in-one homepage with live weather, clock, to-do list, bookmarks, and daily focus tracker.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/dashboard.png" alt="Personal Dashboard screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="pomodoro/index.html" class="project project-rose" style="background:linear-gradient(135deg,#7f1d1d 0%,#b91c1c 50%,#ef4444 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Pomodoro Timer</h2>
+              <p>Focus timer with task list, short and long breaks, session tracking, and sound alerts.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/pomodoro.png" alt="Pomodoro Timer screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Games -->
+      <div class="tab-panel" id="tab-games">
+
+        <a href="crossword/index.html" class="project project-amber" style="background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Crossword Puzzle</h2>
+              <p>Interactive crossword generator with clues, hints, check answers, and keyboard navigation.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/crossword.png" alt="Crossword Puzzle screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="space-invaders/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#047857 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Space Invaders</h2>
+              <p>Classic arcade action with multiple alien types, shield barriers, levels, and high score tracking.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/space-invaders.png" alt="Space Invaders screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="snake/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#052e16 0%,#166534 50%,#22c55e 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Snake</h2>
+              <p>Classic snake game — eat food, grow longer, avoid the walls and your own tail.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/snake.png" alt="Snake screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="2048/index.html" class="project" style="background:linear-gradient(135deg,#78350f 0%,#d97706 50%,#fbbf24 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>2048</h2>
+              <p>Slide tiles, merge numbers, and reach the 2048 tile. Simple rules, addictive gameplay.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/2048.png" alt="2048 screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="quiz/index.html" class="project" style="background:linear-gradient(135deg,#2e1065 0%,#4c1d95 50%,#7c3aed 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Quiz Game</h2>
+              <p>6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/quiz.png" alt="Quiz Game screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="platformer/index.html" class="project project-rose" style="background:linear-gradient(135deg,#4c0519 0%,#881337 50%,#be123c 100%)">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Pixel Runner</h2>
+              <p>Side-scrolling platformer with procedural levels, coin collecting, and increasing difficulty.</p>
+              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame">
+                <img src="images/platformer.png" alt="Pixel Runner screenshot">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="tab-panel" id="tab-coming-soon">
+
+        <div class="project project-purple project-disabled">
+          <div class="project-inner">
+            <div class="project-text">
+              <h2>Brain Training</h2>
+              <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
+              <span class="project-cta project-cta-muted">Coming Soon</span>
+            </div>
+            <div class="project-preview">
+              <div class="device-frame device-phone">
+                <img src="images/brain-training.png" alt="Brain Training screenshot">
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <div class="section">
-        <p class="section-label">Background</p>
-        <p class="section-body">
-          I'm a self-taught developer with a passion for building clean, functional products. I work across the full stack — from designing interfaces people enjoy using to shipping them live on the web. I'm particularly interested in AI and how it can be used to build smarter, more useful tools.
-        </p>
-      </div>
-
-      <div class="section">
-        <p class="section-label">What I build</p>
-        <div class="built-list">
-          <div class="built-item"><span class="built-dot" style="background:#3b82f6"></span>Life Manager</div>
-          <div class="built-item"><span class="built-dot" style="background:#f97316"></span>Meal Planner</div>
-          <div class="built-item"><span class="built-dot" style="background:#1e293b"></span>Weather App</div>
-          <div class="built-item"><span class="built-dot" style="background:#14b8a6"></span>Typing Test</div>
-          <div class="built-item"><span class="built-dot" style="background:#4338ca"></span>Dashboard</div>
-          <div class="built-item"><span class="built-dot" style="background:#d97706"></span>Crossword</div>
-          <div class="built-item"><span class="built-dot" style="background:#047857"></span>Space Invaders</div>
-          <div class="built-item"><span class="built-dot" style="background:#be123c"></span>Pixel Runner</div>
-          <div class="built-item"><span class="built-dot" style="background:#22c55e"></span>Snake</div>
-          <div class="built-item"><span class="built-dot" style="background:#d97706"></span>2048</div>
-          <div class="built-item"><span class="built-dot" style="background:#7c3aed"></span>Quiz Game</div>
-          <div class="built-item"><span class="built-dot" style="background:#ef4444"></span>Pomodoro</div>
-        </div>
-      </div>
-
-      <div class="section">
-        <p class="section-label">Technologies</p>
-        <div class="skills-grid">
-          <span class="skill-tag">HTML</span>
-          <span class="skill-tag">CSS</span>
-          <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">Canvas API</span>
-          <span class="skill-tag">GitHub Pages</span>
-          <span class="skill-tag">Swift</span>
-          <span class="skill-tag">AI / LLMs</span>
-          <span class="skill-tag">REST APIs</span>
-          <span class="skill-tag">localStorage</span>
-          <span class="skill-tag">Responsive Design</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <p class="section-label">Get in touch</p>
-        <p class="section-body" style="margin-bottom: 20px;">
-          Whether it's a project, a question, or just a chat — feel free to reach out.
-        </p>
-        <div class="cta-row">
-          <a href="mailto:jimifh0111@gmail.com" class="cta-btn cta-btn-dark">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-            Send an email
-          </a>
-          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener" class="cta-btn cta-btn-outline">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+      </div><!-- /tab-panels-wrap -->
 
     </main>
 
   </div>
 
   <script>
+    // Loading animation
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
 
+    // Tab switching — fast crossfade
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        const newPanel = document.getElementById('tab-' + target);
+        const currentPanel = document.querySelector('.tab-panel.active');
+        if (currentPanel === newPanel) return;
+
+        // Update tab buttons
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Simultaneous crossfade — old out, new in at the same time
+        panels.forEach(p => p.classList.remove('active'));
+        newPanel.classList.add('active', 'switching');
+
+        // Clean up switching class after animation
+        setTimeout(() => newPanel.classList.remove('switching'), 150);
+
+        document.querySelector('.content').scrollTop = 0;
+      });
+    });
   </script>
 
 </body>
