@@ -14,6 +14,7 @@
   --border: #e0e0e0;
 }
 
+
 html {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
@@ -26,6 +27,81 @@ html {
 body {
   min-height: 100vh;
   overflow: hidden;
+}
+
+/* ===== Loading Animation ===== */
+.layout {
+  opacity: 0;
+}
+
+body.loaded .layout {
+  opacity: 1;
+}
+
+body.loaded .sidebar-content h1 {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+body.loaded .sidebar-content .role {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+body.loaded .contact-links a:nth-child(1) {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+body.loaded .contact-links a:nth-child(2) {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+body.loaded .copyright {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+body.loaded .tabs {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+body.loaded .tab-panel.active .project:nth-child(1) {
+  animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+body.loaded .tab-panel.active .project:nth-child(2) {
+  animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+body.loaded .tab-panel.active .project:nth-child(3) {
+  animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+body.loaded .tab-panel.active .project:nth-child(4) {
+  animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+}
+
+body.loaded .tab-panel.active .project:nth-child(5) {
+  animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 a {
@@ -116,6 +192,85 @@ a {
 .content::-webkit-scrollbar { width: 6px; }
 .content::-webkit-scrollbar-track { background: transparent; }
 .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  gap: 6px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  padding: 4px 0 12px;
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: #fff;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: #ccc;
+}
+
+.tab.active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+
+/* Tab panels — crossfade */
+.tab-panels-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  transition: opacity 0.15s ease;
+}
+
+.tab-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+}
+
+/* Subtle stagger on tab switch */
+.tab-panel.switching .project:nth-child(1) { transition-delay: 0s; }
+.tab-panel.switching .project:nth-child(2) { transition-delay: 0.03s; }
+.tab-panel.switching .project:nth-child(3) { transition-delay: 0.06s; }
+.tab-panel.switching .project:nth-child(4) { transition-delay: 0.09s; }
+.tab-panel.switching .project:nth-child(5) { transition-delay: 0.12s; }
+
+.tab-panel.switching .project {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.tab-panel.active.switching .project {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* ===== Project Cards ===== */
 .project {
@@ -293,6 +448,19 @@ a {
     overflow-y: visible;
     padding: 16px;
     gap: 16px;
+  }
+
+  .tabs {
+    position: static;
+    padding: 0 0 8px;
+  }
+
+  .tab-panel.active {
+    gap: 16px;
+  }
+
+  .tab-panels-wrap {
+    position: relative;
   }
 
   .project-inner {
