@@ -47,6 +47,7 @@
         </nav>
 
         <p class="copyright">&copy; 2026 Jimi Hughes</p>
+        <p class="visitor-count" id="visitor-count"></p>
       </div>
     </aside>
 
@@ -290,6 +291,17 @@
       document.body.classList.add('loaded');
     });
 
+    // Live visitor counter
+    fetch('https://api.counterapi.dev/v1/jimihughes/portfolio/up')
+      .then(r => r.json())
+      .then(data => {
+        const el = document.getElementById('visitor-count');
+        if (el && data.count) {
+          el.textContent = data.count.toLocaleString() + ' visitors';
+        }
+      })
+      .catch(() => {});
+
     // Tab switching — fast crossfade
     const tabs = document.querySelectorAll('.tab');
     const panels = document.querySelectorAll('.tab-panel');
@@ -301,20 +313,17 @@
         const currentPanel = document.querySelector('.tab-panel.active');
         if (currentPanel === newPanel) return;
 
-        // Update tab buttons
         tabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
 
-        // Simultaneous crossfade — old out, new in at the same time
         panels.forEach(p => p.classList.remove('active'));
         newPanel.classList.add('active', 'switching');
 
-        // Clean up switching class after animation
         setTimeout(() => newPanel.classList.remove('switching'), 150);
-
         document.querySelector('.content').scrollTop = 0;
       });
     });
+
   </script>
 
 </body>

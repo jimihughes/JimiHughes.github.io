@@ -177,6 +177,14 @@ a {
   letter-spacing: 0.2px;
 }
 
+.visitor-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
 /* ===== Content ===== */
 .content {
   flex: 1;
