@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why I Went Self-Taught — Jimi Hughes</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.svg">
+  <meta name="description" content="No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg: #f2f2f2; --sidebar-bg: #fafafa; --text: #111; --text-muted: #888; --border: #e0e0e0; }
+    html { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; color: var(--text); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav { height: 52px; background: rgba(250,250,250,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 28px; flex-shrink: 0; z-index: 50; }
+    .site-nav-brand { font-size: 15px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.4px; margin-right: auto; }
+    .site-nav-links { display: flex; gap: 2px; }
+    .site-nav-links a { font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; padding: 6px 13px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
+    .site-nav-links a:hover { color: var(--text); background: rgba(0,0,0,0.05); }
+    .site-nav-links a.active { color: var(--text); font-weight: 600; background: rgba(0,0,0,0.06); }
+
+    .page { flex: 1; max-width: 680px; width: 100%; margin: 0 auto; padding: 64px 24px 100px; }
+
+    .post-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 48px; transition: color 0.15s; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+    .post-back:hover { color: var(--text); }
+
+    .post-header { margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+    .post-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .post-header h1 { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .post-meta { font-size: 13px; color: var(--text-muted); }
+
+    .post-divider { width: 40px; height: 2px; background: var(--text); margin: 40px 0; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+
+    .post-body { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+    .post-body p { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 28px; }
+    .post-body h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-top: 48px; margin-bottom: 16px; }
+    .post-body ul { padding-left: 24px; margin-bottom: 28px; }
+    .post-body ul li { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 6px; }
+    .post-body strong { font-weight: 700; color: var(--text); }
+    .post-body .callout { padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-left: 3px solid var(--text); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; line-height: 1.7; color: var(--text); }
+
+    .post-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+    .post-footer-label { font-size: 13px; color: var(--text-muted); }
+    .post-footer-links { display: flex; gap: 8px; }
+    .post-footer-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--text); transition: border-color 0.2s; }
+    .post-footer-link:hover { border-color: #999; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 600px) {
+      .page { padding: 40px 16px 80px; }
+      .post-header h1 { font-size: 28px; }
+      .post-body p, .post-body ul li { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
+    <div class="site-nav-links">
+      <a href="../index.html">Work</a>
+      <a href="../about/index.html">About</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../contact/index.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <a href="index.html" class="post-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      All posts
+    </a>
+
+    <div class="post-header">
+      <span class="post-tag">Story</span>
+      <h1>Why I Went Self-Taught (And What I'd Tell My Past Self)</h1>
+      <p class="post-meta">January 2026 · 5 min read</p>
+    </div>
+
+    <div class="post-divider"></div>
+
+    <div class="post-body">
+
+      <p>I didn't go to university for computer science. I didn't do a bootcamp. I didn't follow a structured curriculum. I just started building things and kept going until they worked — then kept going after that.</p>
+
+      <p>That sounds cleaner in retrospect than it felt at the time. The honest version involves a lot of staring at error messages I didn't understand, following tutorials that assumed knowledge I didn't have, and finishing projects that worked but that I couldn't fully explain. Here's how it actually went, and what I wish someone had told me at the start.</p>
+
+      <h2>Why self-taught in the first place</h2>
+
+      <p>The answer is simple: I wanted to build things, and I didn't want to wait three years and a lot of money to start. I had an idea for an app. I looked up how to build it. I started building it. I got stuck. I figured it out. I repeated that about a thousand times until I had something real.</p>
+
+      <p>What I didn't anticipate is how much faster that loop would get. The first time I got stuck it took days to get unstuck. Six months in it took hours. A year in it took minutes. The skill you're actually building when you learn to code isn't syntax — it's the ability to find your way out of problems you've never seen before.</p>
+
+      <h2>What didn't work</h2>
+
+      <p>Tutorials. Or more precisely, <strong>tutorial dependency</strong>. There's a phase almost every self-taught developer goes through where they feel like they're making progress — they're completing courses, building along with videos, finishing modules — but the moment they sit down to build something from scratch, nothing comes. That was me for longer than I'd like to admit.</p>
+
+      <p>The problem with tutorials is they're the teacher's project, not yours. You're following a known path to a known destination. Real development is the opposite: unknown path, destination you're still figuring out. The only way to train for that is to do it.</p>
+
+      <div class="callout">
+        Finish one tutorial to get the basics. Then close all the tutorials and build something. You will get stuck. That's the actual lesson starting.
+      </div>
+
+      <h2>What actually worked</h2>
+
+      <p>Shipping things. Publicly. There's a specific kind of accountability that comes from having a project live on the internet with your name on it. You care more. You fix things faster. You notice when something feels wrong in a way you wouldn't if it was just local on your machine.</p>
+
+      <p>Every project on this site is something I built, broke, fixed, redesigned, and shipped. The ones I'm least proud of taught me the most. The Life Manager app has been rewritten twice. The weather app's original CSS was embarrassing. That's fine. Progress is the point, not perfection.</p>
+
+      <h2>The AI question</h2>
+
+      <p>I'd be leaving something out if I didn't mention it: I use AI tools while building. A lot of developers treat this as something to hide. I don't. Using AI to get unstuck faster, to understand an unfamiliar API, or to generate a starting point for something I've never built before is just good tooling. The same way I use MDN, Stack Overflow, and documentation.</p>
+
+      <p>What AI can't do is understand what you're building well enough to make the real decisions. It doesn't know which tradeoff matters to your project. It doesn't feel when something is clunky or when a design is off. That's still you. And developing that judgement is still something you have to do by building things and paying attention.</p>
+
+      <h2>What I'd tell myself at the start</h2>
+
+      <ul>
+        <li><strong>Start with a project you actually want to exist.</strong> Motivation is fuel. Don't learn to code in the abstract — build the specific thing you want.</li>
+        <li><strong>Ship before it's ready.</strong> A project that's live and imperfect teaches you more than one that's perfect and local.</li>
+        <li><strong>Get comfortable being stuck.</strong> Stuck is not failure. Stuck is where the learning is. The discomfort is the work.</li>
+        <li><strong>Read other people's code.</strong> Open source projects, GitHub repos, anything. See how people who are further along solve problems.</li>
+        <li><strong>Build the same thing twice.</strong> After finishing a project, wait a month and rebuild it from memory. You'll be shocked how much faster and cleaner it is the second time.</li>
+      </ul>
+
+      <p>The path I took was longer and messier than a structured course would have been. It was also more mine. Every project on this site exists because I decided to figure something out. That's a habit I'm glad I built.</p>
+
+    </div>
+
+    <div class="post-footer">
+      <span class="post-footer-label">Thanks for reading.</span>
+      <div class="post-footer-links">
+        <a href="../about/index.html" class="post-footer-link">
+          About me
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="index.html" class="post-footer-link">More posts</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

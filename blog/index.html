@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Jimi Hughes</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.svg">
+  <meta property="og:title" content="Blog — Jimi Hughes">
+  <meta property="og:description" content="Thoughts on building apps, games, and tools for the web.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jimihughes.com/blog">
+  <meta name="description" content="Blog by Jimi Hughes — thoughts on self-teaching, building for the web, and lessons learned from shipping real projects.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f2f2f2;
+      --sidebar-bg: #fafafa;
+      --text: #111;
+      --text-muted: #888;
+      --border: #e0e0e0;
+    }
+
+    html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .site-nav {
+      height: 52px;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+    .site-nav-brand { font-size: 15px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.4px; margin-right: auto; }
+    .site-nav-links { display: flex; gap: 2px; }
+    .site-nav-links a { font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; padding: 6px 13px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
+    .site-nav-links a:hover { color: var(--text); background: rgba(0,0,0,0.05); }
+    .site-nav-links a.active { color: var(--text); font-weight: 600; background: rgba(0,0,0,0.06); }
+
+    /* Page */
+    .page {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .blog-header {
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both;
+    }
+
+    .blog-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .blog-header p {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* Post list */
+    .post-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+      text-decoration: none;
+      color: var(--text);
+      transition: opacity 0.15s;
+    }
+
+    .post-item:first-child { border-top: 1px solid var(--border); }
+    .post-item:hover { opacity: 0.6; }
+
+    .post-item:nth-child(1) { animation-delay: 0.12s; }
+    .post-item:nth-child(2) { animation-delay: 0.19s; }
+    .post-item:nth-child(3) { animation-delay: 0.26s; }
+
+    .post-item-left { flex: 1; min-width: 0; }
+
+    .post-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .post-excerpt {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .post-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 40px 16px 60px; }
+      .blog-header h1 { font-size: 32px; }
+      .post-item { flex-direction: column; gap: 8px; }
+      .post-title { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
+    <div class="site-nav-links">
+      <a href="../index.html">Work</a>
+      <a href="../about/index.html">About</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../contact/index.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <div class="blog-header">
+      <h1>Blog</h1>
+      <p>Writing about building things, learning in public, and shipping fast.</p>
+    </div>
+
+    <div class="post-list">
+
+      <a href="building-a-weather-app.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Build Log</span>
+          <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
+          <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
+        </div>
+        <span class="post-date">Mar 2026</span>
+      </a>
+
+      <a href="building-games.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Lessons</span>
+          <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
+          <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
+        </div>
+        <span class="post-date">Feb 2026</span>
+      </a>
+
+      <a href="going-self-taught.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Story</span>
+          <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
+          <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
+        </div>
+        <span class="post-date">Jan 2026</span>
+      </a>
+
+    </div>
+  </div>
+
+</body>
+</html>

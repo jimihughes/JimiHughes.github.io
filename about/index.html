@@ -41,12 +41,11 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    body { min-height: 100vh; overflow: hidden; }
+    body { min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
     a { color: inherit; text-decoration: none; }
 
-
     /* Layout */
-    .layout { display: flex; height: 100vh; }
+    .layout { display: flex; flex: 1; min-height: 0; }
 
     /* Sidebar */
     .sidebar {
@@ -331,9 +330,44 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Site Nav */
+    .site-nav {
+      height: 52px;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 50;
+    }
+    .site-nav-brand {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.4px;
+      margin-right: auto;
+    }
+    .site-nav-links { display: flex; gap: 2px; }
+    .site-nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 13px;
+      border-radius: 8px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .site-nav-links a:hover { color: var(--text); background: rgba(0,0,0,0.05); }
+    .site-nav-links a.active { color: var(--text); font-weight: 600; background: rgba(0,0,0,0.06); }
+
     /* Responsive */
     @media (max-width: 900px) {
-      body { overflow: auto; }
+      body { overflow: auto; display: block; }
       .layout { flex-direction: column; height: auto; }
       .sidebar {
         width: 100%;
@@ -357,6 +391,16 @@
   </style>
 </head>
 <body>
+
+  <nav class="site-nav">
+    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
+    <div class="site-nav-links">
+      <a href="../index.html">Work</a>
+      <a href="index.html" class="active">About</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../contact/index.html">Contact</a>
+    </div>
+  </nav>
 
   <div class="layout">
 
