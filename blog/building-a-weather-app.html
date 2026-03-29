@@ -11,7 +11,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --bg: #f2f2f2; --sidebar-bg: #fafafa; --text: #111; --text-muted: #888; --border: #e0e0e0; }
     html { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; color: var(--text); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
-    body { min-height: 100vh; display: flex; flex-direction: column; }
+    body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
     a { color: inherit; text-decoration: none; }
 
     .site-nav { height: 56px; background: #ffffff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; z-index: 100; }
@@ -21,148 +21,63 @@
     .site-nav-links a:hover { color: #111; background: #f0f0f0; }
     .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
 
-    .page { flex: 1; max-width: 680px; width: 100%; margin: 0 auto; padding: 64px 24px 100px; }
+    .layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 
-    .post-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 48px;
-      transition: color 0.15s;
-      opacity: 0;
-      animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.05s both;
+    .sidebar {
+      width: 320px; flex-shrink: 0; background: var(--sidebar-bg);
+      border-right: 1px solid var(--border); display: flex; align-items: flex-end; padding: 40px;
     }
+    .sidebar-content { width: 100%; }
+    .sidebar-content h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 2px; }
+    .role { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 28px; }
+    .nav-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .nav-links a { font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-links svg { flex-shrink: 0; opacity: 0.5; }
+    .copyright { font-size: 11px; color: var(--text-muted); letter-spacing: 0.2px; }
+
+    .content { flex: 1; overflow-y: auto; padding: 60px; scroll-behavior: smooth; }
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    .post-wrap { max-width: 600px; }
+
+    .post-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 48px; transition: color 0.15s; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
     .post-back:hover { color: var(--text); }
 
-    .post-header {
-      margin-bottom: 48px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both;
-    }
+    .post-header { margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+    .post-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .post-header h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .post-meta { font-size: 13px; color: var(--text-muted); }
 
-    .post-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
+    .post-divider { width: 40px; height: 2px; background: var(--text); margin: 40px 0; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
 
-    .post-header h1 {
-      font-size: 38px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
-
-    .post-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .post-divider {
-      width: 40px;
-      height: 2px;
-      background: var(--text);
-      margin: 40px 0;
-      opacity: 0;
-      animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s both;
-    }
-
-    .post-body {
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-    }
-
-    .post-body p {
-      font-size: 17px;
-      line-height: 1.8;
-      color: #222;
-      margin-bottom: 28px;
-    }
-
-    .post-body h2 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.4px;
-      margin-top: 48px;
-      margin-bottom: 16px;
-    }
-
-    .post-body h3 {
-      font-size: 17px;
-      font-weight: 700;
-      margin-top: 32px;
-      margin-bottom: 12px;
-    }
-
-    .post-body ul {
-      padding-left: 24px;
-      margin-bottom: 28px;
-    }
-
-    .post-body ul li {
-      font-size: 17px;
-      line-height: 1.8;
-      color: #222;
-      margin-bottom: 6px;
-    }
-
+    .post-body { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+    .post-body p { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 28px; }
+    .post-body h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-top: 48px; margin-bottom: 16px; }
+    .post-body h4 { font-size: 17px; font-weight: 700; margin-top: 32px; margin-bottom: 12px; }
+    .post-body ul { padding-left: 24px; margin-bottom: 28px; }
+    .post-body ul li { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 6px; }
     .post-body strong { font-weight: 700; color: var(--text); }
+    .post-body .callout { padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-left: 3px solid var(--text); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; line-height: 1.7; color: var(--text); }
 
-    .post-body .callout {
-      padding: 20px 24px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--text);
-      border-radius: 0 12px 12px 0;
-      margin: 32px 0;
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text);
-    }
-
-    .post-footer {
-      margin-top: 64px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both;
-    }
-
+    .post-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
     .post-footer-label { font-size: 13px; color: var(--text-muted); }
-
     .post-footer-links { display: flex; gap: 8px; }
-
-    .post-footer-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      transition: border-color 0.2s;
-    }
+    .post-footer-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--text); transition: border-color 0.2s; }
     .post-footer-link:hover { border-color: #999; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    @media (max-width: 600px) {
-      .page { padding: 40px 16px 80px; }
-      .post-header h1 { font-size: 28px; }
+    @media (max-width: 900px) {
+      body { overflow: auto; display: block; height: auto; }
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; align-items: flex-start; }
+      .role { margin-bottom: 16px; }
+      .nav-links { margin-bottom: 12px; }
+      .content { overflow-y: visible; padding: 32px 24px; }
+      .post-header h2 { font-size: 28px; }
       .post-body p, .post-body ul li { font-size: 16px; }
     }
   </style>
@@ -179,87 +94,115 @@
     </div>
   </nav>
 
-  <div class="page">
+  <div class="layout">
 
-    <a href="index.html" class="post-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-      All posts
-    </a>
-
-    <div class="post-header">
-      <span class="post-tag">Build Log</span>
-      <h1>How I Built a Live Weather App (And What Nearly Broke Me)</h1>
-      <p class="post-meta">March 2026 · 5 min read</p>
-    </div>
-
-    <div class="post-divider"></div>
-
-    <div class="post-body">
-
-      <p>When I decided to build a weather app, I thought it would be simple. Fetch some data, display it nicely, done. Tutorials make it look that way. Reality was a bit different.</p>
-
-      <p>The finished app has live forecasts, hourly data, a 7-day outlook, sunrise and sunset times, UV index, wind speed, humidity, and city search with auto-suggest. Getting all of that working — and looking good — took a lot more trial and error than I expected. Here's the honest account of how it went.</p>
-
-      <h2>Starting with the API</h2>
-
-      <p>I used the <strong>OpenWeatherMap API</strong>, which has a generous free tier. Setting it up looked easy: register, get a key, make a fetch call, get weather. That part worked first time. What didn't work first time was everything after that.</p>
-
-      <p>Real API data is messy. Some fields you expect are sometimes missing. The temperature comes back in Kelvin by default (didn't notice that for longer than I'd like to admit). Wind direction is in degrees, not compass points — so I had to write a function to convert 247° into "WSW". UV index only comes from a separate endpoint. Sunrise and sunset are Unix timestamps that need converting.</p>
-
-      <div class="callout">
-        Every tutorial shows you the happy path. Real data has null values, unexpected formats, and edge cases the documentation glosses over. Plan for that from the start.
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <h1>Jimi Hughes</h1>
+        <p class="role">Creator / AI Engineer</p>
+        <nav class="nav-links">
+          <a href="../about/index.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            About
+          </a>
+          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:jimifh0111@gmail.com">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+            Email
+          </a>
+        </nav>
+        <p class="copyright">&copy; 2026 Jimi Hughes</p>
       </div>
+    </aside>
 
-      <h2>The CORS problem</h2>
+    <main class="content">
+      <div class="post-wrap">
 
-      <p>For a while, my app worked perfectly when I opened it locally — and broke completely when I pushed it live. The browser was blocking requests to the API because of <strong>CORS (Cross-Origin Resource Sharing)</strong> restrictions.</p>
-
-      <p>The fix was switching from the HTTP endpoint to HTTPS and adding the right headers. Took me a full afternoon to figure that out. The error message in the console wasn't exactly clear, and every Stack Overflow answer seemed to suggest something slightly different.</p>
-
-      <h2>Making it look good</h2>
-
-      <p>Once the data was working, I spent a long time on the UI. Weather apps live or die on how they feel — nobody wants a list of numbers. I ended up building:</p>
-
-      <ul>
-        <li>A dynamic background that shifts based on weather condition and time of day</li>
-        <li>Custom SVG icons for each weather state (sun, cloud, rain, snow, storm)</li>
-        <li>A horizontal scroll for the hourly forecast</li>
-        <li>Cards for the 7-day outlook that show min/max temps at a glance</li>
-      </ul>
-
-      <p>The background gradient took the longest. I wanted it to feel atmospheric — a deep orange sunrise, a steel-grey overcast, a dark navy night. Getting the colour transitions right without it looking garish was genuinely difficult.</p>
-
-      <h2>The city search</h2>
-
-      <p>The search feature uses a separate geocoding API call to convert a city name into coordinates, then passes those to the weather API. Sounds straightforward. In practice, you have to handle:</p>
-
-      <ul>
-        <li>Cities with the same name in different countries</li>
-        <li>Empty results when the city isn't found</li>
-        <li>Rate limiting if someone types fast</li>
-        <li>Graceful fallback to the user's location if search fails</li>
-      </ul>
-
-      <p>I added a <strong>debounce</strong> to the search input — it waits 400ms after the user stops typing before firing the request. That alone cut the number of API calls by about 80% in testing.</p>
-
-      <h2>What I'd do differently</h2>
-
-      <p>If I was starting again, I'd plan the data model first. I dived straight into building the UI before I fully understood what data I had available and in what format. That led to a lot of refactoring mid-build when I realised something I'd assumed was a single call actually needed three.</p>
-
-      <p>The app is live at <a href="../weather/index.html" style="text-decoration:underline; text-underline-offset:3px;">jimihughes.com/weather</a> — give it a try. It'll ask for your location and pull in the live forecast wherever you are.</p>
-
-    </div>
-
-    <div class="post-footer">
-      <span class="post-footer-label">Thanks for reading.</span>
-      <div class="post-footer-links">
-        <a href="../weather/index.html" class="post-footer-link">
-          Try the app
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        <a href="index.html" class="post-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          All posts
         </a>
-        <a href="index.html" class="post-footer-link">More posts</a>
+
+        <div class="post-header">
+          <span class="post-tag">Build Log</span>
+          <h2>How I Built a Live Weather App (And What Nearly Broke Me)</h2>
+          <p class="post-meta">March 2026 · 5 min read</p>
+        </div>
+
+        <div class="post-divider"></div>
+
+        <div class="post-body">
+
+          <p>When I decided to build a weather app, I thought it would be simple. Fetch some data, display it nicely, done. Tutorials make it look that way. Reality was a bit different.</p>
+
+          <p>The finished app has live forecasts, hourly data, a 7-day outlook, sunrise and sunset times, UV index, wind speed, humidity, and city search with auto-suggest. Getting all of that working — and looking good — took a lot more trial and error than I expected. Here's the honest account of how it went.</p>
+
+          <h3>Starting with the API</h3>
+
+          <p>I used the <strong>OpenWeatherMap API</strong>, which has a generous free tier. Setting it up looked easy: register, get a key, make a fetch call, get weather. That part worked first time. What didn't work first time was everything after that.</p>
+
+          <p>Real API data is messy. Some fields you expect are sometimes missing. The temperature comes back in Kelvin by default (didn't notice that for longer than I'd like to admit). Wind direction is in degrees, not compass points — so I had to write a function to convert 247° into "WSW". UV index only comes from a separate endpoint. Sunrise and sunset are Unix timestamps that need converting.</p>
+
+          <div class="callout">
+            Every tutorial shows you the happy path. Real data has null values, unexpected formats, and edge cases the documentation glosses over. Plan for that from the start.
+          </div>
+
+          <h3>The CORS problem</h3>
+
+          <p>For a while, my app worked perfectly when I opened it locally — and broke completely when I pushed it live. The browser was blocking requests to the API because of <strong>CORS (Cross-Origin Resource Sharing)</strong> restrictions.</p>
+
+          <p>The fix was switching from the HTTP endpoint to HTTPS and adding the right headers. Took me a full afternoon to figure that out. The error message in the console wasn't exactly clear, and every Stack Overflow answer seemed to suggest something slightly different.</p>
+
+          <h3>Making it look good</h3>
+
+          <p>Once the data was working, I spent a long time on the UI. Weather apps live or die on how they feel — nobody wants a list of numbers. I ended up building:</p>
+
+          <ul>
+            <li>A dynamic background that shifts based on weather condition and time of day</li>
+            <li>Custom SVG icons for each weather state (sun, cloud, rain, snow, storm)</li>
+            <li>A horizontal scroll for the hourly forecast</li>
+            <li>Cards for the 7-day outlook that show min/max temps at a glance</li>
+          </ul>
+
+          <p>The background gradient took the longest. I wanted it to feel atmospheric — a deep orange sunrise, a steel-grey overcast, a dark navy night. Getting the colour transitions right without it looking garish was genuinely difficult.</p>
+
+          <h3>The city search</h3>
+
+          <p>The search feature uses a separate geocoding API call to convert a city name into coordinates, then passes those to the weather API. Sounds straightforward. In practice, you have to handle:</p>
+
+          <ul>
+            <li>Cities with the same name in different countries</li>
+            <li>Empty results when the city isn't found</li>
+            <li>Rate limiting if someone types fast</li>
+            <li>Graceful fallback to the user's location if search fails</li>
+          </ul>
+
+          <p>I added a <strong>debounce</strong> to the search input — it waits 400ms after the user stops typing before firing the request. That alone cut the number of API calls by about 80% in testing.</p>
+
+          <h3>What I'd do differently</h3>
+
+          <p>If I was starting again, I'd plan the data model first. I dived straight into building the UI before I fully understood what data I had available and in what format. That led to a lot of refactoring mid-build when I realised something I'd assumed was a single call actually needed three.</p>
+
+          <p>The app is live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Work tab</a> — give it a try. It'll ask for your location and pull in the live forecast wherever you are.</p>
+
+        </div>
+
+        <div class="post-footer">
+          <span class="post-footer-label">Thanks for reading.</span>
+          <div class="post-footer-links">
+            <a href="../index.html" class="post-footer-link">
+              See the work
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="index.html" class="post-footer-link">More posts</a>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </main>
 
   </div>
 

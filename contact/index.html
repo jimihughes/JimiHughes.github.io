@@ -31,7 +31,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    body { min-height: 100vh; display: flex; flex-direction: column; }
+    body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
     a { color: inherit; text-decoration: none; }
 
     /* Nav */
@@ -42,189 +42,107 @@
     .site-nav-links a:hover { color: #111; background: #f0f0f0; }
     .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
 
-    /* Page */
-    .page {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 24px;
-    }
+    /* Layout */
+    .layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 
-    .contact-wrap {
-      width: 100%;
-      max-width: 560px;
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      padding: 40px;
     }
+    .sidebar-content { width: 100%; }
+    .sidebar-content h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 2px; }
+    .role { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 28px; }
+    .nav-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .nav-links a { font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-links svg { flex-shrink: 0; opacity: 0.5; }
+    .copyright { font-size: 11px; color: var(--text-muted); letter-spacing: 0.2px; }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 60px;
+      scroll-behavior: smooth;
+    }
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    .contact-wrap { max-width: 520px; }
 
     .contact-header {
       margin-bottom: 48px;
       opacity: 0;
       animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both;
     }
+    .contact-header h2 { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 12px; }
+    .contact-header p { font-size: 16px; color: var(--text-muted); line-height: 1.6; }
 
-    .contact-header h1 {
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: -1.2px;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-
-    .contact-header p {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* Contact cards */
     .contact-options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+      display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both;
     }
-
     .contact-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 20px 24px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      text-decoration: none;
-      color: var(--text);
+      display: flex; align-items: center; gap: 16px; padding: 20px 24px;
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      text-decoration: none; color: var(--text);
       transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     }
-
-    .contact-card:hover {
-      border-color: #bbb;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0,0,0,0.07);
-    }
-
-    .contact-card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
+    .contact-card:hover { border-color: #bbb; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+    .contact-card-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .contact-card-text { flex: 1; min-width: 0; }
+    .contact-card-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .contact-card-value { font-size: 13px; color: var(--text-muted); }
+    .contact-card-arrow { color: var(--text-muted); flex-shrink: 0; transition: transform 0.2s; }
+    .contact-card:hover .contact-card-arrow { transform: translateX(3px); }
 
-    .contact-card-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-
-    .contact-card-value {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .contact-card-arrow {
-      color: var(--text-muted);
-      flex-shrink: 0;
-      transition: transform 0.2s;
-    }
-
-    .contact-card:hover .contact-card-arrow {
-      transform: translateX(3px);
-    }
-
-    /* Divider */
     .or-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.22s both;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.22s both;
     }
-    .or-divider::before, .or-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .or-divider span { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-    /* Message form */
-    .contact-form {
-      opacity: 0;
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.28s both;
-    }
-
+    .contact-form { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
     .form-row { margin-bottom: 14px; }
-
-    .form-row label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+    .form-row label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .form-row input, .form-row textarea {
+      width: 100%; padding: 12px 16px; background: #fff; border: 1px solid var(--border);
+      border-radius: 10px; font-family: inherit; font-size: 14px; color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none; resize: none;
     }
-
-    .form-row input,
-    .form-row textarea {
-      width: 100%;
-      padding: 12px 16px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 14px;
-      color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      resize: none;
-    }
-
-    .form-row input:focus,
-    .form-row textarea:focus {
-      border-color: #999;
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-    }
-
+    .form-row input:focus, .form-row textarea:focus { border-color: #999; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
     .form-row textarea { height: 120px; }
-
     .form-submit {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: var(--text);
-      color: #fff;
-      border: none;
-      border-radius: 100px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      margin-top: 4px;
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+      background: var(--text); color: #fff; border: none; border-radius: 100px;
+      font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: opacity 0.2s; margin-top: 4px;
     }
     .form-submit:hover { opacity: 0.8; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .form-success {
+      display: none; padding: 16px 20px; background: #f0fdf4;
+      border: 1px solid #bbf7d0; border-radius: 12px;
+      font-size: 14px; color: #15803d; margin-top: 16px;
     }
 
-    @media (max-width: 600px) {
-      .page { padding: 40px 16px; align-items: flex-start; }
-      .contact-header h1 { font-size: 32px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; display: block; height: auto; }
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; align-items: flex-start; }
+      .role { margin-bottom: 16px; }
+      .nav-links { margin-bottom: 12px; }
+      .content { overflow-y: visible; padding: 32px 24px; }
     }
   </style>
 </head>
@@ -240,61 +158,101 @@
     </div>
   </nav>
 
-  <div class="page">
-    <div class="contact-wrap">
+  <div class="layout">
 
-      <div class="contact-header">
-        <h1>Let's talk.</h1>
-        <p>Whether it's a project, a collaboration, or just a question — I'm always happy to hear from you.</p>
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <h1>Jimi Hughes</h1>
+        <p class="role">Creator / AI Engineer</p>
+        <nav class="nav-links">
+          <a href="../about/index.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            About
+          </a>
+          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:jimifh0111@gmail.com">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+            Email
+          </a>
+        </nav>
+        <p class="copyright">&copy; 2026 Jimi Hughes</p>
       </div>
+    </aside>
 
-      <div class="contact-options">
-        <a href="mailto:jimifh0111@gmail.com" class="contact-card">
-          <div class="contact-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-          </div>
-          <div class="contact-card-text">
-            <p class="contact-card-label">Email</p>
-            <p class="contact-card-value">jimifh0111@gmail.com</p>
-          </div>
-          <svg class="contact-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
+    <main class="content">
+      <div class="contact-wrap">
 
-        <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener" class="contact-card">
-          <div class="contact-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <div class="contact-header">
+          <h2>Let's talk.</h2>
+          <p>Whether it's a project, a collaboration, or just a question — I'm always happy to hear from you.</p>
+        </div>
+
+        <div class="contact-options">
+          <a href="mailto:jimifh0111@gmail.com" class="contact-card">
+            <div class="contact-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+            </div>
+            <div class="contact-card-text">
+              <p class="contact-card-label">Email</p>
+              <p class="contact-card-value">jimifh0111@gmail.com</p>
+            </div>
+            <svg class="contact-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener" class="contact-card">
+            <div class="contact-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div class="contact-card-text">
+              <p class="contact-card-label">LinkedIn</p>
+              <p class="contact-card-value">jimi-hughes-a0b33737b</p>
+            </div>
+            <svg class="contact-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="or-divider"><span>or send a message</span></div>
+
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/xpwzgvqr" method="POST">
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
           </div>
-          <div class="contact-card-text">
-            <p class="contact-card-label">LinkedIn</p>
-            <p class="contact-card-value">jimi-hughes-a0b33737b</p>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
           </div>
-          <svg class="contact-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
+          <div class="form-row">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            Send message
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </button>
+          <div class="form-success" id="formSuccess">Message sent! I'll get back to you soon.</div>
+        </form>
+
       </div>
+    </main>
 
-      <div class="or-divider"><span>or send a message</span></div>
-
-      <form class="contact-form" action="mailto:jimifh0111@gmail.com" method="get" enctype="text/plain">
-        <div class="form-row">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" placeholder="Your name">
-        </div>
-        <div class="form-row">
-          <label for="subject">Subject</label>
-          <input type="text" id="subject" name="subject" placeholder="What's it about?">
-        </div>
-        <div class="form-row">
-          <label for="body">Message</label>
-          <textarea id="body" name="body" placeholder="What's on your mind?"></textarea>
-        </div>
-        <button type="submit" class="form-submit">
-          Send message
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </button>
-      </form>
-
-    </div>
   </div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('formSuccess');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+      if (res.ok) {
+        form.reset();
+        success.style.display = 'block';
+      }
+    });
+  </script>
 
 </body>
 </html>

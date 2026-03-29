@@ -31,7 +31,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    body { min-height: 100vh; display: flex; flex-direction: column; }
+    body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
     a { color: inherit; text-decoration: none; }
 
     /* Nav */
@@ -42,39 +42,51 @@
     .site-nav-links a:hover { color: #111; background: #f0f0f0; }
     .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
 
-    /* Page */
-    .page {
-      flex: 1;
-      max-width: 680px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 64px 24px 80px;
+    /* Layout */
+    .layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      padding: 40px;
     }
+    .sidebar-content { width: 100%; }
+    .sidebar-content h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 2px; }
+    .role { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 28px; }
+    .nav-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .nav-links a { font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-links svg { flex-shrink: 0; opacity: 0.5; }
+    .copyright { font-size: 11px; color: var(--text-muted); letter-spacing: 0.2px; }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 60px;
+      scroll-behavior: smooth;
+    }
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    .blog-wrap { max-width: 560px; }
 
     .blog-header {
       margin-bottom: 56px;
       opacity: 0;
       animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both;
     }
-
-    .blog-header h1 {
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: -1.2px;
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-
-    .blog-header p {
-      font-size: 16px;
-      color: var(--text-muted);
-    }
+    .blog-header h2 { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 10px; }
+    .blog-header p { font-size: 16px; color: var(--text-muted); }
 
     /* Post list */
-    .post-list {
-      display: flex;
-      flex-direction: column;
-    }
+    .post-list { display: flex; flex-direction: column; }
 
     .post-item {
       display: flex;
@@ -89,55 +101,27 @@
       color: var(--text);
       transition: opacity 0.15s;
     }
-
     .post-item:first-child { border-top: 1px solid var(--border); }
     .post-item:hover { opacity: 0.6; }
-
     .post-item:nth-child(1) { animation-delay: 0.12s; }
     .post-item:nth-child(2) { animation-delay: 0.19s; }
     .post-item:nth-child(3) { animation-delay: 0.26s; }
 
     .post-item-left { flex: 1; min-width: 0; }
+    .post-tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .post-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.3; margin-bottom: 6px; }
+    .post-excerpt { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .post-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
 
-    .post-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    .post-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-
-    .post-excerpt {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .post-date {
-      font-size: 13px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 600px) {
-      .page { padding: 40px 16px 60px; }
-      .blog-header h1 { font-size: 32px; }
+    @media (max-width: 900px) {
+      body { overflow: auto; display: block; height: auto; }
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; align-items: flex-start; }
+      .role { margin-bottom: 16px; }
+      .nav-links { margin-bottom: 12px; }
+      .content { overflow-y: visible; padding: 32px 24px; }
       .post-item { flex-direction: column; gap: 8px; }
       .post-title { font-size: 16px; }
     }
@@ -155,43 +139,71 @@
     </div>
   </nav>
 
-  <div class="page">
+  <div class="layout">
 
-    <div class="blog-header">
-      <h1>Blog</h1>
-      <p>Writing about building things, learning in public, and shipping fast.</p>
-    </div>
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <h1>Jimi Hughes</h1>
+        <p class="role">Creator / AI Engineer</p>
+        <nav class="nav-links">
+          <a href="../about/index.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            About
+          </a>
+          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:jimifh0111@gmail.com">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+            Email
+          </a>
+        </nav>
+        <p class="copyright">&copy; 2026 Jimi Hughes</p>
+      </div>
+    </aside>
 
-    <div class="post-list">
+    <main class="content">
+      <div class="blog-wrap">
 
-      <a href="building-a-weather-app.html" class="post-item">
-        <div class="post-item-left">
-          <span class="post-tag">Build Log</span>
-          <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
-          <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
+        <div class="blog-header">
+          <h2>Blog</h2>
+          <p>Writing about building things, learning in public, and shipping fast.</p>
         </div>
-        <span class="post-date">Mar 2026</span>
-      </a>
 
-      <a href="building-games.html" class="post-item">
-        <div class="post-item-left">
-          <span class="post-tag">Lessons</span>
-          <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
-          <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
+        <div class="post-list">
+
+          <a href="building-a-weather-app.html" class="post-item">
+            <div class="post-item-left">
+              <span class="post-tag">Build Log</span>
+              <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
+              <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
+            </div>
+            <span class="post-date">Mar 2026</span>
+          </a>
+
+          <a href="building-games.html" class="post-item">
+            <div class="post-item-left">
+              <span class="post-tag">Lessons</span>
+              <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
+              <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
+            </div>
+            <span class="post-date">Feb 2026</span>
+          </a>
+
+          <a href="going-self-taught.html" class="post-item">
+            <div class="post-item-left">
+              <span class="post-tag">Story</span>
+              <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
+              <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
+            </div>
+            <span class="post-date">Jan 2026</span>
+          </a>
+
         </div>
-        <span class="post-date">Feb 2026</span>
-      </a>
+      </div>
+    </main>
 
-      <a href="going-self-taught.html" class="post-item">
-        <div class="post-item-left">
-          <span class="post-tag">Story</span>
-          <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
-          <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
-        </div>
-        <span class="post-date">Jan 2026</span>
-      </a>
-
-    </div>
   </div>
 
 </body>
