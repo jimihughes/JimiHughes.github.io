@@ -42,8 +42,23 @@ body.loaded .sidebar-content h1 {
   animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 }
 
-body.loaded .sidebar-content .role {
-  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+/* role text is handled by the JS typing animation — no fadeUp needed */
+
+/* Blinking cursor for typing animation */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  background: var(--text-muted);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink 0.75s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 body.loaded .contact-links a:nth-child(1) {

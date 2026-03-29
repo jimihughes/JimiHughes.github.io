@@ -286,9 +286,40 @@
     console.log('%c📬 Want to work together? → jimifh0111@gmail.com', 'font-size:13px; color:#6366f1; font-weight:600;');
     console.log('%c🔗 linkedin.com/in/jimi-hughes-a0b33737b', 'font-size:13px; color:#6366f1;');
 
-    // Loading animation
+    // Loading animation + typing effect on role text
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
+
+      // Typing animation for "Creator / AI Engineer"
+      const roleEl = document.querySelector('.role');
+      const fullText = roleEl.textContent.trim();
+      roleEl.textContent = '';
+
+      // Insert blinking cursor
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      roleEl.appendChild(cursor);
+
+      // Start typing after h1 has faded in (slight delay feels natural)
+      setTimeout(() => {
+        let i = 0;
+        const speed = 55; // ms per character
+        const type = () => {
+          if (i < fullText.length) {
+            roleEl.insertBefore(document.createTextNode(fullText[i]), cursor);
+            i++;
+            setTimeout(type, speed);
+          } else {
+            // Cursor blinks for 1.5s then softly disappears
+            setTimeout(() => {
+              cursor.style.transition = 'opacity 0.6s ease';
+              cursor.style.opacity = '0';
+              setTimeout(() => cursor.remove(), 600);
+            }, 1500);
+          }
+        };
+        type();
+      }, 650);
     });
 
     // Live visitor counter
