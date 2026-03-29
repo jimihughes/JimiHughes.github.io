@@ -3,369 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jimi Hughes</title>
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.svg">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Jimi Hughes — Creator / AI Engineer">
-  <meta property="og:description" content="Apps, games, and tools built for the web. Life Manager, Weather App, Snake, 2048, and more.">
+  <title>Blog — Jimi Hughes</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.svg">
+  <meta property="og:title" content="Blog — Jimi Hughes">
+  <meta property="og:description" content="Thoughts on building apps, games, and tools for the web.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jimihughes.com">
-  <meta property="og:image" content="https://jimihughes.com/images/og-cover.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Jimi Hughes — Creator / AI Engineer">
-  <meta name="twitter:description" content="Apps, games, and tools built for the web.">
-  <meta name="description" content="Portfolio of Jimi Hughes — creator and AI engineer building apps, games, and tools for the web.">
+  <meta property="og:url" content="https://jimihughes.com/blog">
+  <meta name="description" content="Blog by Jimi Hughes — thoughts on self-teaching, building for the web, and lessons learned from shipping real projects.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f2f2f2;
+      --sidebar-bg: #fafafa;
+      --text: #111;
+      --text-muted: #888;
+      --border: #e0e0e0;
+    }
+
+    html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .site-nav { height: 56px; background: #ffffff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; z-index: 100; }
+    .site-nav-brand { font-size: 15px; font-weight: 800; color: #111; text-decoration: none; letter-spacing: -0.4px; margin-right: auto; }
+    .site-nav-links { display: flex; gap: 4px; }
+    .site-nav-links a { font-size: 14px; font-weight: 500; color: #777; text-decoration: none; padding: 7px 14px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
+    .site-nav-links a:hover { color: #111; background: #f0f0f0; }
+    .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
+
+    /* Page */
+    .page {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .blog-header {
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both;
+    }
+
+    .blog-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .blog-header p {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* Post list */
+    .post-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+      text-decoration: none;
+      color: var(--text);
+      transition: opacity 0.15s;
+    }
+
+    .post-item:first-child { border-top: 1px solid var(--border); }
+    .post-item:hover { opacity: 0.6; }
+
+    .post-item:nth-child(1) { animation-delay: 0.12s; }
+    .post-item:nth-child(2) { animation-delay: 0.19s; }
+    .post-item:nth-child(3) { animation-delay: 0.26s; }
+
+    .post-item-left { flex: 1; min-width: 0; }
+
+    .post-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .post-excerpt {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .post-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 40px 16px 60px; }
+      .blog-header h1 { font-size: 32px; }
+      .post-item { flex-direction: column; gap: 8px; }
+      .post-title { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
 
   <nav class="site-nav">
-    <a href="index.html" class="site-nav-brand">Jimi Hughes</a>
+    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
     <div class="site-nav-links">
-      <a href="index.html" class="active">Work</a>
-      <a href="about/index.html">About</a>
-      <a href="blog/index.html">Blog</a>
-      <a href="contact/index.html">Contact</a>
+      <a href="../index.html">Work</a>
+      <a href="../about/index.html">About</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../contact/index.html">Contact</a>
     </div>
   </nav>
 
-  <div class="layout">
+  <div class="page">
 
-    <!-- Left Panel (sticky) -->
-    <aside class="sidebar">
-      <div class="sidebar-content">
-        <h1>Jimi Hughes</h1>
-        <p class="role">Creator / AI Engineer</p>
+    <div class="blog-header">
+      <h1>Blog</h1>
+      <p>Writing about building things, learning in public, and shipping fast.</p>
+    </div>
 
-        <nav class="contact-links">
-          <a href="about/index.html">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            About
-          </a>
-          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="mailto:jimifh0111@gmail.com">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-            Email
-          </a>
-        </nav>
+    <div class="post-list">
 
-        <p class="copyright">&copy; 2026 Jimi Hughes</p>
-        <p class="visitor-count" id="visitor-count"></p>
-      </div>
-    </aside>
-
-    <!-- Right Panel (scrollable projects) -->
-    <main class="content">
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" data-tab="apps">Apps</button>
-        <button class="tab" data-tab="games">Games</button>
-        <button class="tab" data-tab="coming-soon">Coming Soon</button>
-      </div>
-
-      <div class="tab-panels-wrap">
-
-      <!-- Apps -->
-      <div class="tab-panel active" id="tab-apps">
-
-        <a href="life-manager/index.html" class="project project-blue">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Life Manager</h2>
-              <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/life-manager.png" alt="Life Manager screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="meal-planner/index.html" class="project project-orange">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Meal Planner</h2>
-              <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="weather/index.html" class="project project-dark">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Weather App</h2>
-              <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/weather.png" alt="Weather App screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="typing-test/index.html" class="project project-teal">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Speed Typing Test</h2>
-              <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="dashboard/index.html" class="project project-slate" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4338ca 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Personal Dashboard</h2>
-              <p>All-in-one homepage with live weather, clock, to-do list, bookmarks, and daily focus tracker.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/dashboard.png" alt="Personal Dashboard screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="pomodoro/index.html" class="project project-rose" style="background:linear-gradient(135deg,#7f1d1d 0%,#b91c1c 50%,#ef4444 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Pomodoro Timer</h2>
-              <p>Focus timer with task list, short and long breaks, session tracking, and sound alerts.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/pomodoro.png" alt="Pomodoro Timer screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- Games -->
-      <div class="tab-panel" id="tab-games">
-
-        <a href="crossword/index.html" class="project project-amber" style="background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Crossword Puzzle</h2>
-              <p>Interactive crossword generator with clues, hints, check answers, and keyboard navigation.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/crossword.png" alt="Crossword Puzzle screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="space-invaders/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#047857 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Space Invaders</h2>
-              <p>Classic arcade action with multiple alien types, shield barriers, levels, and high score tracking.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/space-invaders.png" alt="Space Invaders screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="snake/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#052e16 0%,#166534 50%,#22c55e 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Snake</h2>
-              <p>Classic snake game — eat food, grow longer, avoid the walls and your own tail.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/snake.png" alt="Snake screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="2048/index.html" class="project" style="background:linear-gradient(135deg,#78350f 0%,#d97706 50%,#fbbf24 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>2048</h2>
-              <p>Slide tiles, merge numbers, and reach the 2048 tile. Simple rules, addictive gameplay.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/2048.png" alt="2048 screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="quiz/index.html" class="project" style="background:linear-gradient(135deg,#2e1065 0%,#4c1d95 50%,#7c3aed 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Quiz Game</h2>
-              <p>6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/quiz.png" alt="Quiz Game screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="platformer/index.html" class="project project-rose" style="background:linear-gradient(135deg,#4c0519 0%,#881337 50%,#be123c 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Pixel Runner</h2>
-              <p>Side-scrolling platformer with procedural levels, coin collecting, and increasing difficulty.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/platformer.png" alt="Pixel Runner screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- Coming Soon -->
-      <div class="tab-panel" id="tab-coming-soon">
-
-        <div class="project project-purple project-disabled">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Brain Training</h2>
-              <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
-              <span class="project-cta project-cta-muted">Coming Soon</span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame device-phone">
-                <img src="images/brain-training.png" alt="Brain Training screenshot">
-              </div>
-            </div>
-          </div>
+      <a href="building-a-weather-app.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Build Log</span>
+          <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
+          <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
         </div>
+        <span class="post-date">Mar 2026</span>
+      </a>
 
-      </div>
+      <a href="building-games.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Lessons</span>
+          <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
+          <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
+        </div>
+        <span class="post-date">Feb 2026</span>
+      </a>
 
-      </div><!-- /tab-panels-wrap -->
+      <a href="going-self-taught.html" class="post-item">
+        <div class="post-item-left">
+          <span class="post-tag">Story</span>
+          <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
+          <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
+        </div>
+        <span class="post-date">Jan 2026</span>
+      </a>
 
-    </main>
-
+    </div>
   </div>
-
-  <script>
-    // Console easter egg
-    console.log('%c👋 Hey, you found me!', 'font-size:20px; font-weight:bold; color:#111;');
-    console.log('%cYou\'re clearly the curious type — I like that.', 'font-size:13px; color:#555;');
-    console.log('%c📬 Want to work together? → jimifh0111@gmail.com', 'font-size:13px; color:#6366f1; font-weight:600;');
-    console.log('%c🔗 linkedin.com/in/jimi-hughes-a0b33737b', 'font-size:13px; color:#6366f1;');
-
-    // Loading animation + typing effect on role text
-    window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
-
-      // Typing animation for "Creator / AI Engineer"
-      const roleEl = document.querySelector('.role');
-      const fullText = roleEl.textContent.trim();
-      roleEl.textContent = '';
-
-      // Insert blinking cursor
-      const cursor = document.createElement('span');
-      cursor.className = 'typing-cursor';
-      roleEl.appendChild(cursor);
-
-      // Start typing after h1 has faded in (slight delay feels natural)
-      setTimeout(() => {
-        let i = 0;
-        const speed = 55; // ms per character
-        const type = () => {
-          if (i < fullText.length) {
-            roleEl.insertBefore(document.createTextNode(fullText[i]), cursor);
-            i++;
-            setTimeout(type, speed);
-          } else {
-            // Cursor blinks for 1.5s then softly disappears
-            setTimeout(() => {
-              cursor.style.transition = 'opacity 0.6s ease';
-              cursor.style.opacity = '0';
-              setTimeout(() => cursor.remove(), 600);
-            }, 1500);
-          }
-        };
-        type();
-      }, 650);
-    });
-
-    // Live visitor counter
-    fetch('https://api.counterapi.dev/v1/jimihughes/portfolio/up')
-      .then(r => r.json())
-      .then(data => {
-        const el = document.getElementById('visitor-count');
-        if (el && data.count) {
-          el.textContent = data.count.toLocaleString() + ' visitors';
-        }
-      })
-      .catch(() => {});
-
-    // Tab switching — fast crossfade
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.tab-panel');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        const newPanel = document.getElementById('tab-' + target);
-        const currentPanel = document.querySelector('.tab-panel.active');
-        if (currentPanel === newPanel) return;
-
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        panels.forEach(p => p.classList.remove('active'));
-        newPanel.classList.add('active', 'switching');
-
-        setTimeout(() => newPanel.classList.remove('switching'), 150);
-        document.querySelector('.content').scrollTop = 0;
-      });
-    });
-
-  </script>
 
 </body>
 </html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Building 6 Games Taught Me — Jimi Hughes</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.svg">
+  <meta name="description" content="Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me about writing better code.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg: #f2f2f2; --sidebar-bg: #fafafa; --text: #111; --text-muted: #888; --border: #e0e0e0; }
+    html { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; color: var(--text); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav { height: 56px; background: #ffffff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; z-index: 100; }
+    .site-nav-brand { font-size: 15px; font-weight: 800; color: #111; text-decoration: none; letter-spacing: -0.4px; margin-right: auto; }
+    .site-nav-links { display: flex; gap: 4px; }
+    .site-nav-links a { font-size: 14px; font-weight: 500; color: #777; text-decoration: none; padding: 7px 14px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
+    .site-nav-links a:hover { color: #111; background: #f0f0f0; }
+    .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
+
+    .page { flex: 1; max-width: 680px; width: 100%; margin: 0 auto; padding: 64px 24px 100px; }
+
+    .post-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 48px; transition: color 0.15s; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+    .post-back:hover { color: var(--text); }
+
+    .post-header { margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+    .post-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .post-header h1 { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+    .post-meta { font-size: 13px; color: var(--text-muted); }
+
+    .post-divider { width: 40px; height: 2px; background: var(--text); margin: 40px 0; opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+
+    .post-body { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+    .post-body p { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 28px; }
+    .post-body h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-top: 48px; margin-bottom: 16px; }
+    .post-body ul { padding-left: 24px; margin-bottom: 28px; }
+    .post-body ul li { font-size: 17px; line-height: 1.8; color: #222; margin-bottom: 6px; }
+    .post-body strong { font-weight: 700; color: var(--text); }
+    .post-body .callout { padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-left: 3px solid var(--text); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; line-height: 1.7; color: var(--text); }
+
+    /* Game cards */
+    .game-grid { display: flex; flex-direction: column; gap: 2px; margin: 32px 0; }
+    .game-card { padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 2px; }
+    .game-card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .game-card-lesson { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    .post-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+    .post-footer-label { font-size: 13px; color: var(--text-muted); }
+    .post-footer-links { display: flex; gap: 8px; }
+    .post-footer-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--text); transition: border-color 0.2s; }
+    .post-footer-link:hover { border-color: #999; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 600px) {
+      .page { padding: 40px 16px 80px; }
+      .post-header h1 { font-size: 28px; }
+      .post-body p, .post-body ul li { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
+    <div class="site-nav-links">
+      <a href="../index.html">Work</a>
+      <a href="../about/index.html">About</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../contact/index.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <a href="index.html" class="post-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      All posts
+    </a>
+
+    <div class="post-header">
+      <span class="post-tag">Lessons</span>
+      <h1>What Building 6 Games Taught Me About Writing Better Code</h1>
+      <p class="post-meta">February 2026 · 6 min read</p>
+    </div>
+
+    <div class="post-divider"></div>
+
+    <div class="post-body">
+
+      <p>Building games is the best education I've had as a developer. Not because games are glamorous, but because they lie to you less. A bug in a to-do app might go unnoticed for weeks. A bug in a game is immediately, painfully visible. The snake goes through a wall. The alien doesn't shoot. The tile doesn't merge. You feel it instantly.</p>
+
+      <p>Over the past year I built six games — Snake, 2048, Space Invaders, a Crossword Puzzle, a Quiz Game, and a Pixel Runner platformer. Each one taught me something different. Here's what I took from each of them.</p>
+
+      <h2>The games and what they taught me</h2>
+
+      <div class="game-grid">
+        <div class="game-card">
+          <p class="game-card-title">Snake — State machines are underrated</p>
+          <p class="game-card-lesson">Snake looks trivial. It isn't. Managing the direction the snake is moving, the direction it's about to move, and preventing it from reversing into itself requires careful state management. I learned to think in terms of "what state am I in now, and what's the valid next state?" — a pattern I now use everywhere.</p>
+        </div>
+        <div class="game-card">
+          <p class="game-card-title">2048 — Elegant algorithms exist</p>
+          <p class="game-card-lesson">The tile merge logic in 2048 can be written in about 15 lines if you think about it the right way. My first attempt was 80 lines of nested conditionals. When I finally found the clean version — collapsing each row into an array, filtering, merging, padding — it felt like a revelation. Simplicity is a skill.</p>
+        </div>
+        <div class="game-card">
+          <p class="game-card-title">Space Invaders — Collision detection is a rabbit hole</p>
+          <p class="game-card-lesson">I rewrote the collision system three times. Pixel-perfect collision is expensive. Bounding-box collision is fast but imprecise. I ended up with a layered approach — cheap broad-phase checks first, more precise checks only when needed. That's a pattern straight out of game engine design, and I stumbled into it by necessity.</p>
+        </div>
+        <div class="game-card">
+          <p class="game-card-title">Crossword — Data structure design matters early</p>
+          <p class="game-card-lesson">A crossword is a grid where letters intersect. How you model that in code shapes everything. I chose wrong at the start — a flat array when I needed a 2D map with metadata on each cell. Refactoring halfway through cost me two full days. Now I spend more time on data design before writing any logic.</p>
+        </div>
+        <div class="game-card">
+          <p class="game-card-title">Quiz Game — User experience is part of the code</p>
+          <p class="game-card-lesson">The quiz game has 60 questions across 6 categories. Getting the questions right was 10% of the work. The other 90% was transitions, timing, score animations, feedback on wrong answers, and the final results screen. How something feels is just as much a code problem as how it works.</p>
+        </div>
+        <div class="game-card">
+          <p class="game-card-title">Pixel Runner — requestAnimationFrame is your friend</p>
+          <p class="game-card-lesson">My first attempt used setInterval for the game loop. It was choppy, inconsistent, and drained the battery. Switching to requestAnimationFrame — and calculating delta time to keep the game speed consistent regardless of frame rate — made it feel like a completely different game. The browser API exists for a reason.</p>
+        </div>
+      </div>
+
+      <h2>The thing all of them had in common</h2>
+
+      <p>Every single game went through the same lifecycle: it worked, then it got complex, then I had to refactor. The code that gets you to "working" is rarely the code you want to ship. The difference between a game that's done and a game that's good is usually one honest rewrite of the messiest part.</p>
+
+      <div class="callout">
+        Don't be precious about code you've already written. If you can see a cleaner way, take it. The first version was the prototype. Now build the real thing.
+      </div>
+
+      <h2>Why I'd recommend building games to any developer</h2>
+
+      <p>Games compress the feedback loop. You write code, you see the result immediately, you feel whether it's right. That tight cycle builds intuition faster than anything else I've tried.</p>
+
+      <p>They also force you into problems you'd never deliberately seek out — physics, rendering, input handling, AI pathfinding — and those problems teach you more than another CRUD app ever would. Pick a game you enjoy, build a version of it, and don't stop when it works. Stop when it feels good.</p>
+
+      <p>All six games are live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Games tab</a> — go play them.</p>
+
+    </div>
+
+    <div class="post-footer">
+      <span class="post-footer-label">Thanks for reading.</span>
+      <div class="post-footer-links">
+        <a href="../index.html" class="post-footer-link">
+          Play the games
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="index.html" class="post-footer-link">More posts</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
