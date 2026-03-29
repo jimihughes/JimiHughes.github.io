@@ -365,6 +365,33 @@
       });
     });
 
+    // Animated favicon — canvas-based so it actually works in Chrome
+    (function() {
+      var c = document.createElement('canvas');
+      c.width = 32; c.height = 32;
+      var ctx = c.getContext('2d');
+      var a = 0;
+      var lnk = document.querySelector("link[rel*='icon']");
+      if (!lnk) { lnk = document.createElement('link'); lnk.rel = 'icon'; document.head.appendChild(lnk); }
+      function frame() {
+        ctx.clearRect(0, 0, 32, 32);
+        ctx.beginPath();
+        ctx.moveTo(8,0); ctx.arcTo(32,0,32,32,8); ctx.arcTo(32,32,0,32,8); ctx.arcTo(0,32,0,0,8); ctx.arcTo(0,0,32,0,8);
+        ctx.closePath();
+        ctx.fillStyle = '#111'; ctx.fill();
+        ctx.strokeStyle = 'rgba(99,102,241,0.2)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(16,16,12,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.arc(16,16,12,a,a+Math.PI*1.4); ctx.stroke();
+        ctx.fillStyle = '#a5b4fc';
+        ctx.beginPath(); ctx.arc(16+12*Math.cos(a+Math.PI*1.4),16+12*Math.sin(a+Math.PI*1.4),2,0,Math.PI*2); ctx.fill();
+        ctx.font = '800 17px system-ui,sans-serif'; ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('J',16,17);
+        a += 0.035; lnk.href = c.toDataURL();
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
 
   </script>
 
