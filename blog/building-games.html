@@ -140,54 +140,54 @@
 
         <div class="post-body">
 
-          <p>Building games is the best education I've had as a developer. Not because games are glamorous, but because they lie to you less. A bug in a to-do app might go unnoticed for weeks. A bug in a game is immediately, painfully visible. The snake goes through a wall. The alien doesn't shoot. The tile doesn't merge. You feel it instantly.</p>
+          <p>Building games has been the best education I've had as a developer. A bug in a to-do app can go unnoticed for weeks. A bug in a game is obvious the second you play it. The snake clips through a wall. The alien stops shooting. The tile merges wrong. You know immediately something is broken, and that tight feedback loop forces you to write better code.</p>
 
-          <p>Over the past year I built six games — Snake, 2048, Space Invaders, a Crossword Puzzle, a Quiz Game, and a Pixel Runner platformer. Each one taught me something different. Here's what I took from each of them.</p>
+          <p>Over the past year I built six games: Snake, 2048, Space Invaders, a Crossword Puzzle, a Quiz Game, and a Pixel Runner platformer. Each one taught me something I didn't expect going in.</p>
 
           <h3>The games and what they taught me</h3>
 
           <div class="game-grid">
             <div class="game-card">
               <p class="game-card-title">Snake — State machines are underrated</p>
-              <p class="game-card-lesson">Snake looks trivial. It isn't. Managing the direction the snake is moving, the direction it's about to move, and preventing it from reversing into itself requires careful state management. I learned to think in terms of "what state am I in now, and what's the valid next state?" — a pattern I now use everywhere.</p>
+              <p class="game-card-lesson">Snake seems simple until you start building it. Managing which direction the snake is currently moving, which direction it's about to move, and blocking it from reversing into itself requires careful state tracking. It taught me to think in terms of valid state transitions, which is a pattern I now use in basically everything.</p>
             </div>
             <div class="game-card">
-              <p class="game-card-title">2048 — Elegant algorithms exist</p>
-              <p class="game-card-lesson">The tile merge logic in 2048 can be written in about 15 lines if you think about it the right way. My first attempt was 80 lines of nested conditionals. When I finally found the clean version — collapsing each row into an array, filtering, merging, padding — it felt like a revelation. Simplicity is a skill.</p>
+              <p class="game-card-title">2048 — Sometimes the clean solution exists</p>
+              <p class="game-card-lesson">My first attempt at the tile merge logic was about 80 lines of nested conditionals. The clean version is 15 lines: collapse each row into an array, filter out the zeros, merge adjacent matching values, pad back to length. Finding that solution felt like a proper lightbulb moment. The simpler version is usually out there if you look for it.</p>
             </div>
             <div class="game-card">
-              <p class="game-card-title">Space Invaders — Collision detection is a rabbit hole</p>
-              <p class="game-card-lesson">I rewrote the collision system three times. Pixel-perfect collision is expensive. Bounding-box collision is fast but imprecise. I ended up with a layered approach — cheap broad-phase checks first, more precise checks only when needed. That's a pattern straight out of game engine design, and I stumbled into it by necessity.</p>
+              <p class="game-card-title">Space Invaders — Collision detection goes deep</p>
+              <p class="game-card-lesson">I rewrote the collision system three times. Pixel-perfect is too expensive. Pure bounding-box is fast but sloppy. I ended up doing a broad-phase check first and only running the precise check when objects were close. That's apparently a standard game engine pattern, and I arrived at it purely out of necessity.</p>
             </div>
             <div class="game-card">
-              <p class="game-card-title">Crossword — Data structure design matters early</p>
-              <p class="game-card-lesson">A crossword is a grid where letters intersect. How you model that in code shapes everything. I chose wrong at the start — a flat array when I needed a 2D map with metadata on each cell. Refactoring halfway through cost me two full days. Now I spend more time on data design before writing any logic.</p>
+              <p class="game-card-title">Crossword — Get your data structure right before writing any logic</p>
+              <p class="game-card-lesson">A crossword is a grid where letters share cells between words. I modelled it as a flat array initially, when I actually needed a 2D map with metadata on each cell. Refactoring halfway through cost me two full days. Now I spend real time on data design before writing a single function.</p>
             </div>
             <div class="game-card">
-              <p class="game-card-title">Quiz Game — User experience is part of the code</p>
-              <p class="game-card-lesson">The quiz game has 60 questions across 6 categories. Getting the questions right was 10% of the work. The other 90% was transitions, timing, score animations, feedback on wrong answers, and the final results screen. How something feels is just as much a code problem as how it works.</p>
+              <p class="game-card-title">Quiz Game — Feel is part of the product</p>
+              <p class="game-card-lesson">The quiz has 60 questions across 6 categories. Getting the questions right took maybe 10% of the total time. The rest was transitions, answer feedback animations, score tracking, and the results screen. How something feels to use is a code problem just as much as whether it works.</p>
             </div>
             <div class="game-card">
-              <p class="game-card-title">Pixel Runner — requestAnimationFrame is your friend</p>
-              <p class="game-card-lesson">My first attempt used setInterval for the game loop. It was choppy, inconsistent, and drained the battery. Switching to requestAnimationFrame — and calculating delta time to keep the game speed consistent regardless of frame rate — made it feel like a completely different game. The browser API exists for a reason.</p>
+              <p class="game-card-title">Pixel Runner — Use requestAnimationFrame</p>
+              <p class="game-card-lesson">I used setInterval for the first game loop attempt. It was choppy and inconsistent across devices. Switching to requestAnimationFrame and calculating delta time so the speed stayed consistent regardless of frame rate made it feel completely different. The browser gives you the right tool for this, use it.</p>
             </div>
           </div>
 
-          <h3>The thing all of them had in common</h3>
+          <h3>What all of them had in common</h3>
 
-          <p>Every single game went through the same lifecycle: it worked, then it got complex, then I had to refactor. The code that gets you to "working" is rarely the code you want to ship. The difference between a game that's done and a game that's good is usually one honest rewrite of the messiest part.</p>
+          <p>Every game followed the same arc. It worked, then it got complex, then I had to go back and refactor. The code that gets something to a working state is almost never the code you actually want. Getting from working to good usually means one honest rewrite of the worst part.</p>
 
           <div class="callout">
-            Don't be precious about code you've already written. If you can see a cleaner way, take it. The first version was the prototype. Now build the real thing.
+            Don't get attached to code you've already written. If you can see a cleaner way to do it, take it. The first version got you to working. Now build the real thing.
           </div>
 
-          <h3>Why I'd recommend building games to any developer</h3>
+          <h3>Why I'd suggest it to any developer</h3>
 
-          <p>Games compress the feedback loop. You write code, you see the result immediately, you feel whether it's right. That tight cycle builds intuition faster than anything else I've tried.</p>
+          <p>Games make the feedback loop as short as possible. You write something, run it, and immediately know if it's right. That speed builds intuition faster than any other kind of project I've worked on.</p>
 
-          <p>They also force you into problems you'd never deliberately seek out — physics, rendering, input handling, AI pathfinding — and those problems teach you more than another CRUD app ever would. Pick a game you enjoy, build a version of it, and don't stop when it works. Stop when it feels good.</p>
+          <p>They also drag you into problems you'd never go looking for yourself: rendering, physics, input handling, basic AI. Those problems teach you more than another CRUD app would. Pick a game you like, build your own version of it, and don't stop once it runs. Stop when it actually feels good to play.</p>
 
-          <p>All six games are live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Games tab</a> — go play them.</p>
+          <p>All six are live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Games tab</a> if you want to try them.</p>
 
         </div>
 

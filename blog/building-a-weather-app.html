@@ -136,57 +136,48 @@
 
         <div class="post-body">
 
-          <p>When I decided to build a weather app, I thought it would be simple. Fetch some data, display it nicely, done. Tutorials make it look that way. Reality was a bit different.</p>
+          <p>I thought a weather app would be a quick build. Fetch some data, display it nicely, done. Tutorials make it look that straightforward. The actual build was a different story.</p>
 
-          <p>The finished app has live forecasts, hourly data, a 7-day outlook, sunrise and sunset times, UV index, wind speed, humidity, and city search with auto-suggest. Getting all of that working — and looking good — took a lot more trial and error than I expected. Here's the honest account of how it went.</p>
+          <p>The finished version has live forecasts, hourly breakdowns, a 7-day outlook, sunrise and sunset times, UV index, wind speed, humidity, and city search with auto-suggest. Getting all of it working and looking decent took a lot more work than I'd planned for.</p>
 
           <h3>Starting with the API</h3>
 
-          <p>I used the <strong>OpenWeatherMap API</strong>, which has a generous free tier. Setting it up looked easy: register, get a key, make a fetch call, get weather. That part worked first time. What didn't work first time was everything after that.</p>
+          <p>I used the <strong>OpenWeatherMap API</strong>, which has a solid free tier. Getting a basic response back was easy enough. Everything after that was where things got interesting.</p>
 
-          <p>Real API data is messy. Some fields you expect are sometimes missing. The temperature comes back in Kelvin by default (didn't notice that for longer than I'd like to admit). Wind direction is in degrees, not compass points — so I had to write a function to convert 247° into "WSW". UV index only comes from a separate endpoint. Sunrise and sunset are Unix timestamps that need converting.</p>
+          <p>Real API data has rough edges. Fields you expect are sometimes missing. Temperature comes back in Kelvin by default, which I didn't catch for an embarrassingly long time. Wind direction is in degrees rather than compass points, so I had to write a conversion function to turn 247 into "WSW". UV index lives on a completely separate endpoint. Sunrise and sunset come back as Unix timestamps. None of this is hard to deal with, but none of it is mentioned in any tutorial either.</p>
 
           <div class="callout">
-            Every tutorial shows you the happy path. Real data has null values, unexpected formats, and edge cases the documentation glosses over. Plan for that from the start.
+            Tutorials show you the happy path. Real API data has missing fields, weird formats, and edge cases the documentation skips over. Build with that in mind from day one.
           </div>
 
           <h3>The CORS problem</h3>
 
-          <p>For a while, my app worked perfectly when I opened it locally — and broke completely when I pushed it live. The browser was blocking requests to the API because of <strong>CORS (Cross-Origin Resource Sharing)</strong> restrictions.</p>
-
-          <p>The fix was switching from the HTTP endpoint to HTTPS and adding the right headers. Took me a full afternoon to figure that out. The error message in the console wasn't exactly clear, and every Stack Overflow answer seemed to suggest something slightly different.</p>
+          <p>For a while the app worked fine locally and broke completely once it was live. The browser was blocking requests because of <strong>CORS</strong> restrictions. The fix was straightforward once I found it: switch from HTTP to HTTPS and set the right headers. Getting to that answer took most of an afternoon because the console error wasn't very descriptive and the Stack Overflow answers all pointed in slightly different directions.</p>
 
           <h3>Making it look good</h3>
 
-          <p>Once the data was working, I spent a long time on the UI. Weather apps live or die on how they feel — nobody wants a list of numbers. I ended up building:</p>
+          <p>Once the data was reliable I spent a good amount of time on the UI. A weather app that just shows you a list of numbers isn't useful. I ended up building:</p>
 
           <ul>
-            <li>A dynamic background that shifts based on weather condition and time of day</li>
-            <li>Custom SVG icons for each weather state (sun, cloud, rain, snow, storm)</li>
+            <li>A dynamic background that changes based on weather condition and time of day</li>
+            <li>Custom SVG icons for each weather state</li>
             <li>A horizontal scroll for the hourly forecast</li>
-            <li>Cards for the 7-day outlook that show min/max temps at a glance</li>
+            <li>Cards for the 7-day outlook showing min and max temps</li>
           </ul>
 
-          <p>The background gradient took the longest. I wanted it to feel atmospheric — a deep orange sunrise, a steel-grey overcast, a dark navy night. Getting the colour transitions right without it looking garish was genuinely difficult.</p>
+          <p>The background gradients took the most time. I wanted a deep orange for sunrise, a flat grey for overcast, a dark blue for night. Getting those transitions to look natural without being over the top was harder than it sounds.</p>
 
           <h3>The city search</h3>
 
-          <p>The search feature uses a separate geocoding API call to convert a city name into coordinates, then passes those to the weather API. Sounds straightforward. In practice, you have to handle:</p>
+          <p>Search runs a geocoding call first to turn a city name into coordinates, then passes those to the weather API. Simple in theory. In practice you need to handle duplicate city names across countries, empty results, users typing quickly and firing off too many requests, and a fallback to the user's current location when search fails.</p>
 
-          <ul>
-            <li>Cities with the same name in different countries</li>
-            <li>Empty results when the city isn't found</li>
-            <li>Rate limiting if someone types fast</li>
-            <li>Graceful fallback to the user's location if search fails</li>
-          </ul>
-
-          <p>I added a <strong>debounce</strong> to the search input — it waits 400ms after the user stops typing before firing the request. That alone cut the number of API calls by about 80% in testing.</p>
+          <p>Adding a <strong>debounce</strong> to the input so it only fires after 400ms of no typing cut the number of API calls by around 80% on its own. Worth doing on any search input.</p>
 
           <h3>What I'd do differently</h3>
 
-          <p>If I was starting again, I'd plan the data model first. I dived straight into building the UI before I fully understood what data I had available and in what format. That led to a lot of refactoring mid-build when I realised something I'd assumed was a single call actually needed three.</p>
+          <p>I'd sort out the data model before touching the UI. I jumped straight into building screens before I properly understood what data I had and in what shape it came. That led to a bunch of refactoring halfway through when something I thought was one API call turned out to need three.</p>
 
-          <p>The app is live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Work tab</a> — give it a try. It'll ask for your location and pull in the live forecast wherever you are.</p>
+          <p>The app is live on the <a href="../index.html" style="text-decoration:underline; text-underline-offset:3px;">Work tab</a> if you want to try it. Give it your location and it'll pull in the live forecast.</p>
 
         </div>
 
