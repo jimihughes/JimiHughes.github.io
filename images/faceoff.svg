@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0a0a0a"/>
+  <text x="60" y="80" font-family="Helvetica,Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="3" fill="#f59e0b">FACE-OFF</text>
+  <text x="60" y="200" font-family="Helvetica,Arial,sans-serif" font-size="56" font-weight="900" fill="#f0f0f0">Pick the</text>
+  <text x="60" y="270" font-family="Helvetica,Arial,sans-serif" font-size="56" font-weight="900" fill="#f59e0b">winner.</text>
+  <rect x="100" y="340" width="240" height="160" rx="20" fill="#111111" stroke="#1e1e1e" stroke-width="2"/>
+  <text x="220" y="430" font-family="Helvetica,Arial,sans-serif" font-size="18" font-weight="800" fill="#f0f0f0" text-anchor="middle">Eiffel Tower</text>
+  <circle cx="400" cy="420" r="22" fill="#f59e0b"/>
+  <text x="400" y="426" font-family="Helvetica,Arial,sans-serif" font-size="13" font-weight="900" fill="#000" text-anchor="middle">VS</text>
+  <rect x="460" y="340" width="240" height="160" rx="20" fill="#111111" stroke="#1e1e1e" stroke-width="2"/>
+  <text x="580" y="430" font-family="Helvetica,Arial,sans-serif" font-size="18" font-weight="800" fill="#f0f0f0" text-anchor="middle">Big Ben</text>
+  <text x="400" y="310" font-family="Helvetica,Arial,sans-serif" font-size="22" font-weight="900" fill="#f0f0f0" text-anchor="middle">Which is taller?</text>
+</svg>
