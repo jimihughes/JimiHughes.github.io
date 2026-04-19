@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Just Do It">
+  <meta name="theme-color" content="#0d0d14">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>Just Do It</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d14;
+      --surface: #16161f;
+      --surface2: #1e1e2a;
+      --surface3: #26263a;
+      --accent: #ff6b35;
+      --accent-dim: rgba(255,107,53,0.15);
+      --gold: #fbbf24;
+      --text: #f0f0f8;
+      --text-muted: #6b6b80;
+      --text-dim: #9898b0;
+      --success: #4ade80;
+      --border: #2a2a3c;
+      --r: 16px;
+      --r-sm: 10px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; overflow: hidden; -webkit-font-smoothing: antialiased; }
+    #app { height: 100%; height: 100dvh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; position: relative; overflow: hidden; }
+
+    /* SCREENS */
+    .screen { display: none; flex-direction: column; flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 84px; }
+    .screen::-webkit-scrollbar { width: 0; }
+    .screen.active { display: flex; }
+
+    /* HEADER */
+    .hdr { padding: 56px 24px 0; padding-top: calc(56px + env(safe-area-inset-top)); }
+    .hdr-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    .sub { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+
+    /* BOTTOM NAV */
+    .bnav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: var(--surface); border-top: 1px solid var(--border); display: flex; padding: 10px 0; padding-bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 100; }
+    .ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; opacity: 0.38; transition: opacity 0.2s; background: none; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+    .ni.on { opacity: 1; color: var(--accent); }
+    .ni-ic { font-size: 22px; line-height: 1; }
+    .ni-lb { font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 22px; border-radius: var(--r-sm); border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; transition: all 0.15s; outline: none; }
+    .btn-p { background: var(--accent); color: #fff; width: 100%; }
+    .btn-p:active { opacity: 0.82; transform: scale(0.98); }
+    .btn-p:disabled { opacity: 0.38; cursor: default; transform: none; }
+    .btn-g { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-g:active { opacity: 0.75; }
+    .btn-ic { width: 44px; height: 44px; padding: 0; border-radius: 12px; background: var(--surface2); font-size: 20px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .back-btn { background: none; border: none; color: var(--text-dim); font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; }
+
+    /* CHIPS */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { padding: 10px 18px; border-radius: 100px; background: var(--surface2); border: 1.5px solid var(--border); color: var(--text-dim); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.15s; }
+    .chip.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+    .chip:active { transform: scale(0.96); }
+
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 12px; cursor: pointer; transition: transform 0.15s, border-color 0.15s; position: relative; overflow: hidden; }
+    .card:active { transform: scale(0.99); border-color: var(--surface3); }
+    .cbar { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+    .cbody { padding-left: 14px; }
+    .ccat { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .ctitle { font-size: 20px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.3px; }
+    .cmeta { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+    .ctime { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .cenergy { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 100px; background: var(--surface2); color: var(--text-muted); }
+    .creframe { font-size: 13px; color: var(--text-dim); font-style: italic; line-height: 1.5; border-left: 2px solid var(--accent); padding-left: 10px; }
+    .ccta { margin-top: 14px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--accent); }
+
+    /* SECTION */
+    .sec-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin: 24px 0 12px; }
+
+    /* STATS */
+    .stats-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .stat-c { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 16px 12px; text-align: center; }
+    .stat-v { font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; color: var(--accent); margin-bottom: 4px; }
+    .stat-l { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+    /* HISTORY ITEM */
+    .hi { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .hi-ic { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .hi-info { flex: 1; }
+    .hi-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .hi-meta { font-size: 12px; color: var(--text-muted); }
+    .hi-dur { font-size: 13px; font-weight: 700; color: var(--text-dim); }
+
+    /* FOCUS SCREEN */
+    #screen-focus { background: var(--bg); }
+    .fhdr { padding: 56px 24px 0; padding-top: calc(56px + env(safe-area-inset-top)); }
+    .fcat { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .ftitle { font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 24px; }
+    .timer-wrap { text-align: center; padding: 28px 24px; }
+    .timer-time { font-size: 72px; font-weight: 800; letter-spacing: -3px; font-variant-numeric: tabular-nums; line-height: 1; color: var(--accent); }
+    .timer-lbl { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 500; }
+    .steps-list { padding: 0 24px; }
+    .step { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity 0.2s; }
+    .step.done { opacity: 0.38; }
+    .step-chk { width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; margin-top: 1px; }
+    .step.done .step-chk { background: var(--success); border-color: var(--success); }
+    .step-txt { font-size: 15px; font-weight: 500; line-height: 1.4; flex: 1; }
+    .step-tm { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+    .focus-acts { padding: 20px 24px; display: grid; grid-template-columns: 1fr 2fr; gap: 12px; }
+
+    /* COMPLETE SCREEN */
+    #screen-complete { align-items: center; justify-content: center; text-align: center; padding: 40px 24px; }
+    .done-ic { font-size: 80px; margin-bottom: 24px; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes popIn { from { transform: scale(0) rotate(-20deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+    .done-title { font-size: 40px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1.5px; }
+    .done-sub { font-size: 16px; color: var(--text-dim); margin-bottom: 40px; line-height: 1.5; }
+    .dur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin-bottom: 16px; }
+    .dur-chip { padding: 14px 8px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r-sm); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); cursor: pointer; transition: all 0.15s; }
+    .dur-chip.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+    .dur-chip:active { transform: scale(0.97); }
+
+    /* FORM */
+    .fgrp { margin-bottom: 24px; }
+    .flbl { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; }
+    .finput { width: 100%; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+    .finput:focus { border-color: var(--accent); }
+    .finput::placeholder { color: var(--text-muted); }
+
+    /* AI PREVIEW */
+    .ai-prev { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-top: 20px; }
+    .ai-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .ai-row:last-child { border-bottom: none; }
+    .ai-key { color: var(--text-muted); font-weight: 500; }
+    .ai-val { font-weight: 700; }
+
+    /* SETTINGS */
+    .set-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; margin-bottom: 12px; }
+    .set-lbl { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+    .set-note { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 10px; }
+    .key-input { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--r-sm); padding: 12px 14px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 14px; outline: none; -webkit-appearance: none; }
+    .key-input:focus { border-color: var(--accent); }
+    .danger-btn { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: var(--r-sm); padding: 14px 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; }
+
+    /* MISC UI */
+    .surprise-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(251,191,36,0.06)); border: 1.5px dashed rgba(255,107,53,0.4); border-radius: var(--r); color: var(--accent); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; margin-bottom: 20px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .surprise-btn:active { opacity: 0.8; transform: scale(0.99); }
+    .surprise-btn:disabled { opacity: 0.5; cursor: default; }
+    .ai-banner { background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(251,191,36,0.06)); border: 1px solid rgba(255,107,53,0.2); border-radius: var(--r-sm); padding: 12px 16px; font-size: 13px; color: var(--text-dim); margin-bottom: 16px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+    .empty { text-align: center; padding: 60px 24px; color: var(--text-muted); }
+    .empty-ic { font-size: 48px; margin-bottom: 16px; }
+    .empty-t { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-dim); }
+    .empty-s { font-size: 14px; line-height: 1.6; }
+    .dots { display: inline-flex; gap: 4px; align-items: center; }
+    .dots span { width: 6px; height: 6px; background: currentColor; border-radius: 50%; animation: db 1.2s infinite; }
+    .dots span:nth-child(2) { animation-delay: 0.2s; }
+    .dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes db { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+    .px { padding-left: 24px; padding-right: 24px; }
+    .mt8 { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .mt24 { margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- CHECK-IN -->
+  <div id="screen-checkin" class="screen active">
+    <div class="hdr">
+      <div class="hdr-row">
+        <div class="logo">Just Do It<span>.</span></div>
+        <button class="btn-ic" onclick="S('settings')">⚙️</button>
+      </div>
+      <div class="sub">Stop thinking. Start doing.</div>
+    </div>
+    <div class="px mt24">
+      <h2 style="font-size:22px;font-weight:800;margin-bottom:18px;letter-spacing:-0.3px;">How much time do you have?</h2>
+      <div class="chips" id="time-chips">
+        <button class="chip" onclick="selTime(10,this)">10 mins</button>
+        <button class="chip" onclick="selTime(20,this)">20 mins</button>
+        <button class="chip" onclick="selTime(30,this)">30 mins</button>
+        <button class="chip" onclick="selTime(60,this)">1 hour</button>
+        <button class="chip" onclick="selTime(120,this)">2+ hours</button>
+      </div>
+      <h2 style="font-size:22px;font-weight:800;margin:30px 0 18px;letter-spacing:-0.3px;">Energy level?</h2>
+      <div class="chips" id="energy-chips">
+        <button class="chip" onclick="selEnergy('low',this)">⚡ Low</button>
+        <button class="chip" onclick="selEnergy('medium',this)">🔥 Medium</button>
+        <button class="chip" onclick="selEnergy('high',this)">💪 High</button>
+      </div>
+      <button class="btn btn-p mt24" id="go-btn" disabled onclick="goSuggest()">Let's Go →</button>
+    </div>
+    <div id="key-nag"></div>
+  </div>
+
+  <!-- SUGGESTIONS -->
+  <div id="screen-suggestions" class="screen">
+    <div class="hdr">
+      <div class="hdr-row">
+        <div class="logo">Just Do It<span>.</span></div>
+        <button class="btn-ic" onclick="S('checkin')">✏️</button>
+      </div>
+      <div class="sub" id="sug-sub"></div>
+    </div>
+    <div class="px mt24" id="sug-list"></div>
+  </div>
+
+  <!-- FOCUS -->
+  <div id="screen-focus" class="screen">
+    <div class="fhdr px">
+      <button class="back-btn" style="margin-bottom:16px;" onclick="exitFocus()">← Back</button>
+      <div class="fcat" id="f-cat"></div>
+      <div class="ftitle" id="f-title"></div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-time" id="timer-val">00:00</div>
+      <div class="timer-lbl">elapsed</div>
+    </div>
+    <div class="steps-list" id="steps-list"></div>
+    <div class="focus-acts">
+      <button class="btn btn-g" onclick="abandonTask()">Abandon</button>
+      <button class="btn btn-p" onclick="doneTask()">Done ✓</button>
+    </div>
+  </div>
+
+  <!-- COMPLETE -->
+  <div id="screen-complete" class="screen">
+    <div class="done-ic">✅</div>
+    <div class="done-title">Done!</div>
+    <div class="done-sub" id="done-sub"></div>
+    <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:18px;">How long did it actually take?</p>
+    <div class="dur-grid" id="dur-grid"></div>
+    <button class="btn btn-p" style="margin-top:8px;" onclick="saveCompletion()">Save & Continue</button>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="screen-history" class="screen">
+    <div class="hdr">
+      <div class="hdr-row"><div class="logo">History<span>.</span></div></div>
+    </div>
+    <div class="px mt24" id="hist-container"></div>
+  </div>
+
+  <!-- ADD TASK -->
+  <div id="screen-add" class="screen">
+    <div class="hdr">
+      <div class="hdr-row">
+        <button class="back-btn" onclick="S('suggestions')">← Back</button>
+        <div class="logo" style="font-size:18px;">Add Task<span>.</span></div>
+      </div>
+    </div>
+    <div class="px mt24">
+      <div class="fgrp">
+        <label class="flbl">What do you need to do?</label>
+        <input type="text" class="finput" id="task-input" placeholder="e.g. Organise my desk..." maxlength="100">
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Category</label>
+        <div class="chips" id="cat-chips">
+          <button class="chip" onclick="selCat('fitness',this)">💪 Fitness</button>
+          <button class="chip" onclick="selCat('home',this)">🏠 Home</button>
+          <button class="chip" onclick="selCat('personal',this)">🌱 Personal</button>
+          <button class="chip" onclick="selCat('admin',this)">📋 Admin</button>
+          <button class="chip on" onclick="selCat('custom',this)">✨ Other</button>
+        </div>
+      </div>
+      <div id="ai-status" style="display:none;" class="ai-banner">
+        <span id="ai-status-ic">🤖</span>
+        <span id="ai-status-txt">Analysing your task...</span>
+      </div>
+      <div id="ai-result"></div>
+      <div id="add-actions">
+        <button class="btn btn-p" id="analyse-btn" onclick="analyseTask()">Analyse with AI ✨</button>
+        <div id="nokey-msg" style="display:none;text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);">
+          Add your Groq API key in <span style="color:var(--accent);cursor:pointer;" onclick="S('settings')">Settings</span> to use AI features
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="screen-settings" class="screen">
+    <div class="hdr">
+      <div class="hdr-row">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div class="logo" style="font-size:18px;">Settings<span>.</span></div>
+      </div>
+    </div>
+    <div class="px mt24">
+      <div class="set-item">
+        <div class="set-lbl">Groq API Key</div>
+        <div class="set-note">Get a <strong>free</strong> key at <span style="color:var(--accent);">console.groq.com</span> — unlocks AI task analysis &amp; personalised suggestions. Uses <em>llama-3.3-70b-versatile</em>.</div>
+        <input type="password" class="key-input" id="key-input" placeholder="gsk_...">
+        <button class="btn btn-p mt8" id="save-key-btn" onclick="saveKey()">Save Key</button>
+      </div>
+      <div class="set-item">
+        <div class="set-lbl">Stats</div>
+        <div id="set-stats" style="font-size:14px;color:var(--text-dim);line-height:1.8;"></div>
+      </div>
+      <button class="danger-btn" onclick="clearHist()">Clear All History</button>
+      <button class="danger-btn" style="background:rgba(239,68,68,0.05);margin-top:8px;" onclick="clearCustom()">Clear Custom Tasks</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav" id="bnav">
+    <button class="ni on" id="ni-home" onclick="navTo('checkin')">
+      <span class="ni-ic">🏠</span><span class="ni-lb">Home</span>
+    </button>
+    <button class="ni" id="ni-history" onclick="navTo('history')">
+      <span class="ni-ic">📊</span><span class="ni-lb">History</span>
+    </button>
+    <button class="ni" id="ni-add" onclick="navTo('add')">
+      <span class="ni-ic">➕</span><span class="ni-lb">Add Task</span>
+    </button>
+    <button class="ni" id="ni-settings" onclick="navTo('settings')">
+      <span class="ni-ic">⚙️</span><span class="ni-lb">Settings</span>
+    </button>
+  </nav>
+
+</div>
+<script>
+// ── STATE ────────────────────────────────────────────────────
+const st = { time: null, energy: null, task: null, timerInt: null, timerSec: 0, selDur: null, prevScr: 'checkin', pendingTask: null, selCat: 'custom' };
+
+// ── TASK LIBRARY ─────────────────────────────────────────────
+const TASKS = [
+  { id:'fit1', name:'10-min stretch', cat:'fitness', mins:10, energy:'low',
+    reframe:"You've already wasted 10 minutes scrolling. Same time — but you'll feel way better.",
+    steps:[{t:'Neck rolls, 30s each side',m:1},{t:'Shoulder rolls & arm circles',m:1},{t:'Chest opener — hands behind back',m:1},{t:'Hip flexor stretch, both sides',m:2},{t:'Hamstring stretch, seated',m:2},{t:'Spinal twist, both sides',m:2},{t:'Child's pose — breathe it out',m:1}]},
+  { id:'fit2', name:'20-min walk', cat:'fitness', mins:20, energy:'low',
+    reframe:"Fresh air literally rewires your brain. You'll come back sharper, not more tired.",
+    steps:[{t:'Shoes on, grab keys/headphones',m:1},{t:'Walk out the door — any direction',m:1},{t:'10 mins out',m:10},{t:'Turn around — 10 mins back',m:10}]},
+  { id:'fit3', name:'30-min home workout', cat:'fitness', mins:30, energy:'medium',
+    reframe:"No gym needed. 4 exercises, 3 rounds. Your future self will thank you in 20 minutes.",
+    steps:[{t:'5 min warm-up: jog on spot, arm swings',m:5},{t:'15 push-ups',m:2},{t:'20 squats',m:2},{t:'20 lunges (10 each leg)',m:2},{t:'30-second plank',m:1},{t:'Repeat x3 — 1 min rest between rounds',m:13},{t:'5 min cool-down stretch',m:5}]},
+  { id:'fit4', name:'Gym session', cat:'fitness', mins:60, energy:'high',
+    reframe:"The hardest part is walking out the door. Everything after is momentum.",
+    steps:[{t:'Pack bag: water, headphones, towel',m:2},{t:'Get to the gym',m:8},{t:'10 min warm-up: treadmill or bike',m:10},{t:'Main lifts or class',m:35},{t:'Cool down & stretch',m:5}]},
+  { id:'hm1', name:'Wipe kitchen surfaces', cat:'home', mins:10, energy:'low',
+    reframe:"A clean kitchen makes everything feel more in control. It's not cleaning — it's a reset.",
+    steps:[{t:'Clear any clutter from counters',m:2},{t:'Spray surfaces with cleaner',m:1},{t:'Wipe countertops left to right',m:3},{t:'Wipe hob / stove top',m:2},{t:'Wipe sink and taps',m:2}]},
+  { id:'hm2', name:'Clean bathroom', cat:'home', mins:10, energy:'low',
+    reframe:"10 minutes. Spray, wipe, done — and you'll feel like you have your life together.",
+    steps:[{t:'Spray sink, toilet, and shower surfaces',m:1},{t:'Wipe sink and taps',m:2},{t:'Clean toilet inside and out',m:3},{t:'Wipe mirror',m:1},{t:'Mop or wipe floor',m:3}]},
+  { id:'hm3', name:'Hoover', cat:'home', mins:20, energy:'medium',
+    reframe:"You'll do every room only once. Put a podcast on — it's practically enjoyable.",
+    steps:[{t:'Clear floor of shoes and clutter',m:3},{t:'Hoover living room',m:5},{t:'Hoover hallway',m:2},{t:'Hoover bedroom(s)',m:8},{t:'Put hoover away',m:2}]},
+  { id:'hm4', name:'Tidy bedroom', cat:'home', mins:15, energy:'low',
+    reframe:"A tidy bedroom equals a clearer head. You spend a third of your life in there.",
+    steps:[{t:'Make the bed',m:3},{t:'Clothes off floor — put away or in wash',m:4},{t:'Clear bedside table and surfaces',m:4},{t:'Quick floor tidy',m:4}]},
+  { id:'hm5', name:'Do laundry', cat:'home', mins:10, energy:'low',
+    reframe:"Actual effort: 10 minutes. The machine does the rest. Future you has clean clothes.",
+    steps:[{t:'Sort clothes by colour',m:2},{t:'Load machine',m:3},{t:'Add detergent, select cycle',m:2},{t:'Start machine',m:1},{t:'Set reminder to hang dry when done',m:2}]},
+  { id:'hm6', name:'Take out bins', cat:'home', mins:5, energy:'low',
+    reframe:"5 minutes. No excuses. You'll feel weirdly good about this one.",
+    steps:[{t:'Collect bin bags from each room',m:2},{t:'Tie bags',m:1},{t:'Take to outdoor bin',m:1},{t:'Replace bin liners',m:1}]},
+  { id:'pd1', name:'Work on portfolio website', cat:'personal', mins:60, energy:'medium',
+    reframe:"Your portfolio is your silent salesperson. Every hour you put in compounds into opportunities.",
+    steps:[{t:'Open project — review where you left off',m:5},{t:'Pick one specific thing to improve',m:5},{t:'Work on it — no distractions',m:40},{t:'Commit changes, note what's next',m:10}]},
+  { id:'pd2', name:'Build a side project', cat:'personal', mins:120, energy:'high',
+    reframe:"Big things get built in small sessions. Today's 2 hours is the compound interest of your future.",
+    steps:[{t:'Review last session notes, pick a clear goal',m:10},{t:'Deep work: build the feature',m:90},{t:'Commit, push, write notes for next session',m:20}]},
+  { id:'pd3', name:'Read', cat:'personal', mins:30, energy:'low',
+    reframe:"30 pages a day = 12 books a year. You're already here — might as well feed your brain.",
+    steps:[{t:'Find your book, get comfortable',m:2},{t:'Read — no phone in reach',m:26},{t:'Note one thing that stuck with you',m:2}]},
+  { id:'pd4', name:'Learn something new', cat:'personal', mins:30, energy:'medium',
+    reframe:"Curiosity is a skill. Pick one thing and go deep for 30 minutes — you'll surprise yourself.",
+    steps:[{t:'Pick a topic you've been curious about',m:2},{t:'Find one good resource: article, video, docs',m:3},{t:'Focused reading or watching — take notes',m:20},{t:'Write 3 things you learned',m:5}]},
+  { id:'pd5', name:'Write', cat:'personal', mins:45, energy:'medium',
+    reframe:"Writing is thinking made visible. It doesn't need to be good — it needs to be done.",
+    steps:[{t:'Open a blank doc or journal',m:1},{t:'Write 5 mins without stopping — dump thoughts',m:5},{t:'Pick the most interesting thread and develop it',m:30},{t:'Review, edit, close the loop',m:9}]},
+  { id:'ad1', name:'Reply to emails', cat:'admin', mins:15, energy:'low',
+    reframe:"The anxiety of unread emails is worse than answering them. Do it once, do it now.",
+    steps:[{t:'Open inbox, sort by urgency',m:2},{t:'Reply to the most urgent 2–3 first',m:8},{t:'Archive or label the rest',m:5}]},
+  { id:'ad2', name:'Sort finances', cat:'admin', mins:30, energy:'medium',
+    reframe:"Money anxiety comes from not looking. 30 minutes of clarity beats weeks of vague dread.",
+    steps:[{t:'Open banking app or spreadsheet',m:2},{t:'Review last month's transactions',m:10},{t:'Note any subscriptions to cancel',m:5},{t:'Check upcoming bills',m:5},{t:'Update savings goal or budget',m:8}]},
+  { id:'ad3', name:'Make a phone call', cat:'admin', mins:10, energy:'medium',
+    reframe:"That call you've been putting off? Make it. 5 minutes and you'll feel instantly lighter.",
+    steps:[{t:'Find number, note what you need to say',m:2},{t:'Make the call',m:7},{t:'Note any follow-up actions',m:1}]},
+  { id:'ad4', name:'Organise files', cat:'admin', mins:20, energy:'low',
+    reframe:"Digital clutter is mental clutter. 20 minutes now saves hours of future searching.",
+    steps:[{t:'Open Downloads folder',m:1},{t:'Delete anything clearly useless',m:5},{t:'Sort remaining files into folders',m:10},{t:'Clear desktop',m:4}]},
+];
+
+// ── STORAGE ──────────────────────────────────────────────────
+const LS = {
+  get: k => JSON.parse(localStorage.getItem(k) || '[]'),
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+  key: () => localStorage.getItem('jdi_key') || '',
+  setKey: k => localStorage.setItem('jdi_key', k),
+};
+
+function getDone() { return LS.get('jdi_done'); }
+function getCustom() { return LS.get('jdi_custom'); }
+function allTasks() { const a = [...TASKS, ...getCustom()]; if (window._aiTask) a.push(window._aiTask); return a; }
+
+function logDone(entry) {
+  const d = getDone(); d.unshift(entry);
+  if (d.length > 200) d.splice(200);
+  LS.set('jdi_done', d);
+}
+
+// ── NAV ──────────────────────────────────────────────────────
+const NAV_MAP = { checkin:'ni-home', suggestions:'ni-home', history:'ni-history', add:'ni-add', settings:'ni-settings' };
+const NO_NAV = ['focus','complete'];
+
+function S(name, updateNav=true) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + name);
+  if (el) el.classList.add('active');
+  document.getElementById('bnav').style.display = NO_NAV.includes(name) ? 'none' : 'flex';
+  if (updateNav) {
+    document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+    const ni = NAV_MAP[name]; if (ni) document.getElementById(ni).classList.add('on');
+  }
+  if (name === 'history') renderHistory();
+  if (name === 'settings') renderSettings();
+  if (name === 'add') initAdd();
+}
+
+function navTo(name) { st.prevScr = name; S(name); }
+function goBack() { S(st.prevScr || 'checkin'); }
+
+// ── CHECK-IN ─────────────────────────────────────────────────
+function selTime(m, el) {
+  st.time = m;
+  document.querySelectorAll('#time-chips .chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on'); checkGo();
+}
+function selEnergy(e, el) {
+  st.energy = e;
+  document.querySelectorAll('#energy-chips .chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on'); checkGo();
+}
+function checkGo() { document.getElementById('go-btn').disabled = !(st.time && st.energy); }
+function goSuggest() { renderSuggestions(); S('suggestions'); }
+
+// ── FILTER ───────────────────────────────────────────────────
+const EL = { low:0, medium:1, high:2 };
+function filterTasks(time, energy) {
+  const ev = EL[energy];
+  const recent = new Set(getDone().filter(c => Date.now()-c.at < 12*3600000).map(c => c.id));
+  return allTasks()
+    .filter(t => t.mins <= time * 1.25 && EL[t.energy] <= ev + 1)
+    .sort((a,b) => {
+      const rd = (recent.has(a.id)?1:0) - (recent.has(b.id)?1:0);
+      if (rd) return rd;
+      return (EL[a.energy]===ev?0:1) - (EL[b.energy]===ev?0:1);
+    });
+}
+
+// ── COLORS / ICONS ───────────────────────────────────────────
+const CC = { fitness:'#60a5fa', home:'#a78bfa', personal:'#34d399', admin:'#fbbf24', custom:'#ff6b35' };
+const CI = { fitness:'💪', home:'🏠', personal:'🌱', admin:'📋', custom:'✨' };
+const EI = { low:'⚡ Low', medium:'🔥 Medium', high:'💪 High' };
+function cc(c) { return CC[c] || CC.custom; }
+function ci(c) { return CI[c] || CI.custom; }
+
+// ── SUGGESTIONS ──────────────────────────────────────────────
+function taskCard(t) {
+  const col = cc(t.cat || t.category);
+  const cat = t.cat || t.category;
+  const energy = t.energy || t.energyLevel;
+  return `<div class="card" onclick="startTask('${t.id}')">
+    <div class="cbar" style="background:${col};"></div>
+    <div class="cbody">
+      <div class="ccat" style="color:${col};">${ci(cat)} ${cat.toUpperCase()}</div>
+      <div class="ctitle">${esc(t.name)}</div>
+      <div class="cmeta">
+        <span class="ctime">⏱ ${t.mins || t.timeEstimate} mins</span>
+        <span class="cenergy">${EI[energy]||energy}</span>
+      </div>
+      <div class="creframe">${esc(t.reframe)}</div>
+      <div class="ccta">Do this → <span style="font-size:12px;color:var(--text-muted);">${(t.steps||t.microSteps).length} steps</span></div>
+    </div>
+  </div>`;
+}
+
+function renderSuggestions() {
+  const tasks = filterTasks(st.time, st.energy);
+  const tl = st.time >= 120 ? '2+ hours' : st.time >= 60 ? '1 hour' : `${st.time} mins`;
+  document.getElementById('sug-sub').textContent = `${tl} · ${st.energy} energy`;
+  const hasKey = !!LS.key();
+  let h = `<button class="surprise-btn" id="surprise-btn" onclick="surpriseMe()">🎲 Surprise me${hasKey?'':' — add API key first'}</button>`;
+  if (!hasKey) h += `<div class="ai-banner">🤖 <span>Add a free <strong>Groq API key</strong> in <span style="color:var(--accent);cursor:pointer;" onclick="S('settings')">Settings</span> to unlock AI-powered suggestions.</span></div>`;
+  if (!tasks.length) {
+    h += `<div class="empty"><div class="empty-ic">🤷</div><div class="empty-t">Nothing fits right now</div><div class="empty-s">Try selecting more time or a different energy level.</div></div>`;
+  } else {
+    tasks.slice(0,8).forEach(t => h += taskCard(t));
+  }
+  h += `<button class="btn btn-g" style="width:100%;margin-top:8px;" onclick="S('add')">+ Add your own task</button>`;
+  document.getElementById('sug-list').innerHTML = h;
+}
+
+// ── SURPRISE ME ──────────────────────────────────────────────
+async function surpriseMe() {
+  if (!LS.key()) { S('settings'); return; }
+  const btn = document.getElementById('surprise-btn');
+  btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span> Thinking...';
+  btn.disabled = true;
+  const hist = getDone().slice(0,20).map(c => `${c.name} (${c.cat||c.category}) — ${ago(c.at)}`).join('\n');
+  const p = `You are a no-nonsense personal productivity coach. User has ${st.time} minutes and ${st.energy} energy.
+Recent history (last 20 tasks):
+${hist||'No history yet.'}
+Suggest ONE specific task that fits their time/energy and what they haven't done recently.
+Respond ONLY with this JSON (no markdown, no commentary):
+{"name":"task name","category":"fitness|home|personal|admin","timeEstimate":number,"energyLevel":"low|medium|high","reframe":"one punchy motivational sentence","microSteps":[{"text":"step","time":minutes}],"reason":"why you picked this given their history"}`;
+  try {
+    const raw = await callGroq(p);
+    const task = JSON.parse(extractJSON(raw));
+    task.id = 'ai-' + Date.now(); task.isCustom = true;
+    task.cat = task.category; task.mins = task.timeEstimate; task.energy = task.energyLevel; task.steps = task.microSteps;
+    window._aiTask = task;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div class="ai-banner" style="margin-bottom:12px;">🎲 <span><strong>AI pick:</strong> ${esc(task.reason||'Personalised for you')}</span></div>${taskCard(task)}`;
+    const list = document.getElementById('sug-list');
+    list.insertBefore(wrap, list.firstChild);
+    btn.innerHTML = '🎲 Try another'; btn.disabled = false;
+  } catch(e) {
+    btn.innerHTML = '🎲 Error — tap to retry'; btn.disabled = false; console.error(e);
+  }
+}
+
+// ── FOCUS MODE ───────────────────────────────────────────────
+function startTask(id) {
+  const task = allTasks().find(t => t.id === id);
+  if (!task) return;
+  st.task = task; st.timerSec = 0;
+  clearInterval(st.timerInt);
+  const col = cc(task.cat||task.category);
+  const cat = task.cat||task.category;
+  document.getElementById('f-cat').textContent = `${ci(cat)} ${cat.toUpperCase()}`;
+  document.getElementById('f-cat').style.color = col;
+  document.getElementById('f-title').textContent = task.name;
+  const steps = task.steps || task.microSteps || [];
+  document.getElementById('steps-list').innerHTML = steps.map((s,i) =>
+    `<div class="step" id="step-${i}" onclick="toggleStep(${i})">
+      <div class="step-chk" id="schk-${i}">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:none" id="stk-${i}"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div><div class="step-txt">${esc(s.text||s.t)}</div><div class="step-tm">~${s.time||s.m} min</div></div>
+    </div>`
+  ).join('');
+  updateTimer(0);
+  st.timerInt = setInterval(() => { st.timerSec++; updateTimer(st.timerSec); }, 1000);
+  S('focus', false);
+  document.getElementById('bnav').style.display = 'none';
+}
+
+function toggleStep(i) {
+  const item = document.getElementById('step-'+i);
+  const tick = document.getElementById('stk-'+i);
+  const done = item.classList.toggle('done');
+  tick.style.display = done ? 'block' : 'none';
+}
+
+function updateTimer(s) {
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sc = (s%60).toString().padStart(2,'0');
+  document.getElementById('timer-val').textContent = `${m}:${sc}`;
+}
+
+function exitFocus() { clearInterval(st.timerInt); S('suggestions'); }
+function abandonTask() { clearInterval(st.timerInt); S('suggestions'); }
+
+function doneTask() {
+  clearInterval(st.timerInt);
+  const task = st.task;
+  const elapsed = Math.round(st.timerSec / 60);
+  document.getElementById('done-sub').textContent = `${task.name} — ${elapsed || (task.mins||task.timeEstimate)} minute${elapsed!==1?'s':''} on the clock.`;
+  const est = task.mins || task.timeEstimate;
+  const opts = [5,10,15,20,30,45,60].filter(e => e <= est*2+15).slice(0,5);
+  if (elapsed > 0 && !opts.includes(elapsed) && elapsed <= 120) { opts.push(elapsed); opts.sort((a,b)=>a-b); }
+  st.selDur = elapsed || est;
+  document.getElementById('dur-grid').innerHTML = opts.map(d =>
+    `<button class="dur-chip ${d===st.selDur?'on':''}" onclick="selDur(${d},this)">${d<60?d+' min':'1h+'}</button>`
+  ).join('');
+  S('complete', false);
+}
+
+function selDur(m, el) {
+  st.selDur = m;
+  document.querySelectorAll('.dur-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function saveCompletion() {
+  const t = st.task;
+  logDone({ id:t.id, name:t.name, cat:t.cat||t.category, at:Date.now(), dur:st.selDur||(t.mins||t.timeEstimate), est:t.mins||t.timeEstimate });
+  st.task = null;
+  S('suggestions');
+}
+
+// ── HISTORY ──────────────────────────────────────────────────
+function renderHistory() {
+  const done = getDone();
+  const el = document.getElementById('hist-container');
+  if (!done.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ic">📊</div><div class="empty-t">No tasks yet</div><div class="empty-s">Complete your first task to see stats here.</div></div>`;
+    return;
+  }
+  const wk = Date.now() - 7*24*3600000;
+  const tw = done.filter(c => c.at > wk);
+  const avg = tw.length ? Math.round(tw.reduce((s,c)=>s+c.dur,0)/tw.length) : 0;
+  const cats = {}; done.forEach(c => cats[c.cat]=(cats[c.cat]||0)+1);
+  const top = Object.entries(cats).sort((a,b)=>b[1]-a[1])[0]?.[0] || '–';
+  el.innerHTML = `
+    <div class="sec-lbl">This week</div>
+    <div class="stats-g">
+      <div class="stat-c"><div class="stat-v">${tw.length}</div><div class="stat-l">Tasks done</div></div>
+      <div class="stat-c"><div class="stat-v" style="font-size:22px;padding-top:4px;">${ci(top)}</div><div class="stat-l">${top}</div></div>
+      <div class="stat-c"><div class="stat-v">${avg}</div><div class="stat-l">Avg mins</div></div>
+    </div>
+    <div class="sec-lbl">Recent</div>
+    ${done.slice(0,30).map(c=>`
+      <div class="hi">
+        <div class="hi-ic" style="background:${cc(c.cat)}22;">${ci(c.cat)}</div>
+        <div class="hi-info"><div class="hi-name">${esc(c.name)}</div><div class="hi-meta">${ago(c.at)}</div></div>
+        <div class="hi-dur">${c.dur} min</div>
+      </div>`).join('')}
+  `;
+}
+
+// ── ADD TASK ─────────────────────────────────────────────────
+function initAdd() {
+  document.getElementById('task-input').value = '';
+  document.getElementById('ai-result').innerHTML = '';
+  document.getElementById('ai-status').style.display = 'none';
+  document.getElementById('add-actions').style.display = 'block';
+  document.querySelectorAll('#cat-chips .chip').forEach(c => c.classList.remove('on'));
+  document.querySelector('#cat-chips .chip:last-child').classList.add('on');
+  st.selCat = 'custom'; st.pendingTask = null;
+  const hasKey = !!LS.key();
+  document.getElementById('analyse-btn').style.display = hasKey ? 'block' : 'none';
+  document.getElementById('nokey-msg').style.display = hasKey ? 'none' : 'block';
+}
+
+function selCat(c, el) {
+  st.selCat = c;
+  document.querySelectorAll('#cat-chips .chip').forEach(ch => ch.classList.remove('on'));
+  el.classList.add('on');
+}
+
+async function analyseTask() {
+  const name = document.getElementById('task-input').value.trim();
+  if (!name) { document.getElementById('task-input').focus(); return; }
+  if (!LS.key()) { S('settings'); return; }
+  document.getElementById('ai-status').style.display = 'flex';
+  document.getElementById('ai-status-ic').textContent = '🤖';
+  document.getElementById('ai-status-txt').textContent = 'Analysing your task...';
+  document.getElementById('analyse-btn').disabled = true;
+  document.getElementById('ai-result').innerHTML = '';
+  const p = `Productivity coach. User task: "${name}". Category hint: ${st.selCat}.
+Respond ONLY with this JSON (no markdown):
+{"name":"concise task name","category":"fitness|home|personal|admin|custom","timeEstimate":number,"energyLevel":"low|medium|high","reframe":"one punchy sentence: why it won't take as long as they think","microSteps":[{"text":"specific action","time":minutes}]}
+Rules: steps sum to timeEstimate, 4-8 steps, reframe must be motivating and specific.`;
+  try {
+    const raw = await callGroq(p);
+    const task = JSON.parse(extractJSON(raw));
+    task.id = 'custom-' + Date.now(); task.isCustom = true;
+    task.cat = task.category; task.mins = task.timeEstimate; task.energy = task.energyLevel; task.steps = task.microSteps;
+    st.pendingTask = task;
+    document.getElementById('ai-status-ic').textContent = '✅';
+    document.getElementById('ai-status-txt').textContent = 'Done — review and save:';
+    document.getElementById('ai-result').innerHTML = `
+      <div class="ai-prev">
+        <div class="ai-row"><span class="ai-key">Task</span><span class="ai-val">${esc(task.name)}</span></div>
+        <div class="ai-row"><span class="ai-key">Time</span><span class="ai-val">${task.timeEstimate} mins</span></div>
+        <div class="ai-row"><span class="ai-key">Energy</span><span class="ai-val">${EI[task.energyLevel]||task.energyLevel}</span></div>
+        <div class="ai-row"><span class="ai-key">Category</span><span class="ai-val">${ci(task.category)} ${task.category}</span></div>
+        <div class="ai-row" style="flex-direction:column;gap:6px;"><span class="ai-key">Reframe</span><span style="font-style:italic;color:var(--text-dim);font-size:13px;line-height:1.5;">${esc(task.reframe)}</span></div>
+        <div class="ai-row" style="flex-direction:column;gap:6px;"><span class="ai-key">Steps</span>
+          <div>${task.microSteps.map((s,i)=>`<div style="font-size:13px;padding:4px 0;color:var(--text-dim);">${i+1}. ${esc(s.text)} <span style="color:var(--text-muted);">(${s.time}m)</span></div>`).join('')}</div>
+        </div>
+      </div>
+      <button class="btn btn-p mt16" onclick="savePending()">Save Task</button>
+      <button class="btn btn-g mt8" style="width:100%;" onclick="analyseTask()">Re-analyse</button>`;
+    document.getElementById('add-actions').style.display = 'none';
+  } catch(e) {
+    document.getElementById('ai-status-ic').textContent = '❌';
+    document.getElementById('ai-status-txt').textContent = 'Error: ' + (e.message||'Could not analyse task');
+    document.getElementById('analyse-btn').disabled = false;
+  }
+}
+
+function savePending() {
+  if (!st.pendingTask) return;
+  const custom = getCustom(); custom.push(st.pendingTask); LS.set('jdi_custom', custom);
+  S('suggestions'); renderSuggestions();
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────
+function renderSettings() {
+  const k = LS.key();
+  if (k) document.getElementById('key-input').value = k;
+  const done = getDone(); const custom = getCustom();
+  document.getElementById('set-stats').innerHTML = `${done.length} tasks completed total<br>${custom.length} custom tasks saved`;
+}
+
+function saveKey() {
+  const k = document.getElementById('key-input').value.trim();
+  if (!k) return;
+  LS.setKey(k);
+  const btn = document.getElementById('save-key-btn');
+  btn.textContent = '✅ Saved!'; setTimeout(() => btn.textContent = 'Save Key', 1800);
+}
+
+function clearHist() {
+  if (confirm('Clear all task history? Cannot be undone.')) { localStorage.removeItem('jdi_done'); renderSettings(); }
+}
+function clearCustom() {
+  if (confirm('Delete all custom tasks? Cannot be undone.')) { localStorage.removeItem('jdi_custom'); renderSettings(); }
+}
+
+// ── GROQ API ─────────────────────────────────────────────────
+async function callGroq(prompt) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${LS.key()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role:'user', content:prompt }], temperature: 0.7, max_tokens: 1024 }),
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error?.message || `API ${res.status}`); }
+  const d = await res.json();
+  return d.choices?.[0]?.message?.content || '';
+}
+
+function extractJSON(str) {
+  const m = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/) || str.match(/(\{[\s\S]*\})/);
+  return m ? m[1] : str;
+}
+
+// ── UTILS ────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ago(ts) {
+  const d = Date.now()-ts, m = Math.floor(d/60000);
+  if (m<2) return 'just now'; if (m<60) return `${m}m ago`;
+  const h = Math.floor(m/60); if (h<24) return `${h}h ago`;
+  const dy = Math.floor(h/24); return dy===1?'yesterday':`${dy} days ago`;
+}
+
+// ── SERVICE WORKER ───────────────────────────────────────────
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+// ── INIT ─────────────────────────────────────────────────────
+if (!LS.key()) {
+  const nag = document.getElementById('key-nag');
+  nag.innerHTML = `<div class="ai-banner px" style="margin:20px 24px 0;">🤖 <span>Add your free <strong>Groq API key</strong> in <span style="color:var(--accent);cursor:pointer;" onclick="S('settings')">Settings</span> to enable AI features — only needed once.</span></div>`;
+}
+</script>
+</body>
+</html>
