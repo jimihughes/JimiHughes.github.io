@@ -509,15 +509,14 @@ async function surpriseMe() {
   btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span> Thinking...';
   btn.disabled = true;
   const hist = getDone().slice(0,20).map(c => `${c.name} (${c.cat||c.category}) — ${ago(c.at)}`).join('\n');
-  const p = `You are a no-nonsense personal productivity coach. User has ${st.time} minutes and ${st.energy} energy.
+  const p = `You are a no-nonsense personal productivity coach. Return a JSON object suggesting ONE task for a user who has ${st.time} minutes and ${st.energy} energy.
 Recent history (last 20 tasks):
 ${hist||'No history yet.'}
-Suggest ONE specific task that fits their time/energy and what they haven't done recently.
-Respond ONLY with this JSON (no markdown, no commentary):
-{"name":"task name","category":"fitness|home|personal|admin","timeEstimate":number,"energyLevel":"low|medium|high","reframe":"one punchy motivational sentence","microSteps":[{"text":"step","time":minutes}],"reason":"why you picked this given their history"}`;
+Pick something that fits their time/energy and that they have not done recently.
+Required JSON fields: name (string), category (one of: fitness, home, personal, admin), timeEstimate (integer minutes), energyLevel (one of: low, medium, high), reframe (one punchy motivational sentence), microSteps (array of objects with fields: text (string), time (integer minutes)), reason (one sentence explaining why you picked this based on their history).`;
   try {
-    const raw = await callGroq(p);
-    const task = JSON.parse(extractJSON(raw));
+    const raw = await callGroq(p, true);
+    const task = safeParseJSON(extractJSON(raw));
     task.id = 'ai-' + Date.now(); task.isCustom = true;
     task.cat = task.category; task.mins = task.timeEstimate; task.energy = task.energyLevel; task.steps = task.microSteps;
     window._aiTask = task;
@@ -660,13 +659,12 @@ async function analyseTask() {
   document.getElementById('ai-status-txt').textContent = 'Analysing your task...';
   document.getElementById('analyse-btn').disabled = true;
   document.getElementById('ai-result').innerHTML = '';
-  const p = `Productivity coach. User task: "${name}". Category hint: ${st.selCat}.
-Respond ONLY with this JSON (no markdown):
-{"name":"concise task name","category":"fitness|home|personal|admin|custom","timeEstimate":number,"energyLevel":"low|medium|high","reframe":"one punchy sentence: why it won't take as long as they think","microSteps":[{"text":"specific action","time":minutes}]}
-Rules: steps sum to timeEstimate, 4-8 steps, reframe must be motivating and specific.`;
+  const p = `You are a productivity coach. Return a JSON object for this task: "${name}". Category hint: ${st.selCat}.
+Required JSON fields: name (string), category (one of: fitness, home, personal, admin, custom), timeEstimate (integer minutes), energyLevel (one of: low, medium, high), reframe (one punchy motivating sentence about why it won't take as long as they think), microSteps (array of objects with fields: text (string), time (integer minutes)).
+Rules: 4-8 steps, steps should sum to roughly timeEstimate.`;
   try {
-    const raw = await callGroq(p);
-    const task = JSON.parse(extractJSON(raw));
+    const raw = await callGroq(p, true);
+    const task = safeParseJSON(extractJSON(raw));
     task.id = 'custom-' + Date.now(); task.isCustom = true;
     task.cat = task.category; task.mins = task.timeEstimate; task.energy = task.energyLevel; task.steps = task.microSteps;
     st.pendingTask = task;
@@ -723,20 +721,46 @@ function clearCustom() {
 }
 
 // ── GROQ API ─────────────────────────────────────────────────
-async function callGroq(prompt) {
+async function callGroq(prompt, forceJSON = false) {
+  const body = {
+    model: 'llama-3.3-70b-versatile',
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.7,
+    max_tokens: 1024,
+  };
+  if (forceJSON) body.response_format = { type: 'json_object' };
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${LS.key()}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role:'user', content:prompt }], temperature: 0.7, max_tokens: 1024 }),
+    body: JSON.stringify(body),
   });
-  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error?.message || `API ${res.status}`); }
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || `API error ${res.status}`);
+  }
   const d = await res.json();
   return d.choices?.[0]?.message?.content || '';
 }
 
 function extractJSON(str) {
-  const m = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/) || str.match(/(\{[\s\S]*\})/);
-  return m ? m[1] : str;
+  // Strip markdown code fences if present
+  const fenced = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+  if (fenced) return fenced[1].trim();
+  // Find outermost { ... }
+  const start = str.indexOf('{');
+  const end = str.lastIndexOf('}');
+  if (start !== -1 && end > start) return str.slice(start, end + 1);
+  return str;
+}
+
+function safeParseJSON(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    // Attempt to fix unquoted keys: {name: "val"} → {"name": "val"}
+    const repaired = str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":');
+    return JSON.parse(repaired);
+  }
 }
 
 // ── UTILS ────────────────────────────────────────────────────
