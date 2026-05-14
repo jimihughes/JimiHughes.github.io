@@ -14,76 +14,146 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --bg: #f2f2f2;
-      --sidebar-bg: #fafafa;
-      --text: #111;
-      --text-muted: #888;
-      --border: #e0e0e0;
-    }
-
-    html {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 16px;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.5;
+    html, body {
+      height: 100%;
+      background: #080808;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+    * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+    *::-webkit-scrollbar { width: 4px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    *::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
     a { color: inherit; text-decoration: none; }
 
-    /* Nav */
-    .site-nav { height: 56px; background: #ffffff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; z-index: 100; }
-    .site-nav-brand { font-size: 15px; font-weight: 800; color: #111; text-decoration: none; letter-spacing: -0.4px; margin-right: auto; }
-    .site-nav-links { display: flex; gap: 4px; }
-    .site-nav-links a { font-size: 14px; font-weight: 500; color: #777; text-decoration: none; padding: 7px 14px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
-    .site-nav-links a:hover { color: #111; background: #f0f0f0; }
-    .site-nav-links a.active { color: #111; font-weight: 600; background: #f0f0f0; }
-
-    /* Layout */
-    .layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-
-    /* Sidebar */
-    .sidebar {
-      width: 320px;
-      flex-shrink: 0;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
       display: flex;
-      align-items: flex-end;
-      padding: 40px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      backdrop-filter: blur(52px) saturate(240%);
+      -webkit-backdrop-filter: blur(52px) saturate(240%);
+      background: rgba(6,6,6,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .sidebar-content { width: 100%; }
-    .sidebar-content h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 2px; }
-    .role { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 28px; }
-    .nav-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-    .nav-links a { font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
-    .nav-links a:hover { opacity: 0.5; }
-    .nav-links svg { flex-shrink: 0; opacity: 0.5; }
-    .copyright { font-size: 11px; color: var(--text-muted); letter-spacing: 0.2px; }
 
-    /* Content */
-    .content {
-      flex: 1;
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+
+    .nav-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-name-letters { display: inline-flex; }
+
+    .nav-name-letters span {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      font-family: 'Courier New', monospace;
+      width: 0.6em;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      transform: translateY(0);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), color 0.15s ease;
+    }
+
+    .nav-name:hover .nav-name-letters span {
+      transform: translateY(-5px);
+      color: #fff;
+    }
+
+    .nav-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Courier New', monospace;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      font-size: 13px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.15s ease;
+      user-select: none;
+      border-radius: 6px;
+    }
+
+    .nav-link-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      background: #0066ff;
+      opacity: 0.18;
+      clip-path: inset(100% 0 0 0 round 6px);
+      transition: clip-path 0.15s ease;
+      pointer-events: none;
+    }
+
+    .nav-link.active { color: #fff; }
+    .nav-link.active .nav-link-bg { clip-path: inset(0% 0 0 0 round 6px); }
+    .nav-link:hover { color: #fff; }
+    .nav-link:hover .nav-link-bg { clip-path: inset(0% 0 0 0 round 6px); }
+    .nav-link > span { position: relative; z-index: 1; }
+
+    /* ── PAGE ── */
+    .page {
+      padding-top: 56px;
+      min-height: 100vh;
       overflow-y: auto;
-      padding: 60px;
-      scroll-behavior: smooth;
     }
-    .content::-webkit-scrollbar { width: 6px; }
-    .content::-webkit-scrollbar-track { background: transparent; }
-    .content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
 
-    .blog-wrap { max-width: 560px; }
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     .blog-header {
       margin-bottom: 56px;
       opacity: 0;
       animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both;
     }
-    .blog-header h2 { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 10px; }
-    .blog-header p { font-size: 16px; color: var(--text-muted); }
+
+    .page-title {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .page-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.45);
+    }
 
     /* Post list */
     .post-list { display: flex; flex-direction: column; }
@@ -93,121 +163,144 @@
       align-items: baseline;
       justify-content: space-between;
       gap: 24px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       opacity: 0;
       animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
       text-decoration: none;
-      color: var(--text);
+      color: #fff;
       transition: opacity 0.15s;
     }
-    .post-item:first-child { border-top: 1px solid var(--border); }
-    .post-item:hover { opacity: 0.6; }
+
+    .post-item:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+    .post-item:hover { opacity: 0.55; }
     .post-item:nth-child(1) { animation-delay: 0.12s; }
     .post-item:nth-child(2) { animation-delay: 0.19s; }
     .post-item:nth-child(3) { animation-delay: 0.26s; }
 
     .post-item-left { flex: 1; min-width: 0; }
-    .post-tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-    .post-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.3; margin-bottom: 6px; }
-    .post-excerpt { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-    .post-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media (max-width: 900px) {
-      body { overflow: auto; display: block; height: auto; }
-      .layout { flex-direction: column; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 28px 24px; align-items: flex-start; }
-      .role { margin-bottom: 16px; }
-      .nav-links { margin-bottom: 12px; }
-      .content { overflow-y: visible; padding: 32px 24px; }
-      .post-item { flex-direction: column; gap: 8px; }
-      .post-title { font-size: 16px; }
+    .post-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
     }
-    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)'/%3E%3C/svg%3E"); background-size: 300px 300px; }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .post-excerpt {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+
+    .post-date {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    @media (max-width: 600px) {
+      .page-title { font-size: 36px; }
+      .content { padding: 48px 20px 60px; }
+      .post-item { flex-direction: column; gap: 8px; }
+    }
   </style>
 </head>
 <body>
 
-  <nav class="site-nav">
-    <a href="../index.html" class="site-nav-brand">Jimi Hughes</a>
-    <div class="site-nav-links">
-      <a href="../index.html">Work</a>
-      <a href="../about/index.html">About</a>
-      <a href="index.html" class="active">Blog</a>
-      <a href="../contact/index.html">Contact</a>
+  <nav>
+    <div class="nav-left">
+      <a href="../index.html" class="nav-name" id="navName">
+        <span class="nav-name-letters" id="nameLetters"></span>
+      </a>
+      <span class="nav-subtitle">Creator / AI Engineer</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html"         class="nav-link"><div class="nav-link-bg"></div><span>Work</span></a>
+      <a href="../about/index.html"   class="nav-link"><div class="nav-link-bg"></div><span>About</span></a>
+      <a href="index.html"            class="nav-link active"><div class="nav-link-bg"></div><span>Blog</span></a>
+      <a href="../contact/index.html" class="nav-link"><div class="nav-link-bg"></div><span>Contact</span></a>
     </div>
   </nav>
 
-  <div class="layout">
+  <div class="page">
+    <div class="content">
 
-    <aside class="sidebar">
-      <div class="sidebar-content">
-        <h1>Jimi Hughes</h1>
-        <p class="role">Creator / AI Engineer</p>
-        <nav class="nav-links">
-          <a href="../about/index.html">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            About
-          </a>
-          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="mailto:jimifh0111@gmail.com">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-            Email
-          </a>
-        </nav>
-        <p class="copyright">&copy; 2026 Jimi Hughes</p>
+      <div class="blog-header">
+        <h1 class="page-title">Blog</h1>
+        <p class="page-sub">Writing about building things, learning in public, and shipping fast.</p>
       </div>
-    </aside>
 
-    <main class="content">
-      <div class="blog-wrap">
+      <div class="post-list">
 
-        <div class="blog-header">
-          <h2>Blog</h2>
-          <p>Writing about building things, learning in public, and shipping fast.</p>
-        </div>
+        <a href="building-a-weather-app.html" class="post-item">
+          <div class="post-item-left">
+            <span class="post-tag">Build Log</span>
+            <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
+            <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
+          </div>
+          <span class="post-date">Mar 2026</span>
+        </a>
 
-        <div class="post-list">
+        <a href="building-games.html" class="post-item">
+          <div class="post-item-left">
+            <span class="post-tag">Lessons</span>
+            <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
+            <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
+          </div>
+          <span class="post-date">Feb 2026</span>
+        </a>
 
-          <a href="building-a-weather-app.html" class="post-item">
-            <div class="post-item-left">
-              <span class="post-tag">Build Log</span>
-              <p class="post-title">How I Built a Live Weather App (And What Nearly Broke Me)</p>
-              <p class="post-excerpt">Working with real APIs is messier than any tutorial tells you. Here's what I ran into building the weather app from scratch.</p>
-            </div>
-            <span class="post-date">Mar 2026</span>
-          </a>
+        <a href="going-self-taught.html" class="post-item">
+          <div class="post-item-left">
+            <span class="post-tag">Story</span>
+            <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
+            <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
+          </div>
+          <span class="post-date">Jan 2026</span>
+        </a>
 
-          <a href="building-games.html" class="post-item">
-            <div class="post-item-left">
-              <span class="post-tag">Lessons</span>
-              <p class="post-title">What Building 6 Games Taught Me About Writing Better Code</p>
-              <p class="post-excerpt">Games give you instant feedback. Every bug is visible, every lag is felt. Here's what six builds in a row taught me.</p>
-            </div>
-            <span class="post-date">Feb 2026</span>
-          </a>
-
-          <a href="going-self-taught.html" class="post-item">
-            <div class="post-item-left">
-              <span class="post-tag">Story</span>
-              <p class="post-title">Why I Went Self-Taught (And What I'd Tell My Past Self)</p>
-              <p class="post-excerpt">No bootcamp, no degree. Just building things and figuring it out. This is the honest version of how that actually went.</p>
-            </div>
-            <span class="post-date">Jan 2026</span>
-          </a>
-
-        </div>
       </div>
-    </main>
-
+    </div>
   </div>
 
   <script>
+    const name = 'Jimi Hughes';
+    const letters = document.getElementById('nameLetters');
+    name.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch === ' ' ? ' ' : ch;
+      s.style.transitionDelay = `${i * 0.033}s`;
+      if (ch === ' ') s.style.width = '0.35em';
+      letters.appendChild(s);
+    });
+
     (function() {
       var c = document.createElement('canvas');
       c.width = 32; c.height = 32;
@@ -235,5 +328,6 @@
       frame();
     })();
   </script>
+
 </body>
 </html>

@@ -734,9 +734,10 @@
         const gif = document.createElement('img');
         gif.src = p.video;
         gif.alt = '';
-        gif.loading = 'lazy';
         gif.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity 0.6s ease;';
-        gif.addEventListener('load', () => { gif.style.opacity = '1'; });
+        const showGif = () => { gif.style.opacity = '1'; };
+        if (gif.complete && gif.naturalWidth) showGif();
+        else gif.addEventListener('load', showGif);
         media.appendChild(gif);
       }
 
