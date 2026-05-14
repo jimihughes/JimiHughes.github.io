@@ -540,7 +540,7 @@
         desc: 'Tell it your time and energy — it tells you exactly what to tackle. AI micro-step breakdowns, habit tracking, offline-first. Add to your iPhone home screen.',
         tags: ['Groq AI', 'PWA', 'Offline', 'iOS'],
         img: null,
-        video: 'videos/just-do-it.gif',
+        video: 'videos/just-do-it.mp4',
         isJDI: true,
         href: 'just-do-it/index.html',
         external: false
@@ -551,7 +551,7 @@
         desc: 'Task management with custom lists, deadlines, recurring tasks, and a completed archive. Built for the way people actually think about their to-do lists.',
         tags: ['Web', 'PWA'],
         img: 'images/life-manager.png',
-        video: 'videos/life-manager.gif',
+        video: 'videos/life-manager.mp4',
         href: 'life-manager/index.html',
         external: false
       },
@@ -561,7 +561,7 @@
         desc: 'Weekly meal planning with ingredient scaling, recipe filtering, and auto-generated shopping lists. Never think "what\'s for dinner?" again.',
         tags: ['Web'],
         img: 'images/Meal-planner.png',
-        video: 'videos/meal-planner.gif',
+        video: 'videos/meal-planner.mp4',
         href: 'meal-planner/index.html',
         external: false
       },
@@ -571,7 +571,7 @@
         desc: 'Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search. Clean, fast, and accurate.',
         tags: ['API', 'Web'],
         img: 'images/weather.png',
-        video: 'videos/weather.gif',
+        video: 'videos/weather.mp4',
         href: 'weather/index.html',
         external: false
       },
@@ -581,7 +581,7 @@
         desc: '60-second typing challenge with live WPM, accuracy tracking, and character-level feedback. Compete against yourself and improve over time.',
         tags: ['Web'],
         img: 'images/Typing-test.png',
-        video: 'videos/typing-test.gif',
+        video: 'videos/typing-test.mp4',
         href: 'typing-test/index.html',
         external: false
       },
@@ -591,7 +591,7 @@
         desc: 'All-in-one new tab replacement — live weather, clock, to-do list, bookmarks, and daily focus tracker. Your whole day at a glance.',
         tags: ['Web'],
         img: 'images/dashboard.png',
-        video: 'videos/dashboard.gif',
+        video: 'videos/dashboard.mp4',
         href: 'dashboard/index.html',
         external: false
       },
@@ -601,7 +601,7 @@
         desc: 'Focus timer with integrated task list, short and long breaks, session tracking, and sound alerts. Stay in the zone.',
         tags: ['Web'],
         img: 'images/pomodoro.png',
-        video: 'videos/pomodoro.gif',
+        video: 'videos/pomodoro.mp4',
         href: 'pomodoro/index.html',
         external: false
       },
@@ -621,7 +621,7 @@
         desc: 'Interactive crossword generator with clues, hints, check-answers, and full keyboard navigation. Every game is unique.',
         tags: ['JS', 'Web'],
         img: 'images/crossword.png',
-        video: 'videos/crossword.gif',
+        video: 'videos/crossword.mp4',
         href: 'crossword/index.html',
         external: false
       },
@@ -631,7 +631,7 @@
         desc: 'Classic arcade with multiple alien types, destructible shield barriers, escalating levels, and high score tracking.',
         tags: ['Canvas', 'JS'],
         img: 'images/space-invaders.png',
-        video: 'videos/space-invaders.gif',
+        video: 'videos/space-invaders.mp4',
         href: 'space-invaders/index.html',
         external: false
       },
@@ -641,7 +641,7 @@
         desc: 'Classic snake — eat food, grow longer, avoid the walls and your own tail. Simple, satisfying, and endlessly replayable.',
         tags: ['Canvas', 'JS'],
         img: 'images/snake.png',
-        video: 'videos/snake.gif',
+        video: 'videos/snake.mp4',
         href: 'snake/index.html',
         external: false
       },
@@ -651,7 +651,7 @@
         desc: 'Slide tiles, merge numbers, and reach the 2048 tile. Brutally simple rules, stupidly addictive gameplay.',
         tags: ['JS', 'Web'],
         img: 'images/2048.png',
-        video: 'videos/2048.gif',
+        video: 'videos/2048.mp4',
         href: '2048/index.html',
         external: false
       },
@@ -661,7 +661,7 @@
         desc: '6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment. How much do you really know?',
         tags: ['JS', 'Web'],
         img: 'images/quiz.png',
-        video: 'videos/quiz.gif',
+        video: 'videos/quiz.mp4',
         href: 'quiz/index.html',
         external: false
       },
@@ -671,7 +671,7 @@
         desc: 'Side-scrolling platformer with procedurally generated levels, coin collecting, and increasing difficulty. How far can you go?',
         tags: ['Canvas', 'JS'],
         img: 'images/platformer.png',
-        video: 'videos/platformer.gif',
+        video: 'videos/platformer.mp4',
         href: 'platformer/index.html',
         external: false
       },
@@ -729,16 +729,22 @@
         media.appendChild(img);
       }
 
-      // Animated GIF — overlaid on top, fades in once loaded
+      // MP4 video — overlaid on top, autoplays muted and loops
       if (p.video) {
-        const gif = document.createElement('img');
-        gif.src = p.video;
-        gif.alt = '';
-        gif.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity 0.6s ease;';
-        const showGif = () => { gif.style.opacity = '1'; };
-        if (gif.complete && gif.naturalWidth) showGif();
-        else gif.addEventListener('load', showGif);
-        media.appendChild(gif);
+        const vid = document.createElement('video');
+        vid.src = p.video;
+        vid.muted = true;
+        vid.loop = true;
+        vid.playsInline = true;
+        vid.setAttribute('playsinline', '');
+        vid.preload = 'auto';
+        vid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity 0.6s ease;';
+        vid.addEventListener('canplay', () => {
+          vid.style.opacity = '1';
+          vid.play().catch(() => {});
+        });
+        vid.play().catch(() => {});
+        media.appendChild(vid);
       }
 
       // Label overlay
@@ -788,6 +794,14 @@
 
       // Dots
       document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+
+      // Play video on active card, pause others
+      cardEls.forEach((card, i) => {
+        const vid = card.querySelector('video');
+        if (!vid) return;
+        if (i === current) vid.play().catch(() => {});
+        else vid.pause();
+      });
     }
 
     function goTo(idx) {
