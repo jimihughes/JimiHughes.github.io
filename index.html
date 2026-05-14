@@ -4,471 +4,911 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jimi Hughes</title>
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Jimi Hughes — Creator / AI Engineer">
-  <meta property="og:description" content="Apps, games, and tools built for the web. Life Manager, Weather App, Snake, 2048, and more.">
+  <meta property="og:description" content="Apps, games, and AI tools built for the web.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jimihughes.com">
   <meta property="og:image" content="https://jimihughes.com/images/og-cover.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Jimi Hughes — Creator / AI Engineer">
-  <meta name="twitter:description" content="Apps, games, and tools built for the web.">
   <meta name="description" content="Portfolio of Jimi Hughes — creator and AI engineer building apps, games, and tools for the web.">
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #080808;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* hide scrollbars globally */
+    * { scrollbar-width: none; -ms-overflow-style: none; }
+    *::-webkit-scrollbar { display: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      backdrop-filter: blur(52px) saturate(240%);
+      -webkit-backdrop-filter: blur(52px) saturate(240%);
+      background: rgba(6,6,6,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+
+    /* Per-letter bounce name */
+    .nav-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-name-letters { display: inline-flex; }
+
+    .nav-name-letters span {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      font-family: 'Courier New', monospace;
+      width: 0.6em;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      transform: translateY(0);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), color 0.15s ease;
+    }
+
+    .nav-name:hover .nav-name-letters span {
+      transform: translateY(-5px);
+      color: #fff;
+    }
+
+    .nav-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Courier New', monospace;
+      letter-spacing: -0.01em;
+    }
+
+    /* Nav links — clip-path blue reveal */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      font-size: 13px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.15s ease;
+      user-select: none;
+      border-radius: 6px;
+    }
+
+    .nav-link-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      background: #0066ff;
+      opacity: 0.18;
+      clip-path: inset(100% 0 0 0 round 6px);
+      transition: clip-path 0.15s ease;
+      pointer-events: none;
+    }
+
+    .nav-link:hover { color: #fff; }
+    .nav-link:hover .nav-link-bg { clip-path: inset(0% 0 0 0 round 6px); }
+    .nav-link > span { position: relative; z-index: 1; }
+
+    /* Dark/light toggle pill */
+    .toggle-pill {
+      width: 36px; height: 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      background: #0066ff;
+      margin-left: 6px;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .toggle-pill-dot {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #080808;
+      transition: left 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s;
+    }
+
+    /* ── TOGGLE LIST BUTTON ── */
+    #toggle-list-btn {
+      position: fixed;
+      top: 64px; right: 20px;
+      z-index: 100;
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      opacity: 0.55;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    #toggle-list-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+    /* ── STACKED CARD AREA ── */
+    #card-area {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: 56px;
+      transition: opacity 0.4s ease;
+    }
+
+    .card {
+      position: absolute;
+      width: min(680px, 84vw);
+      border: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition:
+        transform 0.65s cubic-bezier(0.22,1,0.36,1),
+        opacity   0.45s ease,
+        border-radius 0.65s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: center center;
+    }
+
+    /* Card position states */
+    .card[data-pos="0"] { transform: translateY(0)    scale(1);     z-index:10; opacity:1;   cursor:default;  border-radius:0; }
+    .card[data-pos="1"] { transform: translateY(18vh) scale(0.925); z-index:9;  opacity:1;   cursor:pointer;  border-radius:0; }
+    .card[data-pos="2"] { transform: translateY(36vh) scale(0.85);  z-index:8;  opacity:1;   cursor:pointer;  border-radius:0; }
+    .card[data-pos="3"] { transform: translateY(54vh) scale(0.775); z-index:7;  opacity:1;   cursor:pointer;  border-radius:0; }
+    .card[data-pos="4"] { transform: translateY(72vh) scale(0.7);   z-index:6;  opacity:0.5; cursor:pointer;  border-radius:0; }
+    .card[data-pos="above"] { transform: translateY(-110vh) scale(1);   z-index:5;  opacity:0;   pointer-events:none; }
+    .card[data-pos="below"] { transform: translateY(110vh)  scale(0.7); z-index:5;  opacity:0;   pointer-events:none; }
+
+    /* Card media (image + future video slot) */
+    .card-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      flex-shrink: 0;
+      background: #111;
+      overflow: hidden;
+    }
+
+    /* Fallback image */
+    .card-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 1;
+    }
+
+    /* Video slot — hidden until a src is set */
+    .card-media video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* When video is ready, fade it over the image */
+    .card-media video.loaded {
+      opacity: 1;
+    }
+
+    /* Label overlay — bottom-left */
+    .card-label {
+      position: absolute;
+      bottom: 12px; left: 12px;
+      z-index: 5;
+      background: rgba(0,0,0,0.52);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      padding: 6px 10px;
+      transition: opacity 0.25s ease;
+    }
+
+    .card-label h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .card-label p {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Dim labels on non-active cards */
+    .card[data-pos="1"] .card-label { opacity: 0.45; }
+    .card[data-pos="2"] .card-label { opacity: 0.18; }
+    .card[data-pos="3"] .card-label { opacity: 0.08; }
+    .card[data-pos="4"] .card-label,
+    .card[data-pos="above"] .card-label,
+    .card[data-pos="below"] .card-label { opacity: 0; }
+
+    /* Hover scale only on active card */
+    .card[data-pos="0"]:hover .card-media img { transform: scale(1.03); }
+
+    /* ── RIGHT DESCRIPTION PANEL ── */
+    #desc-panel {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      /* sits just to the right of the card — card is min(680px,84vw) wide centered */
+      left: calc(50% + min(340px, 42vw) + 24px);
+      width: 190px;
+      z-index: 50;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    #desc-panel-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    #desc-panel-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .desc-tag {
+      font-size: 9px;
+      padding: 2px 7px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 3px;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── PROGRESS DOTS ── */
+    #progress-dots {
+      position: fixed;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      z-index: 50;
+      transition: opacity 0.35s;
+    }
+
+    .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    .dot.active {
+      background: #0066ff;
+      transform: scale(1.5);
+    }
+
+    /* ── NAV HINT ── */
+    #nav-hint {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: rgba(255,255,255,0.22);
+      letter-spacing: 0.08em;
+      z-index: 50;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity 0.35s;
+    }
+
+    /* ── LIST VIEW ── */
+    #list-view {
+      display: none;
+      position: fixed;
+      inset: 0;
+      padding-top: 56px;
+      overflow-y: auto;
+      background: #080808;
+    }
+
+    #list-view.visible { display: block; }
+
+    .list-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px 24px 80px;
+    }
+
+    .list-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto auto;
+      align-items: center;
+      gap: 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.12s;
+      border-radius: 4px;
+    }
+
+    .list-row:hover { background: rgba(255,255,255,0.04); }
+
+    .list-thumb {
+      width: 80px; height: 50px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+
+    .list-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    .list-thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      background: #0d0d14;
+    }
+
+    .list-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+    .list-desc  { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+
+    .list-tag {
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      color: rgba(255,255,255,0.32);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .list-arrow { color: #0066ff; font-size: 14px; opacity: 0; transition: opacity 0.12s; }
+    .list-row:hover .list-arrow { opacity: 1; }
+
+    /* ── FOOTER (list view only) ── */
+    .list-footer {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .list-footer-note {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .list-footer-links { display: flex; gap: 16px; }
+    .list-footer-links a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .list-footer-links a:hover { color: #fff; }
+  </style>
 </head>
 <body>
 
-  <nav class="site-nav">
-    <a href="index.html" class="site-nav-brand">Jimi Hughes</a>
-    <div class="site-nav-links">
-      <a href="index.html" class="active">Work</a>
-      <a href="about/index.html">About</a>
-      <a href="blog/index.html">Blog</a>
-      <a href="contact/index.html">Contact</a>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-left">
+      <a class="nav-name" href="index.html">
+        <span class="nav-name-letters" id="name-letters"></span>
+        <span class="nav-subtitle">Creator / AI Engineer</span>
+      </a>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html"       class="nav-link active"><div class="nav-link-bg"></div><span>Work</span></a>
+      <a href="about/index.html" class="nav-link"><div class="nav-link-bg"></div><span>About</span></a>
+      <a href="blog/index.html"  class="nav-link"><div class="nav-link-bg"></div><span>Blog</span></a>
+      <a href="contact/index.html" class="nav-link"><div class="nav-link-bg"></div><span>Contact</span></a>
+      <button class="toggle-pill" id="theme-toggle" aria-label="Toggle theme">
+        <span class="toggle-pill-dot" id="pill-dot"></span>
+      </button>
     </div>
   </nav>
 
-  <div class="layout">
+  <!-- Toggle list button -->
+  <button id="toggle-list-btn">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="1" y1="3" x2="15" y2="3"/>
+      <line x1="1" y1="8" x2="15" y2="8"/>
+      <line x1="1" y1="13" x2="15" y2="13"/>
+    </svg>
+    <span id="toggle-list-label">Toggle list</span>
+  </button>
 
-    <!-- Left Panel (sticky) -->
-    <aside class="sidebar">
-      <div class="sidebar-content">
-        <h1>Jimi Hughes</h1>
-        <p class="role">Creator / AI Engineer</p>
+  <!-- Stacked cards -->
+  <div id="card-area"></div>
 
-        <nav class="contact-links">
-          <a href="about/index.html">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            About
-          </a>
-          <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="mailto:jimifh0111@gmail.com">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-            Email
-          </a>
-        </nav>
+  <!-- Description panel -->
+  <div id="desc-panel">
+    <p id="desc-panel-text"></p>
+    <div id="desc-panel-tags"></div>
+  </div>
 
-        <p class="copyright">&copy; 2026 Jimi Hughes</p>
-        <p class="visitor-count" id="visitor-count"></p>
+  <!-- Progress dots -->
+  <div id="progress-dots"></div>
+
+  <!-- Nav hint -->
+  <div id="nav-hint">scroll · ↑ ↓ arrow keys · click a card to advance</div>
+
+  <!-- List view -->
+  <div id="list-view">
+    <div class="list-inner" id="list-inner"></div>
+    <div class="list-footer">
+      <span class="list-footer-note">© 2026 Jimi Hughes</span>
+      <div class="list-footer-links">
+        <a href="https://github.com/JimiHughes" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:jimifh0111@gmail.com">Email</a>
       </div>
-    </aside>
-
-    <!-- Right Panel (scrollable projects) -->
-    <main class="content">
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" data-tab="apps">Apps</button>
-        <button class="tab" data-tab="games">Games</button>
-        <button class="tab" data-tab="ai-apps">AI Apps</button>
-        <button class="tab" data-tab="coming-soon">Coming Soon</button>
-      </div>
-
-      <div class="tab-panels-wrap">
-
-      <!-- Apps -->
-      <div class="tab-panel active" id="tab-apps">
-
-        <a href="life-manager/index.html" class="project project-blue">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Life Manager</h2>
-              <p>Task management with custom lists, deadlines, recurring tasks, and a completed archive.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/life-manager.png" alt="Life Manager screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="meal-planner/index.html" class="project project-orange">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Meal Planner</h2>
-              <p>Weekly meal planning with ingredient scaling, recipe filtering, and auto shopping lists.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/Meal-planner.png" alt="Meal Planner screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="weather/index.html" class="project project-dark">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Weather App</h2>
-              <p>Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/weather.png" alt="Weather App screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="typing-test/index.html" class="project project-teal">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Speed Typing Test</h2>
-              <p>60-second typing challenge with live WPM, accuracy tracking, and character-level feedback.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/Typing-test.png" alt="Speed Typing Test screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="dashboard/index.html" class="project project-slate" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4338ca 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Personal Dashboard</h2>
-              <p>All-in-one homepage with live weather, clock, to-do list, bookmarks, and daily focus tracker.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/dashboard.png" alt="Personal Dashboard screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="pomodoro/index.html" class="project project-rose" style="background:linear-gradient(135deg,#7f1d1d 0%,#b91c1c 50%,#ef4444 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Pomodoro Timer</h2>
-              <p>Focus timer with task list, short and long breaks, session tracking, and sound alerts.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/pomodoro.png" alt="Pomodoro Timer screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- Games -->
-      <div class="tab-panel" id="tab-games">
-
-        <a href="https://gd.games/jimb0bjim/defend-the-tower" target="_blank" rel="noopener" class="project" style="background:linear-gradient(135deg,#052e16 0%,#065f46 50%,#059669 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Defend the Tower</h2>
-              <p>Top-down wave survival shooter. Hold off waves of enemies across escalating rounds — built in GDevelop, playable in browser.</p>
-              <span class="project-cta">Play Game <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/defend-the-tower.png" alt="Defend the Tower screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="crossword/index.html" class="project project-amber" style="background:linear-gradient(135deg,#78350f 0%,#b45309 50%,#d97706 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Crossword Puzzle</h2>
-              <p>Interactive crossword generator with clues, hints, check answers, and keyboard navigation.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/crossword.png" alt="Crossword Puzzle screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="space-invaders/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#047857 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Space Invaders</h2>
-              <p>Classic arcade action with multiple alien types, shield barriers, levels, and high score tracking.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/space-invaders.png" alt="Space Invaders screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="snake/index.html" class="project project-emerald" style="background:linear-gradient(135deg,#052e16 0%,#166534 50%,#22c55e 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Snake</h2>
-              <p>Classic snake game — eat food, grow longer, avoid the walls and your own tail.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/snake.png" alt="Snake screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="2048/index.html" class="project" style="background:linear-gradient(135deg,#78350f 0%,#d97706 50%,#fbbf24 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>2048</h2>
-              <p>Slide tiles, merge numbers, and reach the 2048 tile. Simple rules, addictive gameplay.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/2048.png" alt="2048 screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="quiz/index.html" class="project" style="background:linear-gradient(135deg,#2e1065 0%,#4c1d95 50%,#7c3aed 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Quiz Game</h2>
-              <p>6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/quiz.png" alt="Quiz Game screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="platformer/index.html" class="project project-rose" style="background:linear-gradient(135deg,#4c0519 0%,#881337 50%,#be123c 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Pixel Runner</h2>
-              <p>Side-scrolling platformer with procedural levels, coin collecting, and increasing difficulty.</p>
-              <span class="project-cta">Open App <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/platformer.png" alt="Pixel Runner screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- AI Apps -->
-      <div class="tab-panel" id="tab-ai-apps">
-
-        <a href="https://learn-scroll.onrender.com" target="_blank" rel="noopener" class="project" style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#16213e 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Learnscroll</h2>
-              <p>Pick any topic and learn through an infinite scroll feed of facts, myths, mind-blows and more. Powered by AI, designed like a social feed so learning feels effortless.</p>
-              <span class="project-cta">Try It <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/learnscroll.png" alt="Learnscroll screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="https://face-off-quiz.onrender.com" target="_blank" rel="noopener" class="project" style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a0a 50%,#2a1a00 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Face-Off Quiz</h2>
-              <p>Two things go head-to-head. Which is taller, older, heavier, faster? Pick the winner, build your streak, and test your knowledge as the difficulty ramps up.</p>
-              <span class="project-cta">Play Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame">
-                <img src="images/faceoff.png" alt="Face-Off Quiz screenshot">
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="just-do-it/index.html" class="project" style="background:linear-gradient(135deg,#0d0d14 0%,#1a100a 50%,#2a1500 100%)">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Just Do It</h2>
-              <p>A task manager that kills procrastination. Tell it how much time and energy you have — it suggests exactly what to do. AI-powered focus mode, micro-step breakdowns, and habit tracking. Works offline. Add to your iPhone home screen as a standalone app.</p>
-              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;background:rgba(255,107,53,0.15);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);">PWA</span>
-                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;background:rgba(255,107,53,0.15);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);">Groq AI</span>
-                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;background:rgba(255,107,53,0.15);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);">Offline</span>
-                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;background:rgba(255,107,53,0.15);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);">iPhone Ready</span>
-              </div>
-              <span class="project-cta" style="margin-top:16px;">Open App <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame" style="background:#0d0d14;border-color:#2a2a3c;display:flex;align-items:center;justify-content:center;">
-                <svg viewBox="0 0 120 120" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="120" height="120" rx="26" fill="#0d0d14"/>
-                  <path d="M68 18L32 66h32L52 102l50-54H68z" fill="#ff6b35"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- Coming Soon -->
-      <div class="tab-panel" id="tab-coming-soon">
-
-        <div class="project project-purple project-disabled">
-          <div class="project-inner">
-            <div class="project-text">
-              <h2>Brain Training</h2>
-              <p>Cognitive exercises for memory, focus, and problem-solving. Native iOS app built with Swift.</p>
-              <span class="project-cta project-cta-muted">Coming Soon</span>
-            </div>
-            <div class="project-preview">
-              <div class="device-frame device-phone">
-                <img src="images/brain-training.png" alt="Brain Training screenshot">
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      </div><!-- /tab-panels-wrap -->
-
-    </main>
-
+    </div>
   </div>
 
   <script>
-    // Console easter egg
-    console.log('%c👋 Hey, you found me!', 'font-size:20px; font-weight:bold; color:#111;');
-    console.log('%cYou\'re clearly the curious type — I like that.', 'font-size:13px; color:#555;');
-    console.log('%c📬 Want to work together? → jimifh0111@gmail.com', 'font-size:13px; color:#6366f1; font-weight:600;');
-    console.log('%c🔗 linkedin.com/in/jimi-hughes-a0b33737b', 'font-size:13px; color:#6366f1;');
+    // ─────────────────────────────────────────
+    // Project data
+    // video: path to a video/gif — leave null for now, add later
+    // ─────────────────────────────────────────
+    const projects = [
+      {
+        title: 'Learnscroll',
+        cat: 'AI App',
+        desc: 'Pick any topic and get an infinite scroll feed of facts, myths, and mind-blows — AI-powered, designed like a social feed so learning feels effortless.',
+        tags: ['Groq AI', 'Web'],
+        img: 'images/learnscroll.png',
+        video: null,
+        href: 'https://learn-scroll.onrender.com',
+        external: true
+      },
+      {
+        title: 'Face-Off Quiz',
+        cat: 'AI App',
+        desc: 'Two things go head-to-head. Which is taller, older, heavier, faster? Pick the winner, build your streak, and test your knowledge as the difficulty ramps up.',
+        tags: ['AI', 'Web'],
+        img: 'images/faceoff.png',
+        video: null,
+        href: 'https://face-off-quiz.onrender.com',
+        external: true
+      },
+      {
+        title: 'Just Do It',
+        cat: 'AI App · PWA',
+        desc: 'Tell it your time and energy — it tells you exactly what to tackle. AI micro-step breakdowns, habit tracking, offline-first. Add to your iPhone home screen.',
+        tags: ['Groq AI', 'PWA', 'Offline', 'iOS'],
+        img: null,
+        video: null,
+        isJDI: true,
+        href: 'just-do-it/index.html',
+        external: false
+      },
+      {
+        title: 'Life Manager',
+        cat: 'App',
+        desc: 'Task management with custom lists, deadlines, recurring tasks, and a completed archive. Built for the way people actually think about their to-do lists.',
+        tags: ['Web', 'PWA'],
+        img: 'images/life-manager.png',
+        video: null,
+        href: 'life-manager/index.html',
+        external: false
+      },
+      {
+        title: 'Meal Planner',
+        cat: 'App',
+        desc: 'Weekly meal planning with ingredient scaling, recipe filtering, and auto-generated shopping lists. Never think "what\'s for dinner?" again.',
+        tags: ['Web'],
+        img: 'images/Meal-planner.png',
+        video: null,
+        href: 'meal-planner/index.html',
+        external: false
+      },
+      {
+        title: 'Weather App',
+        cat: 'App',
+        desc: 'Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search. Clean, fast, and accurate.',
+        tags: ['API', 'Web'],
+        img: 'images/weather.png',
+        video: null,
+        href: 'weather/index.html',
+        external: false
+      },
+      {
+        title: 'Speed Typing Test',
+        cat: 'App',
+        desc: '60-second typing challenge with live WPM, accuracy tracking, and character-level feedback. Compete against yourself and improve over time.',
+        tags: ['Web'],
+        img: 'images/Typing-test.png',
+        video: null,
+        href: 'typing-test/index.html',
+        external: false
+      },
+      {
+        title: 'Personal Dashboard',
+        cat: 'App',
+        desc: 'All-in-one new tab replacement — live weather, clock, to-do list, bookmarks, and daily focus tracker. Your whole day at a glance.',
+        tags: ['Web'],
+        img: 'images/dashboard.png',
+        video: null,
+        href: 'dashboard/index.html',
+        external: false
+      },
+      {
+        title: 'Pomodoro Timer',
+        cat: 'App',
+        desc: 'Focus timer with integrated task list, short and long breaks, session tracking, and sound alerts. Stay in the zone.',
+        tags: ['Web'],
+        img: 'images/pomodoro.png',
+        video: null,
+        href: 'pomodoro/index.html',
+        external: false
+      },
+      {
+        title: 'Defend the Tower',
+        cat: 'Game',
+        desc: 'Top-down wave survival shooter. Hold off escalating enemy waves across multiple rounds — built in GDevelop, fully playable in the browser.',
+        tags: ['GDevelop', 'Browser'],
+        img: 'images/defend-the-tower.png',
+        video: null,
+        href: 'https://gd.games/jimb0bjim/defend-the-tower',
+        external: true
+      },
+      {
+        title: 'Crossword Puzzle',
+        cat: 'Game',
+        desc: 'Interactive crossword generator with clues, hints, check-answers, and full keyboard navigation. Every game is unique.',
+        tags: ['JS', 'Web'],
+        img: 'images/crossword.png',
+        video: null,
+        href: 'crossword/index.html',
+        external: false
+      },
+      {
+        title: 'Space Invaders',
+        cat: 'Game',
+        desc: 'Classic arcade with multiple alien types, destructible shield barriers, escalating levels, and high score tracking.',
+        tags: ['Canvas', 'JS'],
+        img: 'images/space-invaders.png',
+        video: null,
+        href: 'space-invaders/index.html',
+        external: false
+      },
+      {
+        title: 'Snake',
+        cat: 'Game',
+        desc: 'Classic snake — eat food, grow longer, avoid the walls and your own tail. Simple, satisfying, and endlessly replayable.',
+        tags: ['Canvas', 'JS'],
+        img: 'images/snake.png',
+        video: null,
+        href: 'snake/index.html',
+        external: false
+      },
+      {
+        title: '2048',
+        cat: 'Game',
+        desc: 'Slide tiles, merge numbers, and reach the 2048 tile. Brutally simple rules, stupidly addictive gameplay.',
+        tags: ['JS', 'Web'],
+        img: 'images/2048.png',
+        video: null,
+        href: '2048/index.html',
+        external: false
+      },
+      {
+        title: 'Quiz Game',
+        cat: 'Game',
+        desc: '6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment. How much do you really know?',
+        tags: ['JS', 'Web'],
+        img: 'images/quiz.png',
+        video: null,
+        href: 'quiz/index.html',
+        external: false
+      },
+      {
+        title: 'Pixel Runner',
+        cat: 'Game',
+        desc: 'Side-scrolling platformer with procedurally generated levels, coin collecting, and increasing difficulty. How far can you go?',
+        tags: ['Canvas', 'JS'],
+        img: 'images/platformer.png',
+        video: null,
+        href: 'platformer/index.html',
+        external: false
+      },
+    ];
 
-    // Loading animation + typing effect on role text
-    window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
-
-      // Typing animation for "Creator / AI Engineer"
-      const roleEl = document.querySelector('.role');
-      const fullText = roleEl.textContent.trim();
-      roleEl.textContent = '';
-
-      // Insert blinking cursor
-      const cursor = document.createElement('span');
-      cursor.className = 'typing-cursor';
-      roleEl.appendChild(cursor);
-
-      // Start typing after h1 has faded in (slight delay feels natural)
-      setTimeout(() => {
-        let i = 0;
-        const speed = 55; // ms per character
-        const type = () => {
-          if (i < fullText.length) {
-            roleEl.insertBefore(document.createTextNode(fullText[i]), cursor);
-            i++;
-            setTimeout(type, speed);
-          } else {
-            // Cursor blinks for 1.5s then softly disappears
-            setTimeout(() => {
-              cursor.style.transition = 'opacity 0.6s ease';
-              cursor.style.opacity = '0';
-              setTimeout(() => cursor.remove(), 600);
-            }, 1500);
-          }
-        };
-        type();
-      }, 650);
+    // ─────────────────────────────────────────
+    // Name — per-letter bounce spans
+    // ─────────────────────────────────────────
+    const lettersEl = document.getElementById('name-letters');
+    'Jimi Hughes'.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      if (ch === ' ') { s.style.width = '0.38em'; s.style.whiteSpace = 'pre'; }
+      s.style.transitionDelay = `${i * 0.033}s, ${i * 0.033}s`;
+      lettersEl.appendChild(s);
     });
 
-    // Live visitor counter
+    // ─────────────────────────────────────────
+    // Build card elements
+    // ─────────────────────────────────────────
+    let current = 0;
+    const cardArea  = document.getElementById('card-area');
+    const dotsEl    = document.getElementById('progress-dots');
+    const descText  = document.getElementById('desc-panel-text');
+    const descTags  = document.getElementById('desc-panel-tags');
+
+    // Progress dots
+    projects.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    const cardEls = projects.map((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      // Media
+      const media = document.createElement('div');
+      media.className = 'card-media';
+
+      if (p.isJDI) {
+        // Special JDI card with gradient bg and SVG logo
+        media.style.cssText = 'background:linear-gradient(135deg,#0d0d14 0%,#1a1000 100%);display:flex;align-items:center;justify-content:center;';
+        media.innerHTML = `<svg viewBox="0 0 120 120" width="90" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1"><rect width="120" height="120" rx="26" fill="#0d0d14"/><path d="M68 18L32 66h32L52 102l50-54H68z" fill="#ff6b35"/></svg>`;
+      } else {
+        // Image (shown always)
+        if (p.img) {
+          const img = document.createElement('img');
+          img.src = p.img;
+          img.alt = p.title;
+          img.loading = i === 0 ? 'eager' : 'lazy';
+          media.appendChild(img);
+        }
+
+        // Video slot (hidden until video.src is set and loaded)
+        // To add a video later: set video.src = 'videos/yourfile.mp4'
+        // The video will fade in over the screenshot automatically
+        const vid = document.createElement('video');
+        vid.autoplay = true;
+        vid.loop = true;
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.setAttribute('playsinline', '');
+        if (p.video) {
+          vid.src = p.video;
+          vid.addEventListener('loadeddata', () => vid.classList.add('loaded'));
+        }
+        media.appendChild(vid);
+      }
+
+      // Label overlay
+      const label = document.createElement('div');
+      label.className = 'card-label';
+      label.innerHTML = `<h2>${p.title}</h2><p>${p.cat}</p>`;
+      media.appendChild(label);
+
+      card.appendChild(media);
+
+      // Click: non-active cards advance; active card opens the link
+      card.addEventListener('click', () => {
+        if (parseInt(card.dataset.pos) !== 0) {
+          goTo(i);
+        } else {
+          if (p.external) window.open(p.href, '_blank', 'noopener');
+          else window.location.href = p.href;
+        }
+      });
+
+      cardArea.appendChild(card);
+      return card;
+    });
+
+    // ─────────────────────────────────────────
+    // Position update
+    // ─────────────────────────────────────────
+    function updatePositions() {
+      const n = projects.length;
+      cardEls.forEach((card, i) => {
+        const offset = ((i - current) % n + n) % n;
+        let pos;
+        if (offset === 0)        pos = '0';
+        else if (offset === 1)   pos = '1';
+        else if (offset === 2)   pos = '2';
+        else if (offset === 3)   pos = '3';
+        else if (offset === 4)   pos = '4';
+        else if (offset >= n - 3) pos = 'above';
+        else                     pos = 'below';
+        card.dataset.pos = pos;
+      });
+
+      // Description panel
+      const p = projects[current];
+      descText.textContent = p.desc;
+      descTags.innerHTML = p.tags.map(t => `<span class="desc-tag">${t}</span>`).join('');
+
+      // Dots
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function goTo(idx) {
+      current = ((idx % projects.length) + projects.length) % projects.length;
+      updatePositions();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    updatePositions();
+
+    // ─────────────────────────────────────────
+    // Input: wheel + arrow keys + touch swipe
+    // ─────────────────────────────────────────
+    let locked = false;
+    function throttle(fn) {
+      if (locked || listVisible) return;
+      fn();
+      locked = true;
+      setTimeout(() => locked = false, 700);
+    }
+
+    window.addEventListener('wheel', e => {
+      throttle(() => e.deltaY > 0 ? next() : prev());
+    }, { passive: true });
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') throttle(next);
+      if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  throttle(prev);
+    });
+
+    // Touch swipe
+    let touchY = null;
+    window.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchend', e => {
+      if (touchY === null) return;
+      const dy = touchY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) throttle(() => dy > 0 ? next() : prev());
+      touchY = null;
+    }, { passive: true });
+
+    // ─────────────────────────────────────────
+    // List view toggle
+    // ─────────────────────────────────────────
+    let listVisible = false;
+    const listView   = document.getElementById('list-view');
+    const listInner  = document.getElementById('list-inner');
+    const toggleBtn  = document.getElementById('toggle-list-btn');
+    const toggleLabel = document.getElementById('toggle-list-label');
+    const descPanel  = document.getElementById('desc-panel');
+    const progressEl = document.getElementById('progress-dots');
+    const hintEl     = document.getElementById('nav-hint');
+
+    // Build list rows
+    projects.forEach(p => {
+      const a = document.createElement('a');
+      a.href = p.href;
+      if (p.external) { a.target = '_blank'; a.rel = 'noopener'; }
+      a.className = 'list-row';
+
+      const thumbHtml = p.isJDI
+        ? `<div class="list-thumb"><div class="list-thumb-placeholder">⚡</div></div>`
+        : `<div class="list-thumb"><img src="${p.img}" alt="${p.title}" loading="lazy"></div>`;
+
+      a.innerHTML = `
+        ${thumbHtml}
+        <div>
+          <div class="list-title">${p.title}</div>
+          <div class="list-desc">${p.desc.slice(0, 72)}…</div>
+        </div>
+        <div class="list-tag">${p.cat}</div>
+        <div class="list-arrow">→</div>`;
+      listInner.appendChild(a);
+    });
+
+    toggleBtn.addEventListener('click', () => {
+      listVisible = !listVisible;
+      listView.classList.toggle('visible', listVisible);
+      cardArea.style.opacity = listVisible ? '0' : '1';
+      cardArea.style.pointerEvents = listVisible ? 'none' : '';
+      descPanel.style.opacity  = listVisible ? '0' : '1';
+      progressEl.style.opacity = listVisible ? '0' : '1';
+      hintEl.style.opacity     = listVisible ? '0' : '1';
+      toggleLabel.textContent  = listVisible ? 'Back to cards' : 'Toggle list';
+    });
+
+    // ─────────────────────────────────────────
+    // Theme toggle (dark/light)
+    // ─────────────────────────────────────────
+    let lightMode = false;
+    const pillDot = document.getElementById('pill-dot');
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      lightMode = !lightMode;
+      document.body.style.background    = lightMode ? '#f0ede8' : '#080808';
+      document.body.style.color         = lightMode ? '#111'    : '#fff';
+      document.getElementById('list-view').style.background = lightMode ? '#f0ede8' : '#080808';
+      pillDot.style.left       = lightMode ? '19px' : '3px';
+      pillDot.style.background = lightMode ? '#f0ede8' : '#080808';
+    });
+
+    // ─────────────────────────────────────────
+    // Visitor counter (silent fail)
+    // ─────────────────────────────────────────
     fetch('https://api.counterapi.dev/v1/jimihughes/portfolio/up')
       .then(r => r.json())
-      .then(data => {
-        const el = document.getElementById('visitor-count');
-        if (el && data.count) {
-          el.textContent = data.count.toLocaleString() + ' visitors';
-        }
-      })
+      .then(() => {})
       .catch(() => {});
 
-    // Tab switching — fast crossfade
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.tab-panel');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        const newPanel = document.getElementById('tab-' + target);
-        const currentPanel = document.querySelector('.tab-panel.active');
-        if (currentPanel === newPanel) return;
-
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        panels.forEach(p => p.classList.remove('active'));
-        newPanel.classList.add('active', 'switching');
-
-        setTimeout(() => newPanel.classList.remove('switching'), 150);
-        document.querySelector('.content').scrollTop = 0;
-      });
-    });
-
-    // Animated favicon — canvas-based so it actually works in Chrome
-    (function() {
-      var c = document.createElement('canvas');
-      c.width = 32; c.height = 32;
-      var ctx = c.getContext('2d');
-      var a = 0;
-      var lnk = document.querySelector("link[rel*='icon']");
-      if (!lnk) { lnk = document.createElement('link'); lnk.rel = 'icon'; document.head.appendChild(lnk); }
-      function frame() {
-        ctx.clearRect(0, 0, 32, 32);
-        ctx.beginPath();
-        ctx.moveTo(8,0); ctx.arcTo(32,0,32,32,8); ctx.arcTo(32,32,0,32,8); ctx.arcTo(0,32,0,0,8); ctx.arcTo(0,0,32,0,8);
-        ctx.closePath();
-        ctx.fillStyle = '#111'; ctx.fill();
-        ctx.strokeStyle = 'rgba(99,102,241,0.2)'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(16,16,12,0,Math.PI*2); ctx.stroke();
-        ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-        ctx.beginPath(); ctx.arc(16,16,12,a,a+Math.PI*1.4); ctx.stroke();
-        ctx.fillStyle = '#a5b4fc';
-        ctx.beginPath(); ctx.arc(16+12*Math.cos(a+Math.PI*1.4),16+12*Math.sin(a+Math.PI*1.4),2,0,Math.PI*2); ctx.fill();
-        ctx.font = '800 17px system-ui,sans-serif'; ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('J',16,17);
-        a += 0.035; lnk.href = c.toDataURL();
-        requestAnimationFrame(frame);
-      }
-      frame();
-    })();
-
+    // ─────────────────────────────────────────
+    // Console easter egg
+    // ─────────────────────────────────────────
+    console.log('%c👋 Hey, you found me!', 'font-size:18px;font-weight:bold;');
+    console.log('%c📬 Want to work together? → jimifh0111@gmail.com', 'font-size:13px;color:#0066ff;font-weight:600;');
   </script>
-
 </body>
 </html>
