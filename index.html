@@ -520,7 +520,7 @@
         desc: 'Pick any topic and get an infinite scroll feed of facts, myths, and mind-blows — AI-powered, designed like a social feed so learning feels effortless.',
         tags: ['Groq AI', 'Web'],
         img: 'images/learnscroll.png',
-        video: null,
+        video: 'videos/learnscroll.mp4',
         href: 'https://learn-scroll.onrender.com',
         external: true
       },
@@ -530,7 +530,7 @@
         desc: 'Two things go head-to-head. Which is taller, older, heavier, faster? Pick the winner, build your streak, and test your knowledge as the difficulty ramps up.',
         tags: ['AI', 'Web'],
         img: 'images/faceoff.png',
-        video: null,
+        video: 'videos/faceoff.mp4',
         href: 'https://face-off-quiz.onrender.com',
         external: true
       },
@@ -822,11 +822,21 @@
       if (locked || listVisible) return;
       fn();
       locked = true;
-      setTimeout(() => locked = false, 700);
+      setTimeout(() => locked = false, 900);
     }
 
+    // Accumulate wheel delta so macOS inertia doesn't double-fire
+    let wheelAccum = 0, wheelReset = null;
     window.addEventListener('wheel', e => {
-      throttle(() => e.deltaY > 0 ? next() : prev());
+      if (listVisible) return;
+      wheelAccum += e.deltaY;
+      clearTimeout(wheelReset);
+      wheelReset = setTimeout(() => { wheelAccum = 0; }, 180);
+      if (locked) return;
+      if (Math.abs(wheelAccum) < 60) return;
+      const dir = wheelAccum;
+      wheelAccum = 0;
+      throttle(() => dir > 0 ? next() : prev());
     }, { passive: true });
 
     window.addEventListener('keydown', e => {
