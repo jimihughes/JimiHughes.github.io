@@ -513,10 +513,6 @@
   </div>
 
   <script>
-    // ─────────────────────────────────────────
-    // Project data
-    // video: path to a video/gif — leave null for now, add later
-    // ─────────────────────────────────────────
     const projects = [
       {
         title: 'Learnscroll',
@@ -544,7 +540,7 @@
         desc: 'Tell it your time and energy — it tells you exactly what to tackle. AI micro-step breakdowns, habit tracking, offline-first. Add to your iPhone home screen.',
         tags: ['Groq AI', 'PWA', 'Offline', 'iOS'],
         img: null,
-        video: null,
+        video: 'videos/just-do-it.gif',
         isJDI: true,
         href: 'just-do-it/index.html',
         external: false
@@ -555,7 +551,7 @@
         desc: 'Task management with custom lists, deadlines, recurring tasks, and a completed archive. Built for the way people actually think about their to-do lists.',
         tags: ['Web', 'PWA'],
         img: 'images/life-manager.png',
-        video: null,
+        video: 'videos/life-manager.gif',
         href: 'life-manager/index.html',
         external: false
       },
@@ -565,7 +561,7 @@
         desc: 'Weekly meal planning with ingredient scaling, recipe filtering, and auto-generated shopping lists. Never think "what\'s for dinner?" again.',
         tags: ['Web'],
         img: 'images/Meal-planner.png',
-        video: null,
+        video: 'videos/meal-planner.gif',
         href: 'meal-planner/index.html',
         external: false
       },
@@ -575,7 +571,7 @@
         desc: 'Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search. Clean, fast, and accurate.',
         tags: ['API', 'Web'],
         img: 'images/weather.png',
-        video: null,
+        video: 'videos/weather.gif',
         href: 'weather/index.html',
         external: false
       },
@@ -585,7 +581,7 @@
         desc: '60-second typing challenge with live WPM, accuracy tracking, and character-level feedback. Compete against yourself and improve over time.',
         tags: ['Web'],
         img: 'images/Typing-test.png',
-        video: null,
+        video: 'videos/typing-test.gif',
         href: 'typing-test/index.html',
         external: false
       },
@@ -595,7 +591,7 @@
         desc: 'All-in-one new tab replacement — live weather, clock, to-do list, bookmarks, and daily focus tracker. Your whole day at a glance.',
         tags: ['Web'],
         img: 'images/dashboard.png',
-        video: null,
+        video: 'videos/dashboard.gif',
         href: 'dashboard/index.html',
         external: false
       },
@@ -605,7 +601,7 @@
         desc: 'Focus timer with integrated task list, short and long breaks, session tracking, and sound alerts. Stay in the zone.',
         tags: ['Web'],
         img: 'images/pomodoro.png',
-        video: null,
+        video: 'videos/pomodoro.gif',
         href: 'pomodoro/index.html',
         external: false
       },
@@ -615,7 +611,7 @@
         desc: 'Top-down wave survival shooter. Hold off escalating enemy waves across multiple rounds — built in GDevelop, fully playable in the browser.',
         tags: ['GDevelop', 'Browser'],
         img: 'images/defend-the-tower.png',
-        video: null,
+        video: null, // hosted externally — can't auto-capture
         href: 'https://gd.games/jimb0bjim/defend-the-tower',
         external: true
       },
@@ -625,7 +621,7 @@
         desc: 'Interactive crossword generator with clues, hints, check-answers, and full keyboard navigation. Every game is unique.',
         tags: ['JS', 'Web'],
         img: 'images/crossword.png',
-        video: null,
+        video: 'videos/crossword.gif',
         href: 'crossword/index.html',
         external: false
       },
@@ -635,7 +631,7 @@
         desc: 'Classic arcade with multiple alien types, destructible shield barriers, escalating levels, and high score tracking.',
         tags: ['Canvas', 'JS'],
         img: 'images/space-invaders.png',
-        video: null,
+        video: 'videos/space-invaders.gif',
         href: 'space-invaders/index.html',
         external: false
       },
@@ -645,7 +641,7 @@
         desc: 'Classic snake — eat food, grow longer, avoid the walls and your own tail. Simple, satisfying, and endlessly replayable.',
         tags: ['Canvas', 'JS'],
         img: 'images/snake.png',
-        video: null,
+        video: 'videos/snake.gif',
         href: 'snake/index.html',
         external: false
       },
@@ -655,7 +651,7 @@
         desc: 'Slide tiles, merge numbers, and reach the 2048 tile. Brutally simple rules, stupidly addictive gameplay.',
         tags: ['JS', 'Web'],
         img: 'images/2048.png',
-        video: null,
+        video: 'videos/2048.gif',
         href: '2048/index.html',
         external: false
       },
@@ -665,7 +661,7 @@
         desc: '6 categories, 10 questions each — science, history, tech, geography, sport, and entertainment. How much do you really know?',
         tags: ['JS', 'Web'],
         img: 'images/quiz.png',
-        video: null,
+        video: 'videos/quiz.gif',
         href: 'quiz/index.html',
         external: false
       },
@@ -675,7 +671,7 @@
         desc: 'Side-scrolling platformer with procedurally generated levels, coin collecting, and increasing difficulty. How far can you go?',
         tags: ['Canvas', 'JS'],
         img: 'images/platformer.png',
-        video: null,
+        video: 'videos/platformer.gif',
         href: 'platformer/index.html',
         external: false
       },
@@ -718,34 +714,30 @@
       const media = document.createElement('div');
       media.className = 'card-media';
 
-      if (p.isJDI) {
-        // Special JDI card with gradient bg and SVG logo
+      if (p.isJDI && !p.video) {
+        // JDI fallback — gradient + SVG logo
         media.style.cssText = 'background:linear-gradient(135deg,#0d0d14 0%,#1a1000 100%);display:flex;align-items:center;justify-content:center;';
         media.innerHTML = `<svg viewBox="0 0 120 120" width="90" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1"><rect width="120" height="120" rx="26" fill="#0d0d14"/><path d="M68 18L32 66h32L52 102l50-54H68z" fill="#ff6b35"/></svg>`;
-      } else {
-        // Image (shown always)
-        if (p.img) {
-          const img = document.createElement('img');
-          img.src = p.img;
-          img.alt = p.title;
-          img.loading = i === 0 ? 'eager' : 'lazy';
-          media.appendChild(img);
-        }
+      }
 
-        // Video slot (hidden until video.src is set and loaded)
-        // To add a video later: set video.src = 'videos/yourfile.mp4'
-        // The video will fade in over the screenshot automatically
-        const vid = document.createElement('video');
-        vid.autoplay = true;
-        vid.loop = true;
-        vid.muted = true;
-        vid.playsInline = true;
-        vid.setAttribute('playsinline', '');
-        if (p.video) {
-          vid.src = p.video;
-          vid.addEventListener('loadeddata', () => vid.classList.add('loaded'));
-        }
-        media.appendChild(vid);
+      // Static screenshot (always shown as base layer)
+      if (p.img) {
+        const img = document.createElement('img');
+        img.src = p.img;
+        img.alt = p.title;
+        img.loading = i === 0 ? 'eager' : 'lazy';
+        media.appendChild(img);
+      }
+
+      // Animated GIF — overlaid on top, fades in once loaded
+      if (p.video) {
+        const gif = document.createElement('img');
+        gif.src = p.video;
+        gif.alt = '';
+        gif.loading = 'lazy';
+        gif.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity 0.6s ease;';
+        gif.addEventListener('load', () => { gif.style.opacity = '1'; });
+        media.appendChild(gif);
       }
 
       // Label overlay
