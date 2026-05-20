@@ -817,27 +817,54 @@
     // ─────────────────────────────────────────
     // Input: wheel + arrow keys + touch swipe
     // ─────────────────────────────────────────
+
+    // Arrow keys / touch use a simple boolean lock
     let locked = false;
     function throttle(fn) {
       if (locked || listVisible) return;
       fn();
       locked = true;
-      setTimeout(() => locked = false, 900);
+      setTimeout(() => locked = false, 800);
     }
 
-    // Accumulate wheel delta so macOS inertia doesn't double-fire
-    let wheelAccum = 0, wheelReset = null;
+    // Wheel: dynamic inertia-aware cooldown.
+    // While the cooldown is active, every incoming wheel event
+    // (including macOS inertia) extends the silence timer by 350ms
+    // and zeroes the accumulator — so the lock only drops 350ms
+    // after the LAST inertia event, not 900ms after navigation.
+    let wheelAccum = 0;
+    let wheelCooldown = false;
+    let wheelSilenceTimer = null;
+
+    function endWheelCooldown() {
+      wheelCooldown = false;
+      wheelAccum = 0;
+    }
+
     window.addEventListener('wheel', e => {
       if (listVisible) return;
-      // While locked, drain the accumulator so stale inertia can't queue up
-      if (locked) { wheelAccum = 0; return; }
+
+      if (wheelCooldown) {
+        // Extend silence timer while inertia keeps firing
+        clearTimeout(wheelSilenceTimer);
+        wheelSilenceTimer = setTimeout(endWheelCooldown, 350);
+        wheelAccum = 0;
+        return;
+      }
+
       wheelAccum += e.deltaY;
-      clearTimeout(wheelReset);
-      wheelReset = setTimeout(() => { wheelAccum = 0; }, 200);
+      clearTimeout(wheelSilenceTimer);
+      wheelSilenceTimer = setTimeout(() => { wheelAccum = 0; }, 180);
+
       if (Math.abs(wheelAccum) < 80) return;
+
       const dir = wheelAccum;
       wheelAccum = 0;
-      throttle(() => dir > 0 ? next() : prev());
+      wheelCooldown = true;
+      clearTimeout(wheelSilenceTimer);
+      wheelSilenceTimer = setTimeout(endWheelCooldown, 350);
+
+      if (dir > 0) next(); else prev();
     }, { passive: true });
 
     window.addEventListener('keydown', e => {
