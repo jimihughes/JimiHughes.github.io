@@ -611,7 +611,7 @@
         desc: 'Top-down wave survival shooter. Hold off escalating enemy waves across multiple rounds — built in GDevelop, fully playable in the browser.',
         tags: ['GDevelop', 'Browser'],
         img: 'images/defend-the-tower.png',
-        video: null, // hosted externally — can't auto-capture
+        video: 'videos/defend-the-tower.mp4',
         href: 'https://gd.games/jimb0bjim/defend-the-tower',
         external: true
       },
@@ -829,11 +829,12 @@
     let wheelAccum = 0, wheelReset = null;
     window.addEventListener('wheel', e => {
       if (listVisible) return;
+      // While locked, drain the accumulator so stale inertia can't queue up
+      if (locked) { wheelAccum = 0; return; }
       wheelAccum += e.deltaY;
       clearTimeout(wheelReset);
-      wheelReset = setTimeout(() => { wheelAccum = 0; }, 180);
-      if (locked) return;
-      if (Math.abs(wheelAccum) < 60) return;
+      wheelReset = setTimeout(() => { wheelAccum = 0; }, 200);
+      if (Math.abs(wheelAccum) < 80) return;
       const dir = wheelAccum;
       wheelAccum = 0;
       throttle(() => dir > 0 ? next() : prev());
