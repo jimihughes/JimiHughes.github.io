@@ -683,6 +683,11 @@ function gameLoop(){
 
 gameLoop();
 
+// Expose game state for external tooling
+setInterval(()=>{
+  window._g={state,player,platforms,lavas,spikes,camX,GH};
+},16);
+
 })();
 </script>
 </body>
