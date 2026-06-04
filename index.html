@@ -147,16 +147,34 @@ button { font-family:inherit; cursor:pointer; }
 .mb-logo-name em { color:var(--blue); font-style:normal; }
 
 .mb-btn {
-  font-size:12px; color:var(--txt2); padding:2px 8px; border-radius:4px; border:none; background:none;
-  transition:color 0.15s,background 0.15s; position:relative; overflow:hidden;
+  font-size:12px; color:var(--txt2); padding:3px 9px; border-radius:5px; border:none; background:none;
+  transition:color 0.2s; position:relative; cursor:pointer;
 }
-.mb-btn::after {
-  content:''; position:absolute; inset:0; background:rgba(255,255,255,0.07);
-  transform:scaleX(0); transform-origin:left; transition:transform 0.2s var(--ease);
-  border-radius:4px;
+/* Progressive border that draws clockwise around the button on hover */
+.mb-btn::before {
+  content:''; position:absolute; inset:-1px; border-radius:5px; pointer-events:none;
+  background:
+    linear-gradient(var(--blue),var(--blue)) top    left  / 0%   1px no-repeat,
+    linear-gradient(var(--blue),var(--blue)) top    right / 1px  0%  no-repeat,
+    linear-gradient(var(--blue),var(--blue)) bottom right / 0%   1px no-repeat,
+    linear-gradient(var(--blue),var(--blue)) bottom left  / 1px  0%  no-repeat;
+  transition:background-size 0s;
+  opacity:0;
 }
-.mb-btn:hover { color:var(--txt); }
-.mb-btn:hover::after { transform:scaleX(1); }
+.mb-btn:hover { color:#fff; }
+.mb-btn:hover::before {
+  opacity:1;
+  background:
+    linear-gradient(var(--blue),var(--blue)) top    left  / 100% 1px no-repeat,
+    linear-gradient(var(--blue),var(--blue)) top    right / 1px  100% no-repeat,
+    linear-gradient(var(--blue),var(--blue)) bottom right / 100% 1px no-repeat,
+    linear-gradient(var(--blue),var(--blue)) bottom left  / 1px  100% no-repeat;
+  transition:
+    background-size 0.08s ease           0s,
+    background-size 0.08s ease         0.08s,
+    background-size 0.08s ease         0.16s,
+    background-size 0.08s ease         0.24s;
+}
 
 #mb-clock { font-family:var(--mono); font-size:11px; color:var(--txt2); min-width:42px; text-align:right; letter-spacing:0.02em; }
 
@@ -329,21 +347,41 @@ button { font-family:inherit; cursor:pointer; }
 .win-tb {
   height:38px; flex-shrink:0;
   display:flex; align-items:center; padding:0 11px; gap:8px;
-  background:rgba(255,255,255,0.03);
+  background:rgba(255,255,255,0.025);
   border-bottom:1px solid var(--bd);
   cursor:move; user-select:none; -webkit-user-select:none;
 }
 .win-tb::before {
   content:''; position:absolute; top:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);
 }
-.win-btns { display:flex; gap:7px; flex-shrink:0; }
-.win-btn  { width:12px; height:12px; border-radius:50%; border:none; cursor:pointer; flex-shrink:0; position:relative; transition:filter 0.15s; }
-.win-btn:hover { filter:brightness(1.2) saturate(1.3); }
-.win-btn:hover::after { content:''; position:absolute; inset:2px; border-radius:50%; background:rgba(0,0,0,0.3); }
-.win-btn-x { background:var(--red); }
-.win-btn-m { background:var(--yellow); }
-.win-btn-f { background:var(--lime); }
+
+/* Custom JHOS window buttons — rectangular, symbol appears on hover */
+.win-btns { display:flex; gap:5px; flex-shrink:0; }
+.win-btn {
+  width:26px; height:16px; border-radius:4px;
+  background:rgba(255,255,255,0.055);
+  border:1px solid rgba(255,255,255,0.08);
+  cursor:pointer; flex-shrink:0; position:relative;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.18s, border-color 0.18s;
+}
+.win-btn svg {
+  width:7px; height:7px;
+  stroke:rgba(255,255,255,0); fill:none;
+  stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;
+  transition:stroke 0.18s;
+}
+/* Close */
+.win-btn-x:hover { background:rgba(255,95,87,0.22); border-color:rgba(255,95,87,0.5); }
+.win-btn-x:hover svg { stroke:#ff5f57; }
+/* Minimise */
+.win-btn-m:hover { background:rgba(254,188,46,0.18); border-color:rgba(254,188,46,0.45); }
+.win-btn-m:hover svg { stroke:#febc2e; }
+/* Fullscreen */
+.win-btn-f:hover { background:rgba(40,200,64,0.15); border-color:rgba(40,200,64,0.4); }
+.win-btn-f:hover svg { stroke:#28c840; }
+
 .win-title { flex:1; text-align:center; font-size:12px; font-weight:600; color:var(--txt2); pointer-events:none; letter-spacing:0.01em; }
 .win-tb-end { width:42px; flex-shrink:0; }
 .win-body { flex:1; overflow:hidden; display:flex; flex-direction:column; }
@@ -842,9 +880,15 @@ function makeWin({ id, title, w=500, h=480, content }) {
   el.innerHTML = `
     <div class="win-tb">
       <div class="win-btns">
-        <button class="win-btn win-btn-x"></button>
-        <button class="win-btn win-btn-m"></button>
-        <button class="win-btn win-btn-f"></button>
+        <button class="win-btn win-btn-x" title="Close">
+          <svg viewBox="0 0 7 7"><path d="M1 1l5 5M6 1L1 6"/></svg>
+        </button>
+        <button class="win-btn win-btn-m" title="Minimise">
+          <svg viewBox="0 0 7 7"><path d="M1 3.5h5"/></svg>
+        </button>
+        <button class="win-btn win-btn-f" title="Fullscreen">
+          <svg viewBox="0 0 7 7"><path d="M1 2.5V1h1.5M5.5 1H7v1.5M1 4.5V6h1.5M5.5 6H7V4.5"/></svg>
+        </button>
       </div>
       <div class="win-title">${title}</div>
       <div class="win-tb-end"></div>
@@ -1395,37 +1439,47 @@ function buildDock() {
     pill.appendChild(el);
   });
 
-  // magnification
-  pill.addEventListener('mousemove', dockMagnify);
-  pill.addEventListener('mouseleave', dockReset);
-}
+  // rAF-batched magnification for silky smooth scaling
+  const pill2 = document.getElementById('dock-pill');
+  let _mx = null, _raf = false, _hovering = false;
 
-function dockMagnify(e) {
-  const items = document.querySelectorAll('.dk-item:not([class*="sep"])');
-  items.forEach(item => {
-    const icon = item.querySelector('.dk-icon');
-    if (!icon) return;
-    const r = icon.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const dist = Math.abs(e.clientX - cx);
-    const maxD = 85;
-    if (dist < maxD) {
-      const scale = 1 + 0.6 * Math.pow(1 - dist / maxD, 1.8);
-      const rise  = (scale - 1) * 22;
-      icon.style.transform = `scale(${scale.toFixed(3)}) translateY(-${rise.toFixed(1)}px)`;
-      icon.style.transition = 'transform 0.1s ease';
-    } else {
-      icon.style.transform = '';
-      icon.style.transition = 'transform 0.22s var(--spring)';
-    }
+  pill2.addEventListener('mouseenter', () => { _hovering = true; });
+  pill2.addEventListener('mouseleave', () => {
+    _hovering = false; _mx = null;
+    // spring back with smooth transition
+    document.querySelectorAll('.dk-icon').forEach(ic => {
+      ic.style.transition = 'transform 0.32s cubic-bezier(0.34,1.3,0.64,1)';
+      ic.style.transform = '';
+    });
   });
-}
+  pill2.addEventListener('mousemove', e => {
+    _mx = e.clientX;
+    if (!_raf) { _raf = true; requestAnimationFrame(_applyMag); }
+  });
 
-function dockReset() {
-  document.querySelectorAll('.dk-icon').forEach(icon => {
-    icon.style.transform = '';
-    icon.style.transition = 'transform 0.25s var(--spring)';
-  });
+  function _applyMag() {
+    _raf = false;
+    if (!_hovering || _mx === null) return;
+    document.querySelectorAll('.dk-item').forEach(item => {
+      const ic = item.querySelector('.dk-icon');
+      if (!ic) return;
+      const r  = ic.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const d  = Math.abs(_mx - cx);
+      const MAX = 90;
+      if (d < MAX) {
+        const t = 1 - d / MAX;
+        const s = 1 + 0.62 * t * t * t;
+        const y = (s - 1) * 24;
+        ic.style.transition = 'transform 0.06s linear';
+        ic.style.transform  = `scale(${s.toFixed(4)}) translateY(-${y.toFixed(2)}px)`;
+      } else {
+        ic.style.transition = 'transform 0.18s cubic-bezier(0.22,1,0.36,1)';
+        ic.style.transform  = '';
+      }
+    });
+    if (_hovering && _mx !== null) { _raf = true; requestAnimationFrame(_applyMag); }
+  }
 }
 
 function updateDockDots() {

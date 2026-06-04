@@ -497,7 +497,12 @@ function initGame(){
   generateCrossword();
   render();
   startTimer();
+  // expose state for capture tooling
+  window._cw={solution,placedWords,gridSize,numbers};
 }
+
+// also expose direction setter so capture script can set direction programmatically
+window._cwSetDir=(d)=>{direction=d;if(selectedCell)updateHighlight();};
 
 initGame();
 
