@@ -424,6 +424,11 @@ function gameLoop(){
 
 gameLoop();
 
+// Expose state for external tooling
+setInterval(() => {
+  window._si = { state, player, aliens, bullets, alienBullets, score, lives, level, GW, GH, scale };
+}, 16);
+
 })();
 </script>
 </body>
