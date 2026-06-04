@@ -16,525 +16,548 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    /* ──────────────────────────────────────────────
-       RESET + ROOT
-    ────────────────────────────────────────────── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #06060f; color: #e2e2ee; font-family: 'Space Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
-    *::-webkit-scrollbar { width: 4px; height: 4px; }
-    *::-webkit-scrollbar-track { background: transparent; }
-    *::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-    a { text-decoration: none; color: inherit; }
-    button { font-family: inherit; }
+/* ═══════════════════════════════════════════════════
+   RESET + ROOT
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#06060f; color:#e2e2ee; font-family:'Space Grotesk',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+* { scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.1) transparent; }
+*::-webkit-scrollbar { width:4px; height:4px; }
+*::-webkit-scrollbar-track { background:transparent; }
+*::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:4px; }
+a { text-decoration:none; color:inherit; }
+button { font-family:inherit; cursor:pointer; }
 
-    :root {
-      --bg:       #06060f;
-      --surf:     rgba(11,11,22,0.94);
-      --surf2:    rgba(20,20,38,0.82);
-      --bd:       rgba(255,255,255,0.07);
-      --bd2:      rgba(255,255,255,0.13);
-      --txt:      #e2e2ee;
-      --txt2:     rgba(226,226,238,0.52);
-      --txt3:     rgba(226,226,238,0.28);
-      --blue:     #1a6cff;
-      --blue-dim: rgba(26,108,255,0.18);
-      --orange:   #ff6b35;
-      --purple:   #9333ea;
-      --green:    #10b981;
-      --red:      #ff5f57;
-      --yellow:   #febc2e;
-      --limegreen:#28c840;
-      --shadow:   0 28px 70px rgba(0,0,0,0.72), 0 0 0 1px rgba(255,255,255,0.06);
-      --shadow-sm:0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-      --font:     'Space Grotesk', system-ui, sans-serif;
-      --mono:     'JetBrains Mono', 'Courier New', monospace;
-      --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
-      --ease-out:    cubic-bezier(0.22,1,0.36,1);
-    }
+:root {
+  --bg:     #06060f;
+  --surf:   rgba(10,10,22,0.96);
+  --surf2:  rgba(18,18,36,0.85);
+  --bd:     rgba(255,255,255,0.07);
+  --bd2:    rgba(255,255,255,0.13);
+  --txt:    #e4e4f0;
+  --txt2:   rgba(228,228,240,0.52);
+  --txt3:   rgba(228,228,240,0.28);
+  --blue:   #1a6cff;
+  --blue-d: rgba(26,108,255,0.18);
+  --orange: #ff6b35;
+  --purple: #9333ea;
+  --green:  #10b981;
+  --red:    #ff5f57;
+  --yellow: #febc2e;
+  --lime:   #28c840;
+  --win-shadow: 0 32px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.07);
+  --win-shadow-focus: 0 32px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(26,108,255,0.1);
+  --font: 'Space Grotesk',system-ui,sans-serif;
+  --mono: 'JetBrains Mono','Courier New',monospace;
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
+  --ease:   cubic-bezier(0.22,1,0.36,1);
+}
 
-    /* ──────────────────────────────────────────────
-       BOOT SCREEN
-    ────────────────────────────────────────────── */
-    #boot {
-      position: fixed; inset: 0; z-index: 9999;
-      background: #000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 32px;
-      transition: opacity 0.7s ease;
-    }
-    #boot.out { opacity: 0; pointer-events: none; }
+/* ═══════════════════════════════════════════════════
+   CURSOR GLOW
+═══════════════════════════════════════════════════ */
+#cursor-glow {
+  position:fixed; width:380px; height:380px; border-radius:50%;
+  background:radial-gradient(circle,rgba(26,108,255,0.055) 0%,transparent 70%);
+  pointer-events:none; z-index:1; transform:translate(-50%,-50%);
+  transition:left 0.08s,top 0.08s;
+  will-change:left,top;
+}
 
-    .boot-logo {
-      display: flex; align-items: center; gap: 16px;
-      animation: boot-fade-up 0.6s var(--ease-out) 0.2s both;
-    }
-    @keyframes boot-fade-up {
-      from { opacity:0; transform: translateY(12px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
+/* ═══════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════ */
+#boot {
+  position:fixed; inset:0; z-index:9999; background:#000;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px;
+  transition:opacity 0.7s ease;
+}
+#boot.out { opacity:0; pointer-events:none; }
 
-    .boot-icon {
-      width: 56px; height: 56px; border-radius: 16px;
-      background: linear-gradient(135deg, #0a2a80, #1a6cff);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 48px rgba(26,108,255,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
-    }
-    .boot-icon svg { width: 28px; height: 28px; }
+.boot-logo { display:flex; align-items:center; gap:16px; animation:fade-up 0.6s var(--ease) 0.2s both; }
 
-    .boot-wordmark {
-      font-family: var(--mono); font-size: 30px; font-weight: 600; letter-spacing: -0.02em; color: #fff;
-    }
-    .boot-wordmark em { color: var(--blue); font-style: normal; }
+@keyframes fade-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fade-in  { from{opacity:0} to{opacity:1} }
 
-    .boot-bar-wrap {
-      width: 220px; height: 2px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden;
-      animation: boot-fade-up 0.5s var(--ease-out) 0.4s both;
-    }
-    #boot-bar { height: 100%; width: 0; background: var(--blue); border-radius: 2px; box-shadow: 0 0 14px var(--blue); transition: width 0.12s linear; }
+.boot-icon {
+  width:56px; height:56px; border-radius:16px;
+  background:linear-gradient(135deg,#0a2a80,#1a6cff);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 50px rgba(26,108,255,0.5),inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.boot-icon svg { width:28px; height:28px; }
+.boot-wm { font-family:var(--mono); font-size:30px; font-weight:600; letter-spacing:-0.02em; color:#fff; }
+.boot-wm em { color:var(--blue); font-style:normal; }
 
-    #boot-msg {
-      font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.28); letter-spacing: 0.05em;
-      animation: boot-fade-up 0.5s var(--ease-out) 0.5s both;
-      min-height: 1em;
-    }
+.boot-bar-wrap { width:220px; height:2px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; animation:fade-up 0.5s var(--ease) 0.4s both; }
+#boot-bar { height:100%; width:0; background:var(--blue); border-radius:2px; box-shadow:0 0 16px var(--blue); transition:width 0.12s linear; }
+#boot-msg { font-family:var(--mono); font-size:11px; color:rgba(255,255,255,0.28); letter-spacing:0.06em; min-height:1em; animation:fade-up 0.5s var(--ease) 0.5s both; }
 
-    /* ──────────────────────────────────────────────
-       DESKTOP
-    ────────────────────────────────────────────── */
-    #desktop {
-      position: fixed; inset: 0; overflow: hidden;
-      opacity: 0; transition: opacity 0.7s ease;
-    }
-    #desktop.on { opacity: 1; }
+/* ═══════════════════════════════════════════════════
+   DESKTOP
+═══════════════════════════════════════════════════ */
+#desktop {
+  position:fixed; inset:0; overflow:hidden;
+  opacity:0; transition:opacity 0.7s ease;
+  background:var(--bg);
+}
+#desktop.on { opacity:1; }
 
-    /* wallpaper gradient */
-    #desktop::before {
-      content: '';
-      position: absolute; inset: 0; pointer-events: none; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 70% at 15% 55%, rgba(0,60,200,0.07) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 80% at 82% 15%, rgba(110,0,200,0.05) 0%, transparent 60%),
-        radial-gradient(ellipse 65% 55% at 55% 92%, rgba(0,120,220,0.04) 0%, transparent 55%);
-    }
+/* wallpaper gradient blobs */
+#desktop::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 70% at 15% 55%,  rgba(0,60,210,0.08)  0%,transparent 65%),
+    radial-gradient(ellipse 55% 80% at 85% 10%,  rgba(120,0,220,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 65% 55% at 55% 95%,  rgba(0,120,230,0.05) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 75%,  rgba(200,80,0,0.03)  0%,transparent 50%);
+}
 
-    #bg-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+/* subtle dot grid */
+#desktop::after {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.035) 1px,transparent 1px);
+  background-size:30px 30px;
+}
 
-    /* ──────────────────────────────────────────────
-       MENU BAR
-    ────────────────────────────────────────────── */
-    #menubar {
-      position: absolute; top: 0; left: 0; right: 0; height: 28px; z-index: 300;
-      display: flex; align-items: center; justify-content: space-between; padding: 0 14px;
-      background: rgba(6,6,15,0.72);
-      backdrop-filter: blur(48px) saturate(200%); -webkit-backdrop-filter: blur(48px) saturate(200%);
-      border-bottom: 1px solid rgba(255,255,255,0.055);
-    }
-    #mb-left { display: flex; align-items: center; gap: 4px; }
-    #mb-right { display: flex; align-items: center; gap: 14px; }
+#bg-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
 
-    .mb-logo {
-      display: flex; align-items: center; gap: 6px; margin-right: 8px; cursor: default;
-    }
-    .mb-logo-dot { width: 16px; height: 16px; border-radius: 4px; background: linear-gradient(135deg,#0a2a80,#1a6cff); display:flex;align-items:center;justify-content:center; }
-    .mb-logo-dot svg { width:9px;height:9px; }
-    .mb-logo-name { font-family:var(--mono); font-size:12px; font-weight:600; color:#fff; letter-spacing:-0.01em; }
-    .mb-logo-name em { color:var(--blue); font-style:normal; }
+/* ═══════════════════════════════════════════════════
+   MENU BAR
+═══════════════════════════════════════════════════ */
+#menubar {
+  position:absolute; top:0; left:0; right:0; height:28px; z-index:300;
+  display:flex; align-items:center; justify-content:space-between; padding:0 14px;
+  background:rgba(6,6,15,0.75);
+  backdrop-filter:blur(52px) saturate(200%); -webkit-backdrop-filter:blur(52px) saturate(200%);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+#mb-left  { display:flex; align-items:center; gap:2px; }
+#mb-right { display:flex; align-items:center; gap:12px; }
 
-    .mb-btn {
-      font-size: 12px; color: var(--txt2); padding: 2px 7px; border-radius: 4px;
-      cursor: pointer; transition: color 0.15s, background 0.15s; border: none; background: none;
-    }
-    .mb-btn:hover { color: var(--txt); background: rgba(255,255,255,0.07); }
-    #mb-clock { font-family: var(--mono); font-size: 11px; color: var(--txt2); min-width: 42px; text-align: right; }
+.mb-logo { display:flex; align-items:center; gap:7px; margin-right:10px; }
+.mb-logo-mark {
+  width:17px; height:17px; border-radius:5px;
+  background:linear-gradient(135deg,#0a2a80,#1a6cff);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 10px rgba(26,108,255,0.4);
+}
+.mb-logo-mark svg { width:10px; height:10px; }
+.mb-logo-name { font-family:var(--mono); font-size:12px; font-weight:600; color:#fff; letter-spacing:-0.01em; }
+.mb-logo-name em { color:var(--blue); font-style:normal; }
 
-    /* ──────────────────────────────────────────────
-       DESKTOP SCROLL AREA
-    ────────────────────────────────────────────── */
-    #d-area {
-      position: absolute; top: 28px; left: 0; right: 0; bottom: 70px;
-      overflow-y: auto; overflow-x: hidden;
-      padding: 24px 24px 16px;
-      z-index: 1;
-    }
+.mb-btn {
+  font-size:12px; color:var(--txt2); padding:2px 8px; border-radius:4px; border:none; background:none;
+  transition:color 0.15s,background 0.15s; position:relative; overflow:hidden;
+}
+.mb-btn::after {
+  content:''; position:absolute; inset:0; background:rgba(255,255,255,0.07);
+  transform:scaleX(0); transform-origin:left; transition:transform 0.2s var(--ease);
+  border-radius:4px;
+}
+.mb-btn:hover { color:var(--txt); }
+.mb-btn:hover::after { transform:scaleX(1); }
 
-    /* ──────────────────────────────────────────────
-       CATEGORY SECTION
-    ────────────────────────────────────────────── */
-    .d-section { margin-bottom: 26px; }
+#mb-clock { font-family:var(--mono); font-size:11px; color:var(--txt2); min-width:42px; text-align:right; letter-spacing:0.02em; }
 
-    .d-cat-label {
-      font-family: var(--mono); font-size: 9px; font-weight: 600;
-      letter-spacing: 0.15em; text-transform: uppercase; color: var(--txt3);
-      margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
-    }
-    .d-cat-label::before {
-      content: ''; display: inline-block; width: 6px; height: 6px;
-      border-radius: 50%; background: currentColor; opacity: 0.7; flex-shrink: 0;
-    }
-    .d-cat-label::after {
-      content: ''; flex: 1; height: 1px; background: var(--bd);
-    }
+/* ═══════════════════════════════════════════════════
+   DESKTOP SCROLL AREA
+═══════════════════════════════════════════════════ */
+#d-area {
+  position:absolute; top:28px; left:0; right:0; bottom:70px;
+  overflow-y:auto; overflow-x:hidden;
+  padding:24px 24px 16px; z-index:1;
+}
 
-    .d-icon-grid { display: flex; flex-wrap: wrap; gap: 18px 14px; }
+/* ═══════════════════════════════════════════════════
+   SECTION LABELS
+═══════════════════════════════════════════════════ */
+.d-section { margin-bottom:26px; }
 
-    /* ──────────────────────────────────────────────
-       DESKTOP ICON
-    ────────────────────────────────────────────── */
-    .d-icon {
-      display: flex; flex-direction: column; align-items: center; gap: 7px;
-      cursor: pointer; width: 72px; position: relative;
-      -webkit-tap-highlight-color: transparent;
-    }
+.d-cat-label {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:0.16em; text-transform:uppercase;
+  margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  position:relative;
+}
+.d-cat-label-dot {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+  box-shadow:0 0 8px currentColor;
+  animation:pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { transform:scale(1);   opacity:0.7; }
+  50%      { transform:scale(1.5); opacity:1; }
+}
+.d-cat-label-text { position:relative; z-index:1; }
+.d-cat-label-line { flex:1; height:1px; background:currentColor; opacity:0.15; }
 
-    .d-icon-img {
-      width: 62px; height: 62px; border-radius: 15px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; position: relative;
-      border: 1px solid rgba(255,255,255,0.09);
-      transition: transform 0.22s var(--ease-spring), box-shadow 0.22s ease, filter 0.15s;
-      will-change: transform;
-    }
-    .d-icon:hover .d-icon-img {
-      transform: scale(1.10) translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.55);
-    }
-    .d-icon:active .d-icon-img { transform: scale(0.94); transition-duration: 0.1s; }
+/* ═══════════════════════════════════════════════════
+   DESKTOP ICONS
+═══════════════════════════════════════════════════ */
+.d-icon-grid { display:flex; flex-wrap:wrap; gap:18px 14px; }
 
-    .d-icon-name {
-      font-size: 10.5px; font-weight: 500; color: var(--txt2); text-align: center;
-      line-height: 1.25; max-width: 72px; transition: color 0.15s;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-    }
-    .d-icon:hover .d-icon-name { color: var(--txt); }
+.d-icon {
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  cursor:pointer; width:74px; position:relative;
+  -webkit-tap-highlight-color:transparent;
+  transition:filter 0.2s;
+}
+.d-icon.dragging { opacity:0.35; filter:blur(1px); }
+.d-icon.drop-target .d-icon-img {
+  outline:2px dashed rgba(255,255,255,0.35);
+  outline-offset:5px;
+  animation:target-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes target-pulse { to { outline-color:rgba(255,255,255,0.7); } }
 
-    /* open indicator dot */
-    .d-icon-open-dot {
-      position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
-      width: 4px; height: 4px; border-radius: 50%; background: var(--blue);
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .d-icon.is-open .d-icon-open-dot { opacity: 1; }
+.d-icon-img {
+  width:64px; height:64px; border-radius:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:27px;
+  border:1px solid rgba(255,255,255,0.09);
+  transition:transform 0.22s var(--spring), box-shadow 0.22s ease, border-color 0.2s;
+  will-change:transform;
+  position:relative;
+}
+/* shimmer highlight on top edge */
+.d-icon-img::before {
+  content:''; position:absolute; top:0; left:15%; right:15%;
+  height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+  border-radius:1px;
+}
+.d-icon:hover .d-icon-img {
+  transform:scale(1.12) translateY(-5px);
+  box-shadow:0 14px 36px rgba(0,0,0,0.6), 0 0 28px var(--icon-glow,rgba(80,130,255,0.3));
+  border-color:rgba(255,255,255,0.18);
+}
+.d-icon:active .d-icon-img { transform:scale(0.93); transition-duration:0.09s; }
 
-    /* ──────────────────────────────────────────────
-       DOCK
-    ────────────────────────────────────────────── */
-    #dock {
-      position: absolute; bottom: 8px; left: 0; right: 0; z-index: 300;
-      display: flex; align-items: flex-end; justify-content: center;
-      pointer-events: none;
-    }
+.d-icon-name {
+  font-size:11px; font-weight:500; color:var(--txt2); text-align:center;
+  line-height:1.25; max-width:74px; transition:color 0.15s;
+  text-shadow:0 1px 5px rgba(0,0,0,0.9);
+}
+.d-icon:hover .d-icon-name { color:var(--txt); }
 
-    #dock-pill {
-      display: flex; align-items: flex-end; gap: 4px;
-      padding: 7px 12px 9px;
-      background: rgba(255,255,255,0.042);
-      backdrop-filter: blur(48px) saturate(200%); -webkit-backdrop-filter: blur(48px) saturate(200%);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 20px;
-      box-shadow: 0 4px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
-      pointer-events: all;
-    }
+.d-icon-open-dot {
+  position:absolute; bottom:-5px; left:50%; transform:translateX(-50%);
+  width:4px; height:4px; border-radius:50%; background:var(--blue);
+  opacity:0; transition:opacity 0.2s;
+  box-shadow:0 0 6px var(--blue);
+}
+.d-icon.is-open .d-icon-open-dot { opacity:1; }
 
-    .dk-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      position: relative; cursor: pointer; user-select: none;
-    }
+/* ═══════════════════════════════════════════════════
+   DOCK
+═══════════════════════════════════════════════════ */
+#dock {
+  position:absolute; bottom:8px; left:0; right:0; z-index:300;
+  display:flex; align-items:flex-end; justify-content:center; pointer-events:none;
+}
+#dock-pill {
+  display:flex; align-items:flex-end; gap:4px; padding:7px 12px 9px;
+  background:rgba(255,255,255,0.046);
+  backdrop-filter:blur(52px) saturate(200%); -webkit-backdrop-filter:blur(52px) saturate(200%);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.07);
+  pointer-events:all;
+  transition:padding 0.2s var(--ease);
+}
+.dk-item { display:flex; flex-direction:column; align-items:center; gap:3px; position:relative; }
 
-    .dk-icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; font-size: 20px;
-      transition: transform 0.22s var(--ease-spring);
-      position: relative; z-index: 1;
-    }
-    .dk-item:hover .dk-icon       { transform: scale(1.28) translateY(-7px); }
-    .dk-item:active .dk-icon      { transform: scale(1.05); transition-duration: 0.08s; }
-    .dk-item:hover + .dk-item .dk-icon,
-    .dk-item.prev-hover .dk-icon  { transform: scale(1.10) translateY(-3px); }
+.dk-icon {
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center; font-size:21px;
+  transition:transform 0.22s var(--spring), box-shadow 0.22s;
+  will-change:transform; position:relative; z-index:1;
+  border:1px solid rgba(255,255,255,0.07);
+}
+/* JS overrides transform for magnification */
+.dk-tooltip {
+  position:absolute; bottom:calc(100% + 14px); left:50%;
+  transform:translateX(-50%) translateY(5px);
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
+  border:1px solid var(--bd2); border-radius:7px;
+  padding:4px 10px; font-size:11px; font-weight:500; color:var(--txt);
+  white-space:nowrap; pointer-events:none;
+  opacity:0; transition:opacity 0.15s,transform 0.15s;
+}
+.dk-item:hover .dk-tooltip { opacity:1; transform:translateX(-50%) translateY(0); }
 
-    .dk-tooltip {
-      position: absolute; bottom: calc(100% + 14px); left: 50%;
-      transform: translateX(-50%) translateY(4px);
-      background: rgba(0,0,0,0.82); backdrop-filter: blur(8px);
-      border: 1px solid var(--bd2); border-radius: 7px;
-      padding: 4px 9px; font-size: 11px; font-weight: 500; color: var(--txt);
-      white-space: nowrap; pointer-events: none;
-      opacity: 0; transition: opacity 0.15s, transform 0.15s;
-    }
-    .dk-item:hover .dk-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+.dk-dot {
+  width:4px; height:4px; border-radius:50%;
+  background:rgba(255,255,255,0.22); transition:background 0.2s;
+  box-shadow:0 0 0 rgba(255,255,255,0);
+  transition:background 0.3s,box-shadow 0.3s;
+}
+.dk-item.open .dk-dot {
+  background:rgba(255,255,255,0.75);
+  box-shadow:0 0 6px rgba(255,255,255,0.4);
+  animation:dot-appear 0.3s var(--spring);
+}
+@keyframes dot-appear { from{transform:scale(0)} to{transform:scale(1)} }
 
-    .dk-dot {
-      width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25);
-      transition: background 0.2s; margin-top: 0;
-    }
-    .dk-item.open .dk-dot { background: rgba(255,255,255,0.7); }
+.dk-sep { width:1px; height:34px; background:rgba(255,255,255,0.1); margin:0 5px; align-self:center; }
 
-    .dk-sep { width: 1px; height: 34px; background: rgba(255,255,255,0.1); margin: 0 4px; align-self: center; }
+/* ═══════════════════════════════════════════════════
+   WINDOW LAYER
+═══════════════════════════════════════════════════ */
+#wm { position:absolute; inset:28px 0 70px 0; pointer-events:none; z-index:100; overflow:visible; }
 
-    /* ──────────────────────────────────────────────
-       WINDOW MANAGER LAYER
-    ────────────────────────────────────────────── */
-    #wm {
-      position: absolute; inset: 28px 0 70px 0;
-      pointer-events: none; z-index: 100;
-      overflow: visible;
-    }
+/* ═══════════════════════════════════════════════════
+   WINDOWS
+═══════════════════════════════════════════════════ */
+.win {
+  position:absolute; display:flex; flex-direction:column;
+  background:var(--surf); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px; overflow:hidden;
+  box-shadow:var(--win-shadow-focus);
+  min-width:280px; min-height:160px;
+  pointer-events:all;
+  backdrop-filter:blur(36px) saturate(180%); -webkit-backdrop-filter:blur(36px) saturate(180%);
+  transition:box-shadow 0.25s;
+  will-change:transform;
+}
+.win.anim-open  { animation:w-open  0.24s var(--ease) forwards; }
+.win.anim-close { animation:w-close 0.18s ease        forwards; }
+@keyframes w-open  { from{opacity:0;transform:scale(0.92) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+@keyframes w-close { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(0.91) translateY(6px)} }
+.win.inactive { box-shadow:var(--win-shadow); }
 
-    /* ──────────────────────────────────────────────
-       WINDOW
-    ────────────────────────────────────────────── */
-    .win {
-      position: absolute; display: flex; flex-direction: column;
-      background: var(--surf); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px; overflow: hidden;
-      box-shadow: var(--shadow);
-      min-width: 280px; min-height: 160px;
-      pointer-events: all;
-      will-change: transform;
-      backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-    }
+/* Titlebar */
+.win-tb {
+  height:38px; flex-shrink:0;
+  display:flex; align-items:center; padding:0 11px; gap:8px;
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid var(--bd);
+  cursor:move; user-select:none; -webkit-user-select:none;
+}
+.win-tb::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);
+}
+.win-btns { display:flex; gap:7px; flex-shrink:0; }
+.win-btn  { width:12px; height:12px; border-radius:50%; border:none; cursor:pointer; flex-shrink:0; position:relative; transition:filter 0.15s; }
+.win-btn:hover { filter:brightness(1.2) saturate(1.3); }
+.win-btn:hover::after { content:''; position:absolute; inset:2px; border-radius:50%; background:rgba(0,0,0,0.3); }
+.win-btn-x { background:var(--red); }
+.win-btn-m { background:var(--yellow); }
+.win-btn-f { background:var(--lime); }
+.win-title { flex:1; text-align:center; font-size:12px; font-weight:600; color:var(--txt2); pointer-events:none; letter-spacing:0.01em; }
+.win-tb-end { width:42px; flex-shrink:0; }
+.win-body { flex:1; overflow:hidden; display:flex; flex-direction:column; }
 
-    .win.anim-open  { animation: w-open  0.22s var(--ease-out) forwards; }
-    .win.anim-close { animation: w-close 0.17s ease            forwards; }
+/* Resize handle */
+.win-resize {
+  position:absolute; bottom:0; right:0; width:18px; height:18px; cursor:se-resize; z-index:10;
+}
+.win-resize::after {
+  content:''; position:absolute; bottom:4px; right:4px;
+  width:7px; height:7px;
+  border-right:1.5px solid rgba(255,255,255,0.2);
+  border-bottom:1.5px solid rgba(255,255,255,0.2);
+  transition:border-color 0.15s;
+}
+.win:hover .win-resize::after { border-color:rgba(255,255,255,0.4); }
 
-    @keyframes w-open  { from { opacity:0; transform:scale(0.93) } to { opacity:1; transform:scale(1) } }
-    @keyframes w-close { from { opacity:1; transform:scale(1)    } to { opacity:0; transform:scale(0.93) } }
+/* ═══════════════════════════════════════════════════
+   PROJECT WINDOW
+═══════════════════════════════════════════════════ */
+.pw-media {
+  width:100%; aspect-ratio:16/9; flex-shrink:0; background:#000; position:relative; overflow:hidden;
+}
+.pw-media img  { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
+.pw-media video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; }
+.pw-media::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px; z-index:3;
+  background:var(--pw-accent,var(--blue));
+  box-shadow:0 0 16px var(--pw-accent,var(--blue));
+  opacity:0.8;
+}
+/* vignette on media bottom */
+.pw-media::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:40%; z-index:3;
+  background:linear-gradient(transparent,rgba(0,0,0,0.4));
+  pointer-events:none;
+}
 
-    .win.inactive { box-shadow: var(--shadow-sm); }
-    .win.inactive .win-tb { background: rgba(255,255,255,0.015); }
+.pw-info { padding:15px 17px 18px; overflow-y:auto; flex:1; }
+.pw-cat  { font-family:var(--mono); font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.12em; color:var(--pw-accent,var(--blue)); margin-bottom:3px; }
+.pw-name { font-size:18px; font-weight:700; letter-spacing:-0.025em; margin-bottom:9px; line-height:1.2; }
+.pw-desc { font-size:13px; line-height:1.7; color:var(--txt2); margin-bottom:13px; }
+.pw-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:15px; }
+.pw-tag  {
+  font-family:var(--mono); font-size:10px; padding:3px 8px;
+  border:1px solid rgba(255,255,255,0.1); border-radius:5px; color:var(--txt3);
+  transition:border-color 0.15s,color 0.15s;
+}
+.pw-tag:hover { border-color:var(--pw-accent,var(--blue)); color:var(--txt2); }
+.pw-open {
+  display:inline-flex; align-items:center; gap:7px; padding:9px 18px;
+  border-radius:9px; font-size:13px; font-weight:600;
+  background:var(--pw-accent,var(--blue)); color:#fff; border:none; cursor:pointer;
+  transition:opacity 0.15s,transform 0.15s,box-shadow 0.15s;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+.pw-open:hover { opacity:0.88; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.35); }
+.pw-open:active { transform:translateY(0); }
 
-    /* Title bar */
-    .win-tb {
-      height: 36px; flex-shrink: 0;
-      display: flex; align-items: center; padding: 0 10px; gap: 8px;
-      background: rgba(255,255,255,0.04);
-      border-bottom: 1px solid var(--bd);
-      cursor: move; user-select: none; -webkit-user-select: none;
-    }
+/* ═══════════════════════════════════════════════════
+   ABOUT WINDOW
+═══════════════════════════════════════════════════ */
+.aw-body { padding:22px; overflow-y:auto; flex:1; }
+.aw-hero { display:flex; align-items:flex-start; gap:16px; margin-bottom:20px; }
+.aw-avatar {
+  width:70px; height:70px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#0a2064,#7700cc);
+  display:flex; align-items:center; justify-content:center; font-size:30px;
+  border:2px solid rgba(255,255,255,0.1);
+  box-shadow:0 0 40px rgba(100,0,200,0.28);
+}
+.aw-name { font-size:22px; font-weight:700; letter-spacing:-0.025em; margin-bottom:3px; }
+.aw-role { font-family:var(--mono); font-size:10px; color:var(--blue); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:6px; }
+.aw-loc  { font-size:12px; color:var(--txt3); }
+.aw-bio  { font-size:13px; line-height:1.75; color:var(--txt2); margin-bottom:18px; }
+.aw-h2   { font-family:var(--mono); font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.13em; color:var(--txt3); margin-bottom:10px; }
+.aw-skills { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:18px; }
+.aw-skill {
+  background:var(--surf2); border:1px solid var(--bd); border-radius:7px;
+  padding:7px 8px; font-size:11.5px; font-weight:500; text-align:center; color:var(--txt2);
+  transition:border-color 0.15s,color 0.15s;
+}
+.aw-skill:hover { border-color:var(--blue); color:var(--txt); }
+.aw-work { font-size:12px; color:var(--txt2); line-height:1.85; margin-bottom:18px; }
+.aw-links { display:flex; gap:7px; flex-wrap:wrap; }
+.aw-link {
+  display:inline-flex; align-items:center; gap:6px; padding:7px 14px;
+  background:var(--surf2); border:1px solid var(--bd2); border-radius:9px;
+  font-size:12px; font-weight:500; color:var(--txt);
+  transition:border-color 0.15s,color 0.15s,background 0.15s;
+}
+.aw-link:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-d); }
 
-    .win-btns { display: flex; gap: 7px; flex-shrink: 0; }
-    .win-btn  { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; transition: filter 0.15s; flex-shrink: 0; }
-    .win-btn:hover { filter: brightness(1.25); }
-    .win-btn-x { background: var(--red); }
-    .win-btn-m { background: var(--yellow); }
-    .win-btn-f { background: var(--limegreen); }
+/* ═══════════════════════════════════════════════════
+   TERMINAL WINDOW
+═══════════════════════════════════════════════════ */
+.tw-out {
+  flex:1; overflow-y:auto; padding:12px 14px;
+  background:#010108; font-family:var(--mono); font-size:12px; line-height:1.78; color:#a0a0c0;
+}
+.tw-out .t-prompt { color:#10b981; }
+.tw-out .t-cmd    { color:#e8e8f8; }
+.tw-out .t-hi     { color:var(--blue); }
+.tw-out .t-bold   { color:#fff; font-weight:600; }
+.tw-out .t-muted  { color:rgba(160,160,200,0.4); }
+.tw-out .t-err    { color:#ff6b6b; }
+.tw-out .t-dim    { color:rgba(160,160,200,0.35); }
+.tw-out .t-green  { color:#10b981; }
+.tw-out .t-yellow { color:#febc2e; }
+.tw-out .t-purple { color:#a855f7; }
+.tw-out .t-orange { color:#ff6b35; }
 
-    .win-title { flex: 1; text-align: center; font-size: 12px; font-weight: 600; color: var(--txt2); pointer-events: none; }
-    .win-tb-end { width: 42px; flex-shrink: 0; } /* balance the buttons */
+.tw-irow {
+  display:flex; align-items:center; gap:7px; padding:7px 14px;
+  background:#010108; border-top:1px solid rgba(255,255,255,0.05); flex-shrink:0;
+}
+.tw-ps1 { font-family:var(--mono); font-size:12px; color:#10b981; white-space:nowrap; flex-shrink:0; }
+.tw-inp {
+  flex:1; background:none; border:none; outline:none;
+  font-family:var(--mono); font-size:12px; color:#e8e8f8; caret-color:#10b981;
+}
 
-    /* Window body */
-    .win-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+/* ═══════════════════════════════════════════════════
+   CONTACT WINDOW
+═══════════════════════════════════════════════════ */
+.cw-body { padding:22px; overflow-y:auto; flex:1; }
+.cw-lead { font-size:14px; line-height:1.68; color:var(--txt2); margin-bottom:18px; }
+.cw-list { display:flex; flex-direction:column; gap:9px; }
+.cw-item {
+  display:flex; align-items:center; gap:12px; padding:12px 14px;
+  background:var(--surf2); border:1px solid var(--bd); border-radius:10px;
+  cursor:pointer; transition:border-color 0.18s,background 0.18s,transform 0.18s;
+}
+.cw-item:hover { border-color:var(--blue); background:var(--blue-d); transform:translateX(3px); }
+.cw-ico  { font-size:17px; flex-shrink:0; }
+.cw-text { flex:1; }
+.cw-lbl  { font-size:12.5px; font-weight:600; margin-bottom:1px; }
+.cw-val  { font-size:11px; color:var(--txt3); font-family:var(--mono); }
+.cw-arr  { color:var(--txt3); font-size:13px; transition:color 0.15s,transform 0.15s; }
+.cw-item:hover .cw-arr { color:var(--blue); transform:translateX(2px); }
 
-    /* ──────────────────────────────────────────────
-       PROJECT WINDOW CONTENT
-    ────────────────────────────────────────────── */
-    .pw-media {
-      width: 100%; aspect-ratio: 16/9; flex-shrink: 0; background: #000; position: relative; overflow: hidden;
-    }
-    .pw-media img  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-    .pw-media video{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }
+/* ═══════════════════════════════════════════════════
+   MATRIX RAIN OVERLAY
+═══════════════════════════════════════════════════ */
+#matrix-overlay {
+  position:fixed; inset:0; z-index:8000; pointer-events:none;
+  animation:fade-in 0.3s ease;
+}
 
-    /* accent stripe at top of media */
-    .pw-media::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
-      background: var(--pw-accent, var(--blue));
-      opacity: 0.7;
-    }
+/* ═══════════════════════════════════════════════════
+   MOBILE SHEET
+═══════════════════════════════════════════════════ */
+#mob-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.65); backdrop-filter:blur(6px);
+  display:none; align-items:flex-end; justify-content:center; padding:12px;
+}
+#mob-overlay.on { display:flex; }
+#mob-sheet {
+  width:100%; max-width:520px; max-height:86vh; overflow:hidden;
+  background:var(--surf); border:1px solid var(--bd2); border-radius:18px;
+  display:flex; flex-direction:column;
+  animation:sheet-up 0.32s var(--ease);
+}
+@keyframes sheet-up { from{transform:translateY(70px);opacity:0} to{transform:translateY(0);opacity:1} }
+.mob-handle { width:36px; height:4px; border-radius:2px; background:var(--bd2); margin:10px auto 0; flex-shrink:0; }
+#mob-content { flex:1; overflow-y:auto; overflow-x:hidden; }
 
-    .pw-info { padding: 15px 17px 17px; overflow-y: auto; flex: 1; }
-
-    .pw-cat { font-family: var(--mono); font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--pw-accent, var(--blue)); margin-bottom: 3px; }
-    .pw-name { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.2; }
-    .pw-desc { font-size: 13px; line-height: 1.68; color: var(--txt2); margin-bottom: 12px; }
-
-    .pw-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
-    .pw-tag  { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border: 1px solid var(--bd2); border-radius: 4px; color: var(--txt3); }
-
-    .pw-open {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
-      background: var(--pw-accent, var(--blue)); color: #fff; border: none; cursor: pointer;
-      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
-    }
-    .pw-open:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
-    .pw-open:active { transform: translateY(0); }
-
-    /* ──────────────────────────────────────────────
-       ABOUT WINDOW
-    ────────────────────────────────────────────── */
-    .aw-body { padding: 22px; overflow-y: auto; flex: 1; }
-
-    .aw-hero { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
-
-    .aw-avatar {
-      width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, #0a2864, #7700cc);
-      display: flex; align-items: center; justify-content: center; font-size: 28px;
-      border: 2px solid rgba(255,255,255,0.1);
-      box-shadow: 0 0 32px rgba(100,0,200,0.25);
-    }
-
-    .aw-name { font-size: 21px; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 3px; }
-    .aw-role { font-family: var(--mono); font-size: 10px; color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-    .aw-loc  { font-size: 12px; color: var(--txt3); display: flex; align-items: center; gap: 4px; }
-
-    .aw-bio { font-size: 13px; line-height: 1.72; color: var(--txt2); margin-bottom: 18px; }
-
-    .aw-h2 {
-      font-family: var(--mono); font-size: 9px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.13em; color: var(--txt3); margin-bottom: 10px;
-    }
-
-    .aw-skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 18px; }
-    .aw-skill {
-      background: var(--surf2); border: 1px solid var(--bd); border-radius: 6px;
-      padding: 6px 8px; font-size: 11.5px; font-weight: 500; text-align: center; color: var(--txt2);
-    }
-
-    .aw-work { font-size: 12px; color: var(--txt2); line-height: 1.8; margin-bottom: 18px; }
-
-    .aw-links { display: flex; gap: 7px; flex-wrap: wrap; }
-    .aw-link {
-      display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px;
-      background: var(--surf2); border: 1px solid var(--bd2); border-radius: 8px;
-      font-size: 12px; font-weight: 500; color: var(--txt); cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .aw-link:hover { border-color: var(--blue); color: var(--blue); }
-
-    /* ──────────────────────────────────────────────
-       TERMINAL WINDOW
-    ────────────────────────────────────────────── */
-    .tw-out {
-      flex: 1; overflow-y: auto; padding: 12px 14px;
-      background: #020209; font-family: var(--mono); font-size: 12px; line-height: 1.75; color: #a8a8c8;
-    }
-    .tw-out .t-prompt { color: var(--green); }
-    .tw-out .t-cmd    { color: #e8e8f8; }
-    .tw-out .t-hi     { color: var(--blue); }
-    .tw-out .t-bold   { color: #fff; font-weight: 600; }
-    .tw-out .t-muted  { color: rgba(168,168,200,0.45); }
-    .tw-out .t-err    { color: #ff7070; }
-    .tw-out .t-dim    { color: rgba(168,168,200,0.35); }
-
-    .tw-input-row {
-      display: flex; align-items: center; gap: 7px; padding: 7px 14px;
-      background: #020209; border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
-    }
-    .tw-ps1 { font-family: var(--mono); font-size: 12px; color: var(--green); white-space: nowrap; flex-shrink: 0; }
-    .tw-inp {
-      flex: 1; background: none; border: none; outline: none;
-      font-family: var(--mono); font-size: 12px; color: #e8e8f8; caret-color: var(--green);
-    }
-
-    /* ──────────────────────────────────────────────
-       CONTACT WINDOW
-    ────────────────────────────────────────────── */
-    .cw-body { padding: 22px; overflow-y: auto; flex: 1; }
-    .cw-lead { font-size: 14px; line-height: 1.65; color: var(--txt2); margin-bottom: 18px; }
-    .cw-list { display: flex; flex-direction: column; gap: 9px; }
-    .cw-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-      background: var(--surf2); border: 1px solid var(--bd); border-radius: 10px;
-      cursor: pointer; transition: border-color 0.15s, background 0.15s;
-    }
-    .cw-item:hover { border-color: var(--blue); background: var(--blue-dim); }
-    .cw-ico  { font-size: 17px; flex-shrink: 0; }
-    .cw-text { flex: 1; }
-    .cw-lbl  { font-size: 12.5px; font-weight: 600; margin-bottom: 1px; }
-    .cw-val  { font-size: 11px; color: var(--txt3); font-family: var(--mono); }
-    .cw-arr  { color: var(--txt3); font-size: 13px; }
-
-    /* ──────────────────────────────────────────────
-       MOBILE OVERLAY (for mobile: windows become sheets)
-    ────────────────────────────────────────────── */
-    #mob-overlay {
-      position: fixed; inset: 0; z-index: 500;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-      display: none; align-items: flex-end; justify-content: center;
-      padding: 12px;
-    }
-    #mob-overlay.on { display: flex; }
-
-    #mob-sheet {
-      width: 100%; max-width: 520px; max-height: 86vh;
-      background: var(--surf); border: 1px solid var(--bd2); border-radius: 16px;
-      display: flex; flex-direction: column; overflow: hidden;
-      animation: sheet-up 0.3s var(--ease-out);
-    }
-    @keyframes sheet-up {
-      from { transform: translateY(60px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-
-    .mob-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--bd2); margin: 10px auto 0; flex-shrink: 0; }
-    #mob-content { flex: 1; overflow-y: auto; overflow-x: hidden; }
-
-    /* ──────────────────────────────────────────────
-       RESIZE HANDLE
-    ────────────────────────────────────────────── */
-    .win-resize {
-      position: absolute; bottom: 0; right: 0;
-      width: 16px; height: 16px; cursor: se-resize; z-index: 10;
-      opacity: 0; transition: opacity 0.15s;
-    }
-    .win:hover .win-resize { opacity: 0.4; }
-    .win-resize::before {
-      content: '';
-      position: absolute; bottom: 4px; right: 4px;
-      width: 6px; height: 6px;
-      border-right: 2px solid rgba(255,255,255,0.5);
-      border-bottom: 2px solid rgba(255,255,255,0.5);
-    }
-
-    /* ──────────────────────────────────────────────
-       MOBILE RESPONSIVE
-    ────────────────────────────────────────────── */
-    @media (max-width: 500px) {
-      #d-area { padding: 16px 12px; }
-      .d-icon-img { width: 54px; height: 54px; font-size: 22px; border-radius: 13px; }
-      .d-icon { width: 62px; gap: 5px; }
-      .d-icon-grid { gap: 12px 10px; }
-      .d-icon-name { font-size: 10px; }
-      #dock-pill { padding: 6px 10px 8px; gap: 3px; }
-      .dk-icon { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
-      #menubar { padding: 0 10px; }
-      .mb-btn { display: none; }
-    }
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media (max-width:500px) {
+  #d-area { padding:16px 12px; }
+  .d-icon-img { width:54px; height:54px; font-size:22px; border-radius:13px; }
+  .d-icon { width:62px; gap:5px; }
+  .d-icon-grid { gap:12px 10px; }
+  .d-icon-name { font-size:10px; }
+  #dock-pill { padding:6px 10px 8px; gap:3px; }
+  .dk-icon { width:38px; height:38px; font-size:17px; border-radius:10px; }
+  #menubar { padding:0 10px; }
+  .mb-btn { display:none; }
+}
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     BOOT SCREEN
+<!-- cursor glow -->
+<div id="cursor-glow"></div>
+
+<!-- ═══════════════════════════════════════════════
+     BOOT
 ═══════════════════════════════════════════════ -->
 <div id="boot">
   <div class="boot-logo">
     <div class="boot-icon">
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 3L25 22H3L14 3Z" fill="url(#bgi)" opacity="0.9"/>
-        <path d="M14 9L20 20H8L14 9Z" fill="rgba(255,255,255,0.15)"/>
-        <defs><linearGradient id="bgi" x1="3" y1="22" x2="25" y2="3" gradientUnits="userSpaceOnUse"><stop stop-color="#4488ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
-      </svg>
+      <svg viewBox="0 0 28 28" fill="none"><path d="M14 3L25 22H3L14 3Z" fill="url(#bi)" opacity="0.9"/><path d="M14 9L20 20H8L14 9Z" fill="rgba(255,255,255,0.14)"/><defs><linearGradient id="bi" x1="3" y1="22" x2="25" y2="3" gradientUnits="userSpaceOnUse"><stop stop-color="#4488ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
     </div>
-    <div class="boot-wordmark">JH<em>OS</em></div>
+    <div class="boot-wm">JH<em>OS</em></div>
   </div>
   <div class="boot-bar-wrap"><div id="boot-bar"></div></div>
   <div id="boot-msg">Initialising...</div>
 </div>
 
-<!-- ══════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
      DESKTOP
 ═══════════════════════════════════════════════ -->
 <div id="desktop">
   <canvas id="bg-canvas"></canvas>
 
-  <!-- Menu bar -->
   <div id="menubar">
     <div id="mb-left">
       <div class="mb-logo">
-        <div class="mb-logo-dot">
-          <svg viewBox="0 0 9 9" fill="none"><path d="M4.5 1L8 8H1L4.5 1Z" fill="url(#mg)"/><defs><linearGradient id="mg" x1="1" y1="8" x2="8" y2="1" gradientUnits="userSpaceOnUse"><stop stop-color="#4488ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+        <div class="mb-logo-mark">
+          <svg viewBox="0 0 10 10" fill="none"><path d="M5 1L9 9H1L5 1Z" fill="url(#ml)"/><defs><linearGradient id="ml" x1="1" y1="9" x2="9" y2="1" gradientUnits="userSpaceOnUse"><stop stop-color="#4488ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
         </div>
         <span class="mb-logo-name">JH<em>OS</em></span>
       </div>
@@ -547,16 +570,11 @@
     </div>
   </div>
 
-  <!-- Desktop icon area -->
   <div id="d-area"></div>
-
-  <!-- Window layer -->
   <div id="wm"></div>
 
-  <!-- Dock -->
   <div id="dock"><div id="dock-pill"></div></div>
 
-  <!-- Mobile sheet -->
   <div id="mob-overlay" onclick="closeMobSheet(event)">
     <div id="mob-sheet">
       <div class="mob-handle"></div>
@@ -568,105 +586,102 @@
 <script>
 'use strict';
 
-/* ══════════════════════════════════════════════════
-   PROJECTS DATA
-══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════ */
 const PROJECTS = [
-  /* AI APPS */
-  { id:'learnscroll',   title:'Learnscroll',       cat:'AI App',        sec:'ai',
-    emoji:'📡', bg:['#001844','#0055dd'], accent:'#1a6cff',
+  { id:'learnscroll',   title:'Learnscroll',      cat:'AI App',       sec:'ai',
+    emoji:'📡', bg:['#001844','#0055dd'], accent:'#1a6cff', glow:'rgba(26,108,255,0.35)',
     desc:'Pick any topic and get an infinite scroll feed of facts, myths, and mind-blows — AI-powered, designed like a social feed so learning feels effortless.',
     tags:['Groq AI','Node.js','Express','Web'], video:'videos/learnscroll.mp4', img:'images/learnscroll.png',
     href:'https://learn-scroll.onrender.com', ext:true },
 
-  { id:'faceoff',       title:'Face-Off Quiz',     cat:'AI App',        sec:'ai',
-    emoji:'⚡', bg:['#16003c','#6600cc'], accent:'#a855f7',
-    desc:'Two things go head-to-head. Which is taller, older, heavier, faster? Pick the winner, build your streak, and test your knowledge as difficulty ramps up.',
+  { id:'faceoff',       title:'Face-Off Quiz',    cat:'AI App',       sec:'ai',
+    emoji:'⚡', bg:['#160040','#6600cc'], accent:'#a855f7', glow:'rgba(168,85,247,0.35)',
+    desc:'Two things go head-to-head. Which is taller, older, heavier, faster? Pick the winner, build your streak as difficulty ramps up.',
     tags:['AI','Node.js','Web'], video:'videos/faceoff.mp4', img:'images/faceoff.png',
     href:'https://face-off-quiz.onrender.com', ext:true },
 
-  { id:'jdi',           title:'Just Do It',        cat:'AI App · PWA',  sec:'ai',
-    emoji:'🔥', bg:['#1e0800','#cc3300'], accent:'#ff6b35',
+  { id:'jdi',           title:'Just Do It',       cat:'AI App · PWA', sec:'ai',
+    emoji:'🔥', bg:['#200900','#cc3300'], accent:'#ff6b35', glow:'rgba(255,107,53,0.35)',
     desc:'Tell it your time and energy — it tells you exactly what to tackle. AI micro-step breakdowns, habit tracking, offline-first. Add to your iPhone home screen.',
     tags:['Groq AI','PWA','Offline','iOS'], video:'videos/just-do-it.mp4', img:null,
     href:'just-do-it/index.html', ext:false },
 
-  /* APPS */
-  { id:'lifemanager',   title:'Life Manager',      cat:'App',           sec:'apps',
-    emoji:'✅', bg:['#001810','#005c3a'], accent:'#10b981',
+  { id:'lifemanager',   title:'Life Manager',     cat:'App',          sec:'apps',
+    emoji:'✅', bg:['#001810','#005c3a'], accent:'#10b981', glow:'rgba(16,185,129,0.35)',
     desc:'Task management with custom lists, deadlines, recurring tasks, and a completed archive. Built for the way people actually think about to-dos.',
     tags:['Web','PWA'], video:'videos/life-manager.mp4', img:'images/life-manager.png',
     href:'life-manager/index.html', ext:false },
 
-  { id:'mealplanner',   title:'Meal Planner',      cat:'App',           sec:'apps',
-    emoji:'🍽', bg:['#1a1200','#6b4c00'], accent:'#f59e0b',
+  { id:'mealplanner',   title:'Meal Planner',     cat:'App',          sec:'apps',
+    emoji:'🍽', bg:['#1a1200','#6b4c00'], accent:'#f59e0b', glow:'rgba(245,158,11,0.35)',
     desc:'Weekly meal planning with ingredient scaling, recipe filtering, and auto-generated shopping lists. Never think "what\'s for dinner?" again.',
     tags:['Web'], video:'videos/meal-planner.mp4', img:'images/Meal-planner.png',
     href:'meal-planner/index.html', ext:false },
 
-  { id:'weather',       title:'Weather App',       cat:'App',           sec:'apps',
-    emoji:'🌤', bg:['#001222','#004080'], accent:'#38bdf8',
+  { id:'weather',       title:'Weather App',      cat:'App',          sec:'apps',
+    emoji:'🌤', bg:['#001222','#004080'], accent:'#38bdf8', glow:'rgba(56,189,248,0.35)',
     desc:'Live forecasts with hourly data, 7-day outlook, sunrise/sunset, UV index, and city search. Clean, fast, and accurate.',
     tags:['Open-Meteo API','Web'], video:'videos/weather.mp4', img:'images/weather.png',
     href:'weather/index.html', ext:false },
 
-  { id:'typing',        title:'Speed Typing',      cat:'App',           sec:'apps',
-    emoji:'⌨', bg:['#0a0018','#400080'], accent:'#c084fc',
-    desc:'60-second typing challenge with live WPM, accuracy tracking, and character-level feedback. Compete against yourself and improve over time.',
+  { id:'typing',        title:'Speed Typing',     cat:'App',          sec:'apps',
+    emoji:'⌨', bg:['#0a0018','#400080'], accent:'#c084fc', glow:'rgba(192,132,252,0.35)',
+    desc:'60-second typing challenge with live WPM, accuracy tracking, and character-level feedback. Compete against yourself and improve.',
     tags:['Web'], video:'videos/typing-test.mp4', img:'images/Typing-test.png',
     href:'typing-test/index.html', ext:false },
 
-  { id:'dashboard',     title:'Dashboard',         cat:'App',           sec:'apps',
-    emoji:'🏠', bg:['#001220','#003a5a'], accent:'#0ea5e9',
+  { id:'dashboard',     title:'Dashboard',        cat:'App',          sec:'apps',
+    emoji:'🏠', bg:['#001220','#003a5a'], accent:'#0ea5e9', glow:'rgba(14,165,233,0.35)',
     desc:'All-in-one new tab replacement — live weather, clock, to-do list, bookmarks, and daily focus tracker. Your whole day at a glance.',
     tags:['Web'], video:'videos/dashboard.mp4', img:'images/dashboard.png',
     href:'dashboard/index.html', ext:false },
 
-  { id:'pomodoro',      title:'Pomodoro Timer',    cat:'App',           sec:'apps',
-    emoji:'⏱', bg:['#190010','#700044'], accent:'#f43f5e',
+  { id:'pomodoro',      title:'Pomodoro Timer',   cat:'App',          sec:'apps',
+    emoji:'⏱', bg:['#190010','#700044'], accent:'#f43f5e', glow:'rgba(244,63,94,0.35)',
     desc:'Focus timer with integrated task list, short and long breaks, session tracking, and sound alerts. Stay in the zone.',
     tags:['Web'], video:'videos/pomodoro.mp4', img:'images/pomodoro.png',
     href:'pomodoro/index.html', ext:false },
 
-  /* GAMES */
-  { id:'tower',         title:'Defend the Tower',  cat:'Game',          sec:'games',
-    emoji:'🏰', bg:['#180600','#7a2800'], accent:'#fb923c',
+  { id:'tower',         title:'Defend the Tower', cat:'Game',         sec:'games',
+    emoji:'🏰', bg:['#180600','#7a2800'], accent:'#fb923c', glow:'rgba(251,146,60,0.35)',
     desc:'Top-down wave survival shooter. Hold off escalating enemy waves across multiple rounds — built in GDevelop, fully playable in the browser.',
     tags:['GDevelop','Browser'], video:'videos/defend-the-tower.mp4', img:'images/defend-the-tower.png',
     href:'https://gd.games/jimb0bjim/defend-the-tower', ext:true },
 
-  { id:'crossword',     title:'Crossword',         cat:'Game',          sec:'games',
-    emoji:'🔤', bg:['#001828','#004878'], accent:'#60a5fa',
+  { id:'crossword',     title:'Crossword',        cat:'Game',         sec:'games',
+    emoji:'🔤', bg:['#001828','#004878'], accent:'#60a5fa', glow:'rgba(96,165,250,0.35)',
     desc:'Interactive crossword generator with clues, hints, check-answers, and full keyboard navigation. Every game is unique.',
     tags:['JS','Web'], video:'videos/crossword.mp4', img:'images/crossword.png',
     href:'crossword/index.html', ext:false },
 
-  { id:'spaceinvaders', title:'Space Invaders',    cat:'Game',          sec:'games',
-    emoji:'👾', bg:['#000a1e','#001880'], accent:'#34d399',
+  { id:'spaceinvaders', title:'Space Invaders',   cat:'Game',         sec:'games',
+    emoji:'👾', bg:['#000a1e','#001880'], accent:'#34d399', glow:'rgba(52,211,153,0.35)',
     desc:'Classic arcade with multiple alien types, destructible shield barriers, escalating levels, and high score tracking.',
     tags:['Canvas','JS'], video:'videos/space-invaders.mp4', img:'images/space-invaders.png',
     href:'space-invaders/index.html', ext:false },
 
-  { id:'snake',         title:'Snake',             cat:'Game',          sec:'games',
-    emoji:'🐍', bg:['#001a08','#006428'], accent:'#4ade80',
+  { id:'snake',         title:'Snake',            cat:'Game',         sec:'games',
+    emoji:'🐍', bg:['#001a08','#006428'], accent:'#4ade80', glow:'rgba(74,222,128,0.35)',
     desc:'Classic snake — eat food, grow longer, avoid the walls and your own tail. Simple, satisfying, endlessly replayable.',
     tags:['Canvas','JS'], video:'videos/snake.mp4', img:'images/snake.png',
     href:'snake/index.html', ext:false },
 
-  { id:'g2048',         title:'2048',              cat:'Game',          sec:'games',
-    emoji:'🔢', bg:['#1a0c00','#7a3a00'], accent:'#fb923c',
+  { id:'g2048',         title:'2048',             cat:'Game',         sec:'games',
+    emoji:'🔢', bg:['#1a0c00','#7a3a00'], accent:'#fb923c', glow:'rgba(251,146,60,0.35)',
     desc:'Slide tiles, merge numbers, and reach 2048. Brutally simple rules, stupidly addictive gameplay.',
     tags:['JS','Web'], video:'videos/2048.mp4', img:'images/2048.png',
     href:'2048/index.html', ext:false },
 
-  { id:'quiz',          title:'Quiz Game',         cat:'Game',          sec:'games',
-    emoji:'❓', bg:['#0e0018','#4a0090'], accent:'#a78bfa',
+  { id:'quiz',          title:'Quiz Game',        cat:'Game',         sec:'games',
+    emoji:'❓', bg:['#0e0018','#4a0090'], accent:'#a78bfa', glow:'rgba(167,139,250,0.35)',
     desc:'6 categories, 10 questions each — science, history, tech, geography, sport, entertainment. How much do you really know?',
     tags:['JS','Web'], video:'videos/quiz.mp4', img:'images/quiz.png',
     href:'quiz/index.html', ext:false },
 
-  { id:'platformer',    title:'Pixel Runner',      cat:'Game',          sec:'games',
-    emoji:'🏃', bg:['#001a1a','#006868'], accent:'#2dd4bf',
+  { id:'platformer',    title:'Pixel Runner',     cat:'Game',         sec:'games',
+    emoji:'🏃', bg:['#001a1a','#006868'], accent:'#2dd4bf', glow:'rgba(45,212,191,0.35)',
     desc:'Side-scrolling platformer with procedurally generated levels, coin collecting, and increasing difficulty. How far can you go?',
     tags:['Canvas','JS'], video:'videos/platformer.mp4', img:'images/platformer.png',
     href:'platformer/index.html', ext:false },
@@ -678,9 +693,29 @@ const SECTIONS = [
   { id:'games', label:'Games',             accent:'#9333ea' },
 ];
 
-/* ══════════════════════════════════════════════════
+const DOCK_DEF = [
+  { id:'about',    emoji:'👤', label:'About',    bg:'linear-gradient(145deg,#0a2064,#1a6cff)', action:() => openAbout()    },
+  { id:'terminal', emoji:'⌨',  label:'Terminal', bg:'linear-gradient(145deg,#020c0c,#006644)', action:() => openTerminal() },
+  { id:'contact',  emoji:'✉',  label:'Contact',  bg:'linear-gradient(145deg,#1a0028,#8800cc)', action:() => openContact()  },
+  { sep:true },
+  { id:'github',  emoji:'🐙', label:'GitHub',   bg:'rgba(255,255,255,0.06)',
+    action:() => window.open('https://github.com/JimiHughes','_blank','noopener') },
+  { id:'linkedin',emoji:'🔗', label:'LinkedIn', bg:'rgba(0,40,100,0.5)',
+    action:() => window.open('https://www.linkedin.com/in/jimi-hughes-a0b33737b','_blank','noopener') },
+];
+
+/* ═══════════════════════════════════════════════════
+   CURSOR GLOW
+═══════════════════════════════════════════════════ */
+const glowEl = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', e => {
+  glowEl.style.left = e.clientX + 'px';
+  glowEl.style.top  = e.clientY + 'px';
+});
+
+/* ═══════════════════════════════════════════════════
    BOOT
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 const bootEl  = document.getElementById('boot');
 const bootBar = document.getElementById('boot-bar');
 const bootMsg = document.getElementById('boot-msg');
@@ -690,7 +725,7 @@ const BOOT_MSGS = ['Loading kernel...','Mounting filesystem...','Starting servic
 let bootPct = 0, bootMI = 0;
 
 function bootTick() {
-  bootPct += Math.random() * 16 + 7;
+  bootPct += Math.random() * 15 + 8;
   if (bootPct > 100) bootPct = 100;
   bootBar.style.width = bootPct + '%';
   const mi = Math.min(BOOT_MSGS.length - 1, Math.floor((bootPct / 100) * BOOT_MSGS.length));
@@ -701,31 +736,27 @@ function bootTick() {
     bootEl.classList.add('out');
     deskEl.classList.add('on');
     setTimeout(() => { bootEl.style.display = 'none'; initDesktop(); }, 700);
-  }, 550);
+  }, 500);
 }
-setTimeout(bootTick, 250);
+setTimeout(bootTick, 300);
 
-/* ══════════════════════════════════════════════════
-   CANVAS BACKGROUND — particle network
-══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   CANVAS BACKGROUND
+═══════════════════════════════════════════════════ */
 function initCanvas() {
   const cv = document.getElementById('bg-canvas');
   const cx = cv.getContext('2d');
   let W, H, pts, mx = -999, my = -999;
 
-  function resize() {
-    W = cv.width  = window.innerWidth;
-    H = cv.height = window.innerHeight;
-    makePts();
-  }
+  function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; makePts(); }
 
   function makePts() {
-    const n = Math.max(40, Math.floor(W * H / 16000));
+    const n = Math.max(50, Math.floor(W * H / 14000));
     pts = Array.from({length: n}, () => ({
       x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
-      r: Math.random() * 1.4 + 0.4,
+      vx:(Math.random()-.5)*.22, vy:(Math.random()-.5)*.22,
+      r: Math.random() * 1.6 + 0.4,
+      hue: Math.random() > 0.85 ? 260 : 210, // occasional purple stars
     }));
   }
 
@@ -733,7 +764,7 @@ function initCanvas() {
   window.addEventListener('resize', resize);
   window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-  const LINK_DIST = 130, MOUSE_DIST = 160;
+  const LINK = 140, MDIST = 150;
 
   function frame() {
     cx.clearRect(0, 0, W, H);
@@ -741,28 +772,25 @@ function initCanvas() {
       p.x += p.vx; p.y += p.vy;
       if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
       if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      cx.fillStyle = 'rgba(80,130,255,0.2)'; cx.fill();
+      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      cx.fillStyle = `hsla(${p.hue},80%,70%,0.22)`; cx.fill();
     }
-    /* links */
     for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+      for (let j = i+1; j < pts.length; j++) {
+        const dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y;
         const d = Math.hypot(dx, dy);
-        if (d < LINK_DIST) {
-          const a = (1 - d / LINK_DIST) * 0.065;
-          cx.beginPath(); cx.moveTo(pts[i].x, pts[i].y); cx.lineTo(pts[j].x, pts[j].y);
-          cx.strokeStyle = `rgba(60,110,255,${a})`; cx.lineWidth = 0.7; cx.stroke();
+        if (d < LINK) {
+          const a = (1-d/LINK) * 0.07;
+          cx.beginPath(); cx.moveTo(pts[i].x,pts[i].y); cx.lineTo(pts[j].x,pts[j].y);
+          cx.strokeStyle = `rgba(80,120,255,${a})`; cx.lineWidth = 0.8; cx.stroke();
         }
       }
-      /* mouse repel */
-      const dxm = pts[i].x - mx, dym = pts[i].y - my;
-      const dm = Math.hypot(dxm, dym);
-      if (dm < MOUSE_DIST) {
-        const f = (1 - dm / MOUSE_DIST) * 0.012;
-        pts[i].vx += dxm * f; pts[i].vy += dym * f;
-        const sp = Math.hypot(pts[i].vx, pts[i].vy);
-        if (sp > 1.2) { pts[i].vx = pts[i].vx / sp * 1.2; pts[i].vy = pts[i].vy / sp * 1.2; }
+      const dxm = pts[i].x-mx, dym = pts[i].y-my, dm = Math.hypot(dxm,dym);
+      if (dm < MDIST) {
+        const f = (1-dm/MDIST) * 0.014;
+        pts[i].vx += dxm*f; pts[i].vy += dym*f;
+        const sp = Math.hypot(pts[i].vx,pts[i].vy);
+        if (sp > 1.4) { pts[i].vx = pts[i].vx/sp*1.4; pts[i].vy = pts[i].vy/sp*1.4; }
       }
     }
     requestAnimationFrame(frame);
@@ -770,60 +798,53 @@ function initCanvas() {
   frame();
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    CLOCK
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 function updateClock() {
   const d = new Date();
-  const h = String(d.getHours()).padStart(2, '0');
-  const m = String(d.getMinutes()).padStart(2, '0');
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
   document.getElementById('mb-clock').textContent = `${h}:${m}`;
 }
-setInterval(updateClock, 5000);
-updateClock();
+setInterval(updateClock, 5000); updateClock();
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    WINDOW MANAGER
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 let zTop = 10;
-const openWins = {}; // id → { el, minimised }
+const openWins = {};
 const wmEl = document.getElementById('wm');
-
 const isMobile = () => window.innerWidth < 500;
 
-function bringFront(el) { el.style.zIndex = ++zTop; markInactive(); el.classList.remove('inactive'); }
-function markInactive() { document.querySelectorAll('.win').forEach(w => w.classList.add('inactive')); }
+function bringFront(el) {
+  el.style.zIndex = ++zTop;
+  document.querySelectorAll('.win').forEach(w => {
+    w.classList.toggle('inactive', w !== el);
+  });
+}
 
-function makeWin({ id, title, w = 500, h = 480, content }) {
-  // If already open, just focus
+function makeWin({ id, title, w=500, h=480, content }) {
   if (openWins[id]) {
     const wn = openWins[id];
-    if (wn.minimised) { wn.el.style.display = ''; wn.minimised = false; }
-    bringFront(wn.el);
-    updateDockDots(); updateIconDots();
-    return wn.el;
+    if (wn.minimised) { wn.el.style.display=''; wn.minimised=false; }
+    bringFront(wn.el); updateDockDots(); updateIconDots(); return wn.el;
   }
-
   const el = document.createElement('div');
   el.className = 'win anim-open';
-
-  // Size + position (cascade)
-  el.style.width  = w + 'px';
-  el.style.height = h + 'px';
+  el.style.width = w + 'px'; el.style.height = h + 'px';
   const offs = Object.keys(openWins).length;
   const lw = wmEl.offsetWidth  || window.innerWidth;
   const lh = wmEl.offsetHeight || (window.innerHeight - 100);
-  const cx = Math.max(20, (lw - w) / 2 + offs * 26);
-  const cy = Math.max(10, (lh - h) / 2 + (offs % 3) * 26);
-  el.style.left = cx + 'px';
-  el.style.top  = cy + 'px';
+  el.style.left = Math.max(20, (lw-w)/2 + offs*28) + 'px';
+  el.style.top  = Math.max(10, (lh-h)/2 + (offs%4)*22) + 'px';
 
   el.innerHTML = `
     <div class="win-tb">
       <div class="win-btns">
-        <button class="win-btn win-btn-x" title="Close"></button>
-        <button class="win-btn win-btn-m" title="Minimise"></button>
-        <button class="win-btn win-btn-f" title="Fullscreen"></button>
+        <button class="win-btn win-btn-x"></button>
+        <button class="win-btn win-btn-m"></button>
+        <button class="win-btn win-btn-f"></button>
       </div>
       <div class="win-title">${title}</div>
       <div class="win-tb-end"></div>
@@ -834,141 +855,118 @@ function makeWin({ id, title, w = 500, h = 480, content }) {
   wmEl.appendChild(el);
   bringFront(el);
   el.addEventListener('mousedown', () => bringFront(el));
-
-  // Buttons
   el.querySelector('.win-btn-x').addEventListener('click', e => { e.stopPropagation(); closeWin(id); });
   el.querySelector('.win-btn-m').addEventListener('click', e => {
     e.stopPropagation();
-    el.style.display = 'none';
-    openWins[id].minimised = true;
+    el.style.display='none'; openWins[id].minimised=true;
     updateDockDots(); updateIconDots();
   });
   el.querySelector('.win-btn-f').addEventListener('click', e => {
     e.stopPropagation();
-    if (el.dataset.full === '1') {
-      el.style.cssText = `${el.dataset.prev} z-index:${el.style.zIndex}`;
-      el.dataset.full = '';
+    if (el.dataset.full==='1') {
+      const s = JSON.parse(el.dataset.prev||'{}');
+      el.style.left=s.l+'px'; el.style.top=s.t+'px'; el.style.width=s.w+'px'; el.style.height=s.h+'px';
+      el.dataset.full='';
     } else {
-      el.dataset.prev = `left:${el.style.left};top:${el.style.top};width:${el.style.width};height:${el.style.height};`;
-      el.dataset.full = '1';
-      el.style.left = '0'; el.style.top = '0';
-      el.style.width = wmEl.offsetWidth + 'px';
-      el.style.height = wmEl.offsetHeight + 'px';
+      el.dataset.prev = JSON.stringify({l:parseInt(el.style.left),t:parseInt(el.style.top),w:parseInt(el.style.width),h:parseInt(el.style.height)});
+      el.style.left='0'; el.style.top='0';
+      el.style.width=wmEl.offsetWidth+'px'; el.style.height=wmEl.offsetHeight+'px';
+      el.dataset.full='1';
     }
   });
-
   makeDraggable(el, el.querySelector('.win-tb'));
   makeResizable(el, el.querySelector('.win-resize'));
-
-  // Start any video
   const vid = el.querySelector('video');
-  if (vid) { vid.muted = true; vid.loop = true; vid.playsInline = true; vid.play().catch(() => {}); }
-
-  openWins[id] = { el, minimised: false };
+  if (vid) { vid.muted=true; vid.loop=true; vid.playsInline=true; vid.play().catch(()=>{}); }
+  openWins[id] = { el, minimised:false };
   updateDockDots(); updateIconDots();
   return el;
 }
 
 function closeWin(id) {
-  const wn = openWins[id];
-  if (!wn) return;
-  const vid = wn.el.querySelector('video');
-  if (vid) vid.pause();
+  const wn = openWins[id]; if (!wn) return;
+  const vid = wn.el.querySelector('video'); if (vid) vid.pause();
   wn.el.classList.add('anim-close');
-  setTimeout(() => { wn.el.remove(); delete openWins[id]; updateDockDots(); updateIconDots(); }, 170);
-}
-
-function makeResizable(win, handle) {
-  if (!handle) return;
-  let on = false, sx, sy, sw, sh;
-  handle.addEventListener('mousedown', e => {
-    on = true; sx = e.clientX; sy = e.clientY;
-    sw = parseInt(win.style.width); sh = parseInt(win.style.height);
-    e.preventDefault(); e.stopPropagation();
-  });
-  document.addEventListener('mousemove', e => {
-    if (!on) return;
-    win.style.width  = Math.max(300, sw + e.clientX - sx) + 'px';
-    win.style.height = Math.max(200, sh + e.clientY - sy) + 'px';
-  });
-  document.addEventListener('mouseup', () => { on = false; });
+  setTimeout(() => { wn.el.remove(); delete openWins[id]; updateDockDots(); updateIconDots(); }, 180);
 }
 
 function makeDraggable(win, handle) {
-  let ox, oy, sx, sy, on = false;
+  let on=false, ox,oy,sx,sy;
   handle.addEventListener('mousedown', e => {
     if (e.target.classList.contains('win-btn')) return;
-    on = true; sx = e.clientX; sy = e.clientY;
-    ox = parseInt(win.style.left) || 0; oy = parseInt(win.style.top) || 0;
+    on=true; sx=e.clientX; sy=e.clientY;
+    ox=parseInt(win.style.left)||0; oy=parseInt(win.style.top)||0;
     e.preventDefault();
   });
   document.addEventListener('mousemove', e => {
     if (!on) return;
-    let nx = ox + e.clientX - sx, ny = oy + e.clientY - sy;
-    ny = Math.max(-28, ny);
-    win.style.left = nx + 'px'; win.style.top = ny + 'px';
+    win.style.left=(ox+e.clientX-sx)+'px';
+    win.style.top =Math.max(-28, oy+e.clientY-sy)+'px';
   });
-  document.addEventListener('mouseup', () => { on = false; });
+  document.addEventListener('mouseup', () => { on=false; });
 }
 
-/* ══════════════════════════════════════════════════
+function makeResizable(win, handle) {
+  if (!handle) return;
+  let on=false, sx,sy,sw,sh;
+  handle.addEventListener('mousedown', e => {
+    on=true; sx=e.clientX; sy=e.clientY;
+    sw=parseInt(win.style.width); sh=parseInt(win.style.height);
+    e.preventDefault(); e.stopPropagation();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!on) return;
+    win.style.width  = Math.max(300, sw+e.clientX-sx)+'px';
+    win.style.height = Math.max(200, sh+e.clientY-sy)+'px';
+  });
+  document.addEventListener('mouseup', () => { on=false; });
+}
+
+/* ═══════════════════════════════════════════════════
    MOBILE SHEET
-══════════════════════════════════════════════════ */
-const mobOverlay = document.getElementById('mob-overlay');
-const mobContent = document.getElementById('mob-content');
-
+═══════════════════════════════════════════════════ */
+const mobOv = document.getElementById('mob-overlay');
+const mobCt = document.getElementById('mob-content');
 function openMobSheet(html) {
-  mobContent.innerHTML = html;
-  mobOverlay.classList.add('on');
-  const vid = mobContent.querySelector('video');
-  if (vid) { vid.muted = true; vid.loop = true; vid.playsInline = true; vid.play().catch(() => {}); }
+  mobCt.innerHTML = html; mobOv.classList.add('on');
+  const vid = mobCt.querySelector('video');
+  if (vid) { vid.muted=true; vid.loop=true; vid.playsInline=true; vid.play().catch(()=>{}); }
 }
-
 function closeMobSheet(e) {
-  if (e && e.target !== mobOverlay) return;
-  mobOverlay.classList.remove('on');
-  const vid = mobContent.querySelector('video');
-  if (vid) vid.pause();
+  if (e && e.target !== mobOv) return;
+  mobOv.classList.remove('on');
+  const vid = mobCt.querySelector('video'); if (vid) vid.pause();
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    PROJECT WINDOW
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 function openProject(p) {
-  if (isMobile()) {
-    openMobSheet(projectHTML(p));
-    return;
-  }
-  const hasVid = !!p.video;
-  makeWin({
-    id: p.id, title: p.title,
-    w: 500, h: hasVid ? 490 : 300,
-    content: projectHTML(p),
-  });
+  if (isMobile()) { openMobSheet(projectHTML(p)); return; }
+  makeWin({ id:p.id, title:p.title, w:500, h:p.video?490:300, content:projectHTML(p) });
 }
 
 function projectHTML(p) {
-  const mediaHtml = p.video ? `
+  const med = p.video ? `
     <div class="pw-media" style="--pw-accent:${p.accent}">
       ${p.img ? `<img src="${p.img}" alt="${p.title}" loading="lazy">` : ''}
       <video src="${p.video}" muted loop playsinline autoplay></video>
     </div>` : '';
-
-  return `${mediaHtml}
+  return `${med}
     <div class="pw-info" style="--pw-accent:${p.accent}">
       <div class="pw-cat">${p.cat}</div>
       <div class="pw-name">${p.title}</div>
       <div class="pw-desc">${p.desc}</div>
-      <div class="pw-tags">${p.tags.map(t => `<span class="pw-tag">${t}</span>`).join('')}</div>
-      <a class="pw-open" href="${p.href}" ${p.ext ? 'target="_blank" rel="noopener"' : ''} style="background:${p.accent}">
-        Open ${p.ext ? '↗' : '→'}
+      <div class="pw-tags">${p.tags.map(t=>`<span class="pw-tag">${t}</span>`).join('')}</div>
+      <a class="pw-open" href="${p.href}" ${p.ext?'target=_blank rel=noopener':''} style="background:${p.accent}">
+        Open ${p.ext?'↗':'→'}
       </a>
     </div>`;
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    ABOUT WINDOW
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 function openAbout() {
   const skills = ['JavaScript','Python','Node.js','React','HTML/CSS','Socket.io','Express','GDevelop','Groq API','Power Automate','Trading APIs','ffmpeg'];
   const html = `
@@ -981,18 +979,12 @@ function openAbout() {
           <div class="aw-loc">📍 United Kingdom</div>
         </div>
       </div>
-      <p class="aw-bio">UK-based developer building things I actually want to use. I like the intersection of AI, automation, and clean interfaces — whether that's a trading dashboard, content pipeline, or browser game. Curiosity-first, polish second.</p>
-      <p class="aw-bio">Background in full-stack web dev, automation (Power Automate, Python), AI integration (Groq, OpenAI), and creative tools. Interests: investing &amp; trading, films, content creation, and whatever rabbit hole I'm in this week.</p>
-      <div class="aw-h2" style="margin-top:4px">Skills &amp; Tools</div>
-      <div class="aw-skills">${skills.map(s => `<div class="aw-skill">${s}</div>`).join('')}</div>
+      <p class="aw-bio">UK-based developer building things I actually want to use. I like the intersection of AI, automation, and clean interfaces — whether that's a trading dashboard, content pipeline, or browser game.</p>
+      <p class="aw-bio" style="margin-top:-8px">Background in full-stack web dev, automation (Power Automate, Python), AI integration (Groq, OpenAI), and creative tools. Interests: investing, films, content creation, and whatever rabbit hole I'm in this week.</p>
+      <div class="aw-h2" style="margin-top:6px">Skills &amp; Tools</div>
+      <div class="aw-skills">${skills.map(s=>`<div class="aw-skill">${s}</div>`).join('')}</div>
       <div class="aw-h2">Professional Work</div>
-      <div class="aw-work">
-        Multiplayer quiz platform (Node / Express / Socket.io / React) &nbsp;·&nbsp;
-        Automated trading bot dashboard (Python / HTML) &nbsp;·&nbsp;
-        Reddit story video automation pipeline &nbsp;·&nbsp;
-        Power Automate &amp; Bullhorn ATS integrations &nbsp;·&nbsp;
-        Faceless AI YouTube history channel pipeline
-      </div>
+      <div class="aw-work">Multiplayer quiz platform (Node/Express/Socket.io/React) · Automated trading bot dashboard (Python/HTML) · Reddit story video pipeline · Power Automate &amp; Bullhorn ATS integrations · Faceless AI YouTube history channel pipeline</div>
       <div class="aw-h2">Find Me</div>
       <div class="aw-links">
         <a class="aw-link" href="https://github.com/JimiHughes" target="_blank" rel="noopener">⌨ GitHub</a>
@@ -1001,93 +993,268 @@ function openAbout() {
       </div>
     </div>`;
   if (isMobile()) { openMobSheet(html); return; }
-  makeWin({ id:'about', title:'About Jimi Hughes', w:440, h:580, content: html });
+  makeWin({ id:'about', title:'About Jimi Hughes', w:440, h:590, content:html });
 }
 
-/* ══════════════════════════════════════════════════
-   TERMINAL
-══════════════════════════════════════════════════ */
-const HELP_TEXT = `<span class="t-bold">JHOS Terminal</span> — available commands
+/* ═══════════════════════════════════════════════════
+   CONTACT WINDOW
+═══════════════════════════════════════════════════ */
+function openContact() {
+  const html = `
+    <div class="cw-body">
+      <p class="cw-lead">Open to freelance projects, collaborations, and interesting conversations. Pick your platform.</p>
+      <div class="cw-list">
+        <a class="cw-item" href="mailto:jimifh0111@gmail.com">
+          <span class="cw-ico">✉</span>
+          <div class="cw-text"><div class="cw-lbl">Email</div><div class="cw-val">jimifh0111@gmail.com</div></div>
+          <span class="cw-arr">→</span>
+        </a>
+        <a class="cw-item" href="https://github.com/JimiHughes" target="_blank" rel="noopener">
+          <span class="cw-ico">⌨</span>
+          <div class="cw-text"><div class="cw-lbl">GitHub</div><div class="cw-val">github.com/JimiHughes</div></div>
+          <span class="cw-arr">→</span>
+        </a>
+        <a class="cw-item" href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
+          <span class="cw-ico">🔗</span>
+          <div class="cw-text"><div class="cw-lbl">LinkedIn</div><div class="cw-val">linkedin.com/in/jimi-hughes-a0b33737b</div></div>
+          <span class="cw-arr">→</span>
+        </a>
+      </div>
+    </div>`;
+  if (isMobile()) { openMobSheet(html); return; }
+  makeWin({ id:'contact', title:'Contact', w:400, h:320, content:html });
+}
 
-  <span class="t-hi">help</span>        show this message
-  <span class="t-hi">about</span>       display bio
-  <span class="t-hi">ls</span>          list all projects
-  <span class="t-hi">open &lt;id&gt;</span>   open a project window
-  <span class="t-hi">skills</span>      show skill list
-  <span class="t-hi">contact</span>     contact info
-  <span class="t-hi">whoami</span>      ...
-  <span class="t-hi">clear</span>       clear terminal
-`;
+/* ═══════════════════════════════════════════════════
+   TERMINAL — PUBLIC + HIDDEN COMMANDS
+═══════════════════════════════════════════════════ */
+const TERM_DATA = {
+  help: `<span class="t-bold">JHOS Terminal v1.0</span>  — available commands
 
-const ABOUT_TEXT = `<span class="t-bold">Jimi Hughes</span> — Creator / AI Engineer
-<span class="t-dim">─────────────────────────────</span>
+  <span class="t-hi">help</span>           show this message
+  <span class="t-hi">about</span>          display bio
+  <span class="t-hi">ls</span>             list all projects
+  <span class="t-hi">open &lt;id&gt;</span>      open a project window
+  <span class="t-hi">skills</span>         show skill list
+  <span class="t-hi">contact</span>        contact info
+  <span class="t-hi">theme &lt;name&gt;</span>   change accent colour
+  <span class="t-hi">neofetch</span>       system info
+  <span class="t-hi">whoami</span>         ...
+  <span class="t-hi">clear</span>          clear terminal
+<span class="t-muted">
+  pssst — there are hidden commands too 👀</span>`,
+
+  about: `<span class="t-bold">Jimi Hughes</span> — Creator / AI Engineer
+<span class="t-dim">──────────────────────────────────────</span>
 Location:  United Kingdom
 Focus:     full-stack · AI integration · automation
 Interests: investing · films · content creation
 
 GitHub:    <span class="t-hi">github.com/JimiHughes</span>
-Email:     <span class="t-hi">jimifh0111@gmail.com</span>`;
+Email:     <span class="t-hi">jimifh0111@gmail.com</span>`,
 
-const SKILLS_TEXT = `<span class="t-bold">Languages:</span>   JavaScript, Python, HTML/CSS
+  skills: `<span class="t-bold">Languages:</span>   JavaScript, Python, HTML/CSS
 <span class="t-bold">Frontend:</span>    React, Canvas API
 <span class="t-bold">Backend:</span>     Node.js, Express, Socket.io
 <span class="t-bold">AI:</span>          Groq API, OpenAI, prompt eng.
 <span class="t-bold">Tools:</span>       Power Automate, ffmpeg, GDevelop
-<span class="t-bold">Automation:</span>  Python pipelines, Bullhorn ATS`;
+<span class="t-bold">Automation:</span>  Python pipelines, Bullhorn ATS`,
 
-const CONTACT_TEXT = `Email:    <span class="t-hi">jimifh0111@gmail.com</span>
+  contact: `Email:    <span class="t-hi">jimifh0111@gmail.com</span>
 GitHub:   <span class="t-hi">github.com/JimiHughes</span>
-LinkedIn: <span class="t-hi">linkedin.com/in/jimi-hughes-a0b33737b</span>`;
+LinkedIn: <span class="t-hi">linkedin.com/in/jimi-hughes-a0b33737b</span>`,
 
-function lsProjects() {
+  neofetch: `
+<span class="t-hi">         ▲▲▲         </span>  <span class="t-bold">jimi</span><span class="t-muted">@</span><span class="t-bold">jhos</span>
+<span class="t-hi">        ▲▲▲▲▲        </span>  <span class="t-dim">────────────────</span>
+<span class="t-hi">       ▲▲▲▲▲▲▲       </span>  <span class="t-yellow">OS:</span> JHOS 1.0 (browser)
+<span class="t-hi">      ▲   ▲   ▲      </span>  <span class="t-yellow">Host:</span> jimihughes.com
+<span class="t-hi">     ▲▲▲▲▲▲▲▲▲▲▲    </span>  <span class="t-yellow">Kernel:</span> V8 / JavaScriptCore
+                      <span class="t-yellow">Shell:</span> JHOS Term 1.0
+                      <span class="t-yellow">Projects:</span> 16
+                      <span class="t-yellow">Languages:</span> JS, Python, Node
+                      <span class="t-yellow">Uptime:</span> always`,
+
+  whoami: 'jimi hughes',
+
+  // HIDDEN
+  hire: `<span class="t-bold" style="color:#febc2e">★  AVAILABLE FOR HIRE  ★</span>
+
+Looking for a developer who ships? You found one.
+
+  ✦  Full-stack web apps (Node / React / Express)
+  ✦  AI integration &amp; automation pipelines
+  ✦  Browser games &amp; interactive experiences
+  ✦  Clean interfaces that actually get used
+
+<span class="t-hi">→  jimifh0111@gmail.com</span>
+<span class="t-hi">→  linkedin.com/in/jimi-hughes-a0b33737b</span>
+
+<span class="t-muted">Don't overthink it. Just say hello.</span>`,
+
+  sudo: `<span class="t-err">Permission denied.</span>  Nice try though.`,
+
+  coffee: `
+<span class="t-yellow">    ( (   </span>
+<span class="t-yellow">     ) )  </span>
+<span class="t-yellow">  ......  </span>
+<span class="t-yellow">  |    |] </span>
+<span class="t-yellow">  \    /  </span>
+<span class="t-yellow">   \`----' </span>
+<span class="t-muted">Brewing...</span>`,
+
+  ascii: `
+<span class="t-hi"> ██╗██╗  ██╗ ██████╗ ███████╗</span>
+<span class="t-hi"> ██║██║  ██║██╔═══██╗██╔════╝</span>
+<span class="t-hi"> ██║███████║██║   ██║███████╗ </span>
+<span class="t-hi"> ██║██╔══██║██║   ██║╚════██║</span>
+<span class="t-hi"> ██║██║  ██║╚██████╔╝███████║</span>
+<span class="t-hi"> ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝</span>
+<span class="t-muted"> Jimi Hughes OS — v1.0</span>`,
+
+  konami: `<span class="t-purple">↑ ↑ ↓ ↓ ← → ← → B A</span>
+
+<span class="t-yellow">+30 lives added.</span>
+<span class="t-muted">( not really — but you do get respect for trying )</span>`,
+
+  date: () => new Date().toLocaleString('en-GB', { weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit' }),
+
+  jobs: `PID  CPU  MEM  COMMAND
+<span class="t-green">1    0.1  0.4  jhos-kernel</span>
+<span class="t-green">12   0.0  1.2  particle-engine</span>
+<span class="t-green">13   0.0  0.3  window-manager</span>
+<span class="t-hi">47   0.8  2.1  terminal</span>
+<span class="t-yellow">88   4.2  8.8  creative-ideas</span>
+<span class="t-orange">99  12.0 14.0  infinite-curiosity</span>`,
+
+  ping: `PING jimihughes.com (185.199.108.153)
+64 bytes from jimihughes.com: time=<span class="t-green">8.2ms</span>
+64 bytes from jimihughes.com: time=<span class="t-green">7.9ms</span>
+64 bytes from jimihughes.com: time=<span class="t-green">8.1ms</span>
+
+<span class="t-muted">— 3 packets transmitted, 3 received, 0% loss</span>`,
+
+  hack: null, // handled specially
+  matrix: null,
+  flip: null,
+  theme: null,
+  ls: null,
+  open: null,
+};
+
+function lsText() {
   return PROJECTS.map(p =>
-    `  <span class="t-hi">${p.id.padEnd(16)}</span><span class="t-dim">${p.title.padEnd(20)}</span> <span style="color:${p.accent}80">${p.cat}</span>`
+    `  <span class="t-hi">${p.id.padEnd(16)}</span><span class="t-muted">${p.title.padEnd(22)}</span><span style="color:${p.accent}80">${p.cat}</span>`
   ).join('\n');
 }
 
-function termCmd(outEl, raw) {
-  const cmd = raw.trim();
-  outEl.innerHTML += `\n<span class="t-prompt">jimi@jhos:~$</span> <span class="t-cmd">${escHtml(cmd)}</span>\n`;
-
-  const parts = cmd.split(/\s+/);
-  let res = '';
-  switch (parts[0].toLowerCase()) {
-    case 'help':    res = HELP_TEXT; break;
-    case 'about':   res = ABOUT_TEXT; break;
-    case 'skills':  res = SKILLS_TEXT; break;
-    case 'contact': res = CONTACT_TEXT; break;
-    case 'whoami':  res = 'jimi hughes'; break;
-    case 'date':    res = new Date().toLocaleString(); break;
-    case 'clear':   outEl.innerHTML = ''; return;
-    case 'ls':      res = lsProjects(); break;
-    case 'open': {
-      const id = parts[1];
-      if (!id) { res = '<span class="t-err">Usage: open &lt;project-id&gt;</span>'; break; }
-      const p = PROJECTS.find(x => x.id === id);
-      if (!p) { res = `<span class="t-err">Not found: ${escHtml(id)}</span>. Try <span class="t-hi">ls</span>`; break; }
-      openProject(p);
-      res = `<span class="t-hi">Opening ${p.title}…</span>`;
-      break;
-    }
-    default: res = cmd ? `<span class="t-err">command not found: ${escHtml(cmd)}</span>` : '';
+function runHack(out) {
+  const lines = [
+    'Initialising breach sequence...',
+    'Scanning ports... 22/tcp 80/tcp 443/tcp',
+    'Exploiting CVE-2024-████...',
+    'Access granted ✓',
+    'Downloading consciousness...',
+    '████████████████░░░░ 80%',
+    '████████████████████ 100%',
+    '',
+    'Just kidding.',
+    '(Please hire me though.)',
+  ];
+  let i = 0;
+  function next() {
+    if (i >= lines.length) return;
+    out.innerHTML += `<span class="t-green">${lines[i]}</span>\n`;
+    out.scrollTop = out.scrollHeight;
+    i++; setTimeout(next, 160 + Math.random() * 140);
   }
-  if (res) outEl.innerHTML += `<span>${res}</span>\n`;
-  outEl.scrollTop = outEl.scrollHeight;
+  next();
+}
+
+function runMatrix() {
+  const ov = document.createElement('canvas');
+  ov.id = 'matrix-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
+  ov.width = window.innerWidth; ov.height = window.innerHeight;
+  document.body.appendChild(ov);
+  const ctx = ov.getContext('2d');
+  const cols = Math.floor(ov.width/14);
+  const drops = Array(cols).fill(1);
+  const chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEF';
+  let rafId;
+  function draw() {
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fillRect(0,0,ov.width,ov.height);
+    ctx.font = '14px monospace';
+    for (let i = 0; i < drops.length; i++) {
+      ctx.fillStyle = i % 5 === 0 ? '#fff' : '#0f0';
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*14, drops[i]*14);
+      if (drops[i]*14 > ov.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+    rafId = requestAnimationFrame(draw);
+  }
+  draw();
+  setTimeout(() => { cancelAnimationFrame(rafId); ov.remove(); }, 6000);
+}
+
+function setTheme(name) {
+  const MAP = { blue:'#1a6cff', red:'#ff3366', green:'#00d084', purple:'#a855f7', orange:'#ff6b35', cyan:'#00bcd4', gold:'#f59e0b', pink:'#ec4899' };
+  const c = MAP[name?.toLowerCase()];
+  if (!c) return `Unknown theme. Available: <span class="t-hi">${Object.keys(MAP).join(' · ')}</span>`;
+  document.documentElement.style.setProperty('--blue', c);
+  document.documentElement.style.setProperty('--blue-d', c + '28');
+  return `<span class="t-green">Theme set to</span> <span style="color:${c}">■</span> ${name}`;
+}
+
+function processCmd(raw, out) {
+  const cmd = raw.trim();
+  out.innerHTML += `\n<span class="t-prompt">jimi@jhos:~$</span> <span class="t-cmd">${escHtml(cmd)}</span>\n`;
+  const parts = cmd.split(/\s+/);
+  const base  = parts[0].toLowerCase();
+  let res = '';
+
+  if (base === 'clear')   { out.innerHTML = ''; return; }
+  if (base === 'matrix')  { runMatrix(); res = '<span class="t-green">Entering the Matrix...</span>'; }
+  else if (base === 'hack')  { runHack(out); return; }
+  else if (base === 'flip')  {
+    deskEl.style.transition = 'transform 0.6s ease';
+    deskEl.style.transform = 'rotate(180deg)';
+    setTimeout(() => { deskEl.style.transform = ''; }, 3000);
+    res = '<span class="t-green">Flipping desktop in 3... 2... 1...</span>';
+  }
+  else if (base === 'theme') { res = setTheme(parts[1]); }
+  else if (base === 'ls')    { res = lsText(); }
+  else if (base === 'open')  {
+    const id = parts[1];
+    if (!id) { res = '<span class="t-err">Usage: open &lt;id&gt;</span>'; }
+    else {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) res = `<span class="t-err">Not found: ${escHtml(id)}</span>  →  try <span class="t-hi">ls</span>`;
+      else { openProject(p); res = `<span class="t-green">Opening ${p.title}…</span>`; }
+    }
+  }
+  else if (base === 'date') { res = TERM_DATA.date(); }
+  else if (base === 'whoami') { res = TERM_DATA.whoami; }
+  else if (TERM_DATA[base] && typeof TERM_DATA[base] === 'string') { res = TERM_DATA[base]; }
+  else if (cmd === '') { /* nothing */ }
+  else { res = `<span class="t-err">command not found: ${escHtml(cmd)}</span>  →  <span class="t-hi">help</span>`; }
+
+  if (res) out.innerHTML += `<span>${res}</span>\n`;
+  out.scrollTop = out.scrollHeight;
 }
 
 function openTerminal() {
   const content = `
     <div class="tw-out" id="tw-out">
-<span class="t-dim">JHOS Terminal v1.0</span>
-Type <span class="t-hi">help</span> for available commands.
+<span class="t-muted">JHOS Terminal v1.0  —  type </span><span class="t-hi">help</span><span class="t-muted"> to begin</span>
 </div>
-    <div class="tw-input-row">
+    <div class="tw-irow">
       <span class="tw-ps1">jimi@jhos:~$</span>
       <input class="tw-inp" id="tw-inp" type="text" autocomplete="off" spellcheck="false">
     </div>`;
-
-  if (isMobile()) { openMobSheet(content); } else { makeWin({ id:'terminal', title:'Terminal', w:540, h:380, content }); }
-
+  if (isMobile()) { openMobSheet(content); }
+  else { makeWin({ id:'terminal', title:'Terminal', w:540, h:380, content }); }
   setTimeout(() => {
     const inp = document.getElementById('tw-inp');
     if (!inp) return;
@@ -1095,103 +1262,122 @@ Type <span class="t-hi">help</span> for available commands.
     inp.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
       const out = document.getElementById('tw-out');
-      if (out) termCmd(out, inp.value);
+      if (out) processCmd(inp.value, out);
       inp.value = '';
     });
   }, 80);
 }
 
-/* ══════════════════════════════════════════════════
-   CONTACT
-══════════════════════════════════════════════════ */
-function openContact() {
-  const html = `
-    <div class="cw-body">
-      <p class="cw-lead">Open to freelance projects, collaborations, and interesting conversations.</p>
-      <div class="cw-list">
-        <a class="cw-item" href="mailto:jimifh0111@gmail.com">
-          <span class="cw-ico">✉</span>
-          <div class="cw-text"><div class="cw-lbl">Email</div><div class="cw-val">jimifh0111@gmail.com</div></div>
-          <span class="cw-arr">↗</span>
-        </a>
-        <a class="cw-item" href="https://github.com/JimiHughes" target="_blank" rel="noopener">
-          <span class="cw-ico">⌨</span>
-          <div class="cw-text"><div class="cw-lbl">GitHub</div><div class="cw-val">github.com/JimiHughes</div></div>
-          <span class="cw-arr">↗</span>
-        </a>
-        <a class="cw-item" href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">
-          <span class="cw-ico">🔗</span>
-          <div class="cw-text"><div class="cw-lbl">LinkedIn</div><div class="cw-val">linkedin.com/in/jimi-hughes-a0b33737b</div></div>
-          <span class="cw-arr">↗</span>
-        </a>
-      </div>
-    </div>`;
-  if (isMobile()) { openMobSheet(html); return; }
-  makeWin({ id:'contact', title:'Contact', w:400, h:310, content: html });
+/* ═══════════════════════════════════════════════════
+   DESKTOP ICONS + DRAG-AND-DROP
+═══════════════════════════════════════════════════ */
+function loadIconOrder() {
+  try { return JSON.parse(localStorage.getItem('jhos-icon-order') || 'null'); } catch { return null; }
+}
+function saveIconOrder() {
+  const order = [...document.querySelectorAll('.d-icon')].map(el => el.dataset.pid);
+  localStorage.setItem('jhos-icon-order', JSON.stringify(order));
 }
 
-/* ══════════════════════════════════════════════════
-   DESKTOP ICONS
-══════════════════════════════════════════════════ */
 function buildDesktop() {
   const area = document.getElementById('d-area');
+  const savedOrder = loadIconOrder();
+
   SECTIONS.forEach(sec => {
-    const projs = PROJECTS.filter(p => p.sec === sec.id);
-    if (!projs.length) return;
+    let projs = PROJECTS.filter(p => p.sec === sec.id);
+    // Apply saved order within section
+    if (savedOrder) {
+      projs = savedOrder
+        .map(id => projs.find(p => p.id === id))
+        .filter(Boolean)
+        .concat(projs.filter(p => !savedOrder.includes(p.id)));
+    }
 
     const sect = document.createElement('div');
     sect.className = 'd-section';
 
-    const label = document.createElement('div');
-    label.className = 'd-cat-label';
-    label.style.color = sec.accent + 'aa';
-    label.textContent = sec.label;
-    sect.appendChild(label);
+    // section label
+    const lbl = document.createElement('div');
+    lbl.className = 'd-cat-label';
+    lbl.style.color = sec.accent;
+    lbl.innerHTML = `<div class="d-cat-label-dot" style="background:${sec.accent}"></div><span class="d-cat-label-text">${sec.label}</span><div class="d-cat-label-line"></div>`;
+    sect.appendChild(lbl);
 
     const grid = document.createElement('div');
     grid.className = 'd-icon-grid';
+    grid.dataset.section = sec.id;
 
     projs.forEach(p => {
-      const icon = document.createElement('div');
-      icon.className = 'd-icon';
-      icon.dataset.projId = p.id;
-      icon.innerHTML = `
-        <div class="d-icon-img" style="background:linear-gradient(145deg,${p.bg[0]},${p.bg[1]})">
-          <span>${p.emoji}</span>
-        </div>
-        <span class="d-icon-name">${p.title}</span>
-        <div class="d-icon-open-dot"></div>`;
-      icon.addEventListener('click', () => openProject(p));
-      grid.appendChild(icon);
+      grid.appendChild(makeIcon(p));
     });
 
     sect.appendChild(grid);
     area.appendChild(sect);
   });
+
+  // enable drag-and-drop
+  initIconDnd();
+}
+
+function makeIcon(p) {
+  const icon = document.createElement('div');
+  icon.className = 'd-icon';
+  icon.dataset.pid = p.id;
+  icon.draggable = true;
+  icon.innerHTML = `
+    <div class="d-icon-img" style="background:linear-gradient(145deg,${p.bg[0]},${p.bg[1]});--icon-glow:${p.glow}">
+      <span>${p.emoji}</span>
+    </div>
+    <span class="d-icon-name">${p.title}</span>
+    <div class="d-icon-open-dot"></div>`;
+  icon.addEventListener('click', () => openProject(p));
+  return icon;
+}
+
+let dndSrc = null;
+
+function initIconDnd() {
+  document.querySelectorAll('.d-icon').forEach(ic => {
+    ic.addEventListener('dragstart', e => {
+      dndSrc = ic;
+      ic.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', ic.dataset.pid);
+    });
+    ic.addEventListener('dragend', () => {
+      dndSrc?.classList.remove('dragging');
+      document.querySelectorAll('.d-icon.drop-target').forEach(el => el.classList.remove('drop-target'));
+      dndSrc = null;
+      saveIconOrder();
+    });
+    ic.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (ic !== dndSrc) ic.classList.add('drop-target');
+    });
+    ic.addEventListener('dragleave', () => ic.classList.remove('drop-target'));
+    ic.addEventListener('drop', e => {
+      e.preventDefault();
+      ic.classList.remove('drop-target');
+      if (!dndSrc || dndSrc === ic) return;
+      // Insert dndSrc before ic
+      ic.parentNode.insertBefore(dndSrc, ic);
+      saveIconOrder();
+    });
+  });
 }
 
 function updateIconDots() {
   document.querySelectorAll('.d-icon').forEach(ico => {
-    const id = ico.dataset.projId;
+    const id = ico.dataset.pid;
     const wn = openWins[id];
     ico.classList.toggle('is-open', !!(wn && !wn.minimised));
   });
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    DOCK
-══════════════════════════════════════════════════ */
-const DOCK_DEF = [
-  { id:'about',    emoji:'👤', label:'About',    bg:'linear-gradient(145deg,#0a2064,#1a6cff)', action: openAbout    },
-  { id:'terminal', emoji:'⌨', label:'Terminal', bg:'linear-gradient(145deg,#020a0a,#006644)', action: openTerminal },
-  { id:'contact',  emoji:'✉', label:'Contact',  bg:'linear-gradient(145deg,#1a0028,#8800cc)', action: openContact  },
-  { sep:true },
-  { id:'github',   emoji:'🐙', label:'GitHub',   bg:'rgba(255,255,255,0.06)',
-    action: () => window.open('https://github.com/JimiHughes','_blank','noopener') },
-  { id:'linkedin', emoji:'🔗', label:'LinkedIn', bg:'rgba(0,40,100,0.5)',
-    action: () => window.open('https://www.linkedin.com/in/jimi-hughes-a0b33737b','_blank','noopener') },
-];
-
+═══════════════════════════════════════════════════ */
 function buildDock() {
   const pill = document.getElementById('dock-pill');
   DOCK_DEF.forEach(d => {
@@ -1199,66 +1385,90 @@ function buildDock() {
       const s = document.createElement('div'); s.className = 'dk-sep'; pill.appendChild(s); return;
     }
     const el = document.createElement('div');
-    el.className = 'dk-item'; el.dataset.dockId = d.id;
-    el.innerHTML = `
-      <div class="dk-icon" style="background:${d.bg}">${d.emoji}</div>
-      <div class="dk-tooltip">${d.label}</div>
-      <div class="dk-dot"></div>`;
+    el.className = 'dk-item'; el.dataset.did = d.id;
+    el.innerHTML = `<div class="dk-icon" style="background:${d.bg}">${d.emoji}</div><div class="dk-tooltip">${d.label}</div><div class="dk-dot"></div>`;
     el.addEventListener('click', () => {
       const wn = openWins[d.id];
-      if (wn && wn.minimised) {
-        wn.el.style.display = ''; wn.minimised = false;
-        bringFront(wn.el); updateDockDots(); updateIconDots();
-      } else { d.action(); }
+      if (wn?.minimised) { wn.el.style.display=''; wn.minimised=false; bringFront(wn.el); updateDockDots(); updateIconDots(); }
+      else d.action();
     });
     pill.appendChild(el);
+  });
+
+  // magnification
+  pill.addEventListener('mousemove', dockMagnify);
+  pill.addEventListener('mouseleave', dockReset);
+}
+
+function dockMagnify(e) {
+  const items = document.querySelectorAll('.dk-item:not([class*="sep"])');
+  items.forEach(item => {
+    const icon = item.querySelector('.dk-icon');
+    if (!icon) return;
+    const r = icon.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const dist = Math.abs(e.clientX - cx);
+    const maxD = 85;
+    if (dist < maxD) {
+      const scale = 1 + 0.6 * Math.pow(1 - dist / maxD, 1.8);
+      const rise  = (scale - 1) * 22;
+      icon.style.transform = `scale(${scale.toFixed(3)}) translateY(-${rise.toFixed(1)}px)`;
+      icon.style.transition = 'transform 0.1s ease';
+    } else {
+      icon.style.transform = '';
+      icon.style.transition = 'transform 0.22s var(--spring)';
+    }
+  });
+}
+
+function dockReset() {
+  document.querySelectorAll('.dk-icon').forEach(icon => {
+    icon.style.transform = '';
+    icon.style.transition = 'transform 0.25s var(--spring)';
   });
 }
 
 function updateDockDots() {
   document.querySelectorAll('.dk-item').forEach(el => {
-    const id = el.dataset.dockId;
+    const id = el.dataset.did;
     const wn = openWins[id];
     el.classList.toggle('open', !!(wn && !wn.minimised));
   });
 }
 
-/* ══════════════════════════════════════════════════
-   STAGGER ICONS IN
-══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   STAGGER ICONS
+═══════════════════════════════════════════════════ */
 function staggerIcons() {
-  const icons = document.querySelectorAll('.d-icon');
-  icons.forEach((ic, i) => {
+  document.querySelectorAll('.d-icon').forEach((ic, i) => {
     ic.style.opacity = '0';
-    ic.style.transform = 'translateY(14px) scale(0.92)';
-    ic.style.transition = `opacity 0.4s ease ${i * 28}ms, transform 0.4s var(--ease-out) ${i * 28}ms`;
+    ic.style.transform = 'translateY(16px) scale(0.9)';
+    ic.style.transition = `opacity 0.4s ease ${i*26}ms, transform 0.45s var(--ease) ${i*26}ms`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       ic.style.opacity = '1';
-      ic.style.transform = 'translateY(0) scale(1)';
+      ic.style.transform = '';
     }));
   });
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    UTIL
-══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-/* ══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    INIT
-══════════════════════════════════════════════════ */
-let _desktopReady = false;
+═══════════════════════════════════════════════════ */
+let _ready = false;
 function initDesktop() {
-  if (_desktopReady) return;
-  _desktopReady = true;
+  if (_ready) return; _ready = true;
   initCanvas();
   buildDesktop();
   buildDock();
   staggerIcons();
-  // Auto-open About after icons settle
-  if (!isMobile()) setTimeout(openAbout, 900);
+  if (!isMobile()) setTimeout(openAbout, 950);
 }
 </script>
 </body>
