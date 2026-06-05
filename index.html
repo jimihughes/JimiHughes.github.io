@@ -1054,6 +1054,91 @@ button { font-family:inherit; cursor:pointer; }
 .wp-option.active { border-color:rgba(255,255,255,0.7); }
 
 /* ═══════════════════════════════════════════════════
+   ICON DEPTH EFFECT (desktop + mobile)
+═══════════════════════════════════════════════════ */
+.d-icon-img::after {
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(145deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.04) 35%,transparent 65%);
+}
+/* Icon description tooltip */
+.d-icon-tip {
+  position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+  background:rgba(8,8,22,0.96); border:1px solid rgba(255,255,255,0.13); border-radius:10px;
+  padding:8px 12px; font-size:11px; color:var(--txt2); line-height:1.5;
+  max-width:180px; text-align:center; white-space:normal; pointer-events:none;
+  opacity:0; transition:opacity 0.18s; z-index:200;
+  box-shadow:0 8px 24px rgba(0,0,0,0.6);
+}
+.d-icon:hover .d-icon-tip { opacity:1; }
+.d-icon-tip::after {
+  content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+  border:5px solid transparent; border-top-color:rgba(255,255,255,0.13);
+}
+
+/* ═══════════════════════════════════════════════════
+   DESKTOP WIDGETS
+═══════════════════════════════════════════════════ */
+#desk-widgets {
+  position:absolute; bottom:78px; left:16px; z-index:50;
+  display:none;
+  display:flex; flex-direction:column; gap:8px; pointer-events:none;
+}
+.desk-widget {
+  background:rgba(8,8,22,0.72); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.09); border-radius:14px;
+  padding:10px 14px; pointer-events:all;
+  transition:transform 0.2s var(--spring), border-color 0.2s;
+}
+.desk-widget:hover { transform:translateY(-2px); border-color:rgba(255,255,255,0.18); }
+#widget-clock-face { font-family:var(--mono); font-size:26px; font-weight:200; color:#fff; letter-spacing:-0.04em; line-height:1; }
+#widget-clock-date { font-family:var(--mono); font-size:9px; color:var(--txt3); text-transform:uppercase; letter-spacing:0.12em; margin-top:3px; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM MONITOR APP
+═══════════════════════════════════════════════════ */
+.smon-wrap { padding:16px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:14px; }
+.smon-section-h { font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--txt3); margin-bottom:8px; }
+.smon-graph-wrap { background:rgba(0,0,0,0.35); border-radius:10px; border:1px solid var(--bd); overflow:hidden; }
+.smon-graph { width:100%; height:70px; display:block; }
+.smon-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.smon-bar-label { font-family:var(--mono); font-size:10px; color:var(--txt3); width:80px; flex-shrink:0; }
+.smon-bar-track { flex:1; height:8px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden; }
+.smon-bar-fill { height:100%; border-radius:4px; transition:width 1s ease; }
+.smon-bar-val { font-family:var(--mono); font-size:10px; color:var(--txt2); width:36px; text-align:right; flex-shrink:0; }
+.smon-proc-row { display:flex; justify-content:space-between; padding:6px 10px; border-radius:7px; font-size:11.5px; }
+.smon-proc-row:nth-child(odd) { background:rgba(255,255,255,0.03); }
+.smon-proc-name { color:var(--txt2); font-family:var(--mono); }
+.smon-proc-cpu { color:var(--txt3); font-family:var(--mono); font-size:10px; }
+
+/* ═══════════════════════════════════════════════════
+   CALENDAR APP
+═══════════════════════════════════════════════════ */
+.cal-wrap { padding:16px; overflow-y:auto; flex:1; }
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.cal-month-name { font-size:17px; font-weight:700; letter-spacing:-0.02em; }
+.cal-nav { display:flex; gap:4px; }
+.cal-nav-btn { width:28px; height:28px; border-radius:8px; border:1px solid var(--bd2); background:var(--surf2); color:var(--txt2); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s,color 0.15s; }
+.cal-nav-btn:hover { background:rgba(255,255,255,0.1); color:var(--txt); }
+.cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:6px; }
+.cal-wd { font-family:var(--mono); font-size:9px; text-align:center; color:var(--txt3); text-transform:uppercase; letter-spacing:0.08em; padding:4px 0; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-day {
+  aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  border-radius:9px; font-size:13px; font-weight:500; cursor:pointer;
+  position:relative; color:var(--txt2); transition:background 0.15s,color 0.15s;
+}
+.cal-day:hover { background:rgba(255,255,255,0.07); color:var(--txt); }
+.cal-day.today { background:var(--blue); color:#fff; font-weight:700; }
+.cal-day.other-month { color:var(--txt3); }
+.cal-day.has-event::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--green); }
+.cal-day.today.has-event::after { background:#fff; }
+.cal-event-list { margin-top:16px; }
+.cal-event { display:flex; align-items:flex-start; gap:10px; padding:9px 12px; background:var(--surf2); border:1px solid var(--bd); border-radius:10px; margin-bottom:7px; }
+.cal-event-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.cal-event-title { font-size:12.5px; font-weight:600; margin-bottom:1px; }
+.cal-event-time { font-size:10.5px; color:var(--txt3); font-family:var(--mono); }
+
+/* ═══════════════════════════════════════════════════
    FINDER / FILE BROWSER
 ═══════════════════════════════════════════════════ */
 .finder-wrap { display:flex; flex:1; overflow:hidden; }
@@ -1248,6 +1333,213 @@ button { font-family:inherit; cursor:pointer; }
 .tour-btn-next:hover { opacity:0.88; }
 
 /* ═══════════════════════════════════════════════════
+   MOBILE PHONE OS
+═══════════════════════════════════════════════════ */
+#mob-os {
+  position:fixed; inset:0; z-index:20000;
+  display:none; flex-direction:column;
+  background:#000; overflow:hidden;
+  font-family:var(--font);
+}
+/* Show mobile OS on small screens, hide desktop */
+@media(max-width:680px) {
+  #mob-os { display:flex; }
+  #desktop,#boot { display:none !important; }
+  #cursor-glow,#grain { display:none !important; }
+}
+
+/* Wallpaper */
+#mob-wallpaper { position:absolute; inset:0; z-index:0; overflow:hidden; }
+#mob-wallpaper canvas { position:absolute; inset:0; width:100%; height:100%; }
+.mob-aurora { position:absolute; border-radius:50%; pointer-events:none; }
+.mob-a1 { width:130vw; height:80vh; top:-30%; left:-30%;
+  background:radial-gradient(ellipse,rgba(26,108,255,0.14) 0%,transparent 68%);
+  filter:blur(70px); animation:aurora-drift-1 18s ease-in-out infinite alternate; }
+.mob-a2 { width:110vw; height:70vh; bottom:-20%; right:-25%;
+  background:radial-gradient(ellipse,rgba(147,51,234,0.11) 0%,transparent 68%);
+  filter:blur(80px); animation:aurora-drift-2 22s ease-in-out infinite alternate; }
+
+/* Status bar */
+#mob-statusbar {
+  position:relative; z-index:10; height:44px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; color:#fff;
+}
+#mob-time { font-family:var(--mono); font-size:15px; font-weight:600; letter-spacing:-0.01em; }
+#mob-status-icons { display:flex; align-items:center; gap:5px; }
+.mob-signal { display:flex; align-items:flex-end; gap:1.5px; height:12px; }
+.mob-signal-bar { width:3px; border-radius:1px; background:rgba(255,255,255,0.9); }
+.mob-battery-wrap { display:flex; align-items:center; gap:3px; }
+.mob-battery-icon {
+  width:22px; height:11px; border:1.5px solid rgba(255,255,255,0.7); border-radius:3px; position:relative;
+}
+.mob-battery-icon::after {
+  content:''; position:absolute; right:-4px; top:50%; transform:translateY(-50%);
+  width:2px; height:5px; background:rgba(255,255,255,0.7); border-radius:0 1px 1px 0;
+}
+.mob-battery-fill {
+  position:absolute; left:1.5px; top:1.5px; bottom:1.5px;
+  background:#4ade80; border-radius:1.5px; transition:width 1s;
+}
+.mob-status-wifi { font-size:11px; }
+
+/* Home screen */
+#mob-home {
+  position:relative; z-index:5; flex:1; display:flex; flex-direction:column;
+  padding:8px 0 0; overflow:hidden;
+}
+#mob-greeting { font-size:28px; font-weight:700; color:#fff; padding:8px 24px 2px; letter-spacing:-0.02em; }
+#mob-greeting-sub { font-size:13px; color:rgba(255,255,255,0.45); padding:0 24px 16px; }
+
+/* Search bar (opens spotlight) */
+#mob-search {
+  margin:0 16px 16px; height:38px; border-radius:12px;
+  background:rgba(255,255,255,0.12); backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.1);
+  display:flex; align-items:center; padding:0 14px; gap:9px; cursor:pointer;
+  transition:background 0.15s;
+}
+#mob-search:active { background:rgba(255,255,255,0.18); }
+#mob-search-icon { font-size:13px; opacity:0.5; }
+#mob-search-text { font-size:13px; color:rgba(255,255,255,0.4); }
+
+/* App grid */
+#mob-app-scroll { flex:1; overflow-y:auto; padding:0 14px 8px; -webkit-overflow-scrolling:touch; }
+.mob-app-section-label {
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); padding:12px 6px 6px;
+}
+.mob-app-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:4px; }
+.mob-app-item {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:transform 0.15s var(--spring);
+}
+.mob-app-item:active { transform:scale(0.88); }
+.mob-app-icon {
+  width:60px; height:60px; border-radius:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:26px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.08);
+  position:relative; overflow:hidden;
+}
+/* Shine overlay on icons */
+.mob-app-icon::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:55%;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.22),rgba(255,255,255,0));
+  pointer-events:none;
+}
+.mob-app-label { font-size:11px; font-weight:500; color:rgba(255,255,255,0.85); text-align:center; max-width:64px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Dock */
+#mob-dock-area {
+  position:relative; z-index:10; padding:8px 20px 0; flex-shrink:0;
+}
+#mob-dock-pill {
+  display:flex; justify-content:space-around; align-items:center;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(32px); -webkit-backdrop-filter:blur(32px);
+  border:1px solid rgba(255,255,255,0.18); border-radius:22px;
+  padding:10px 16px; margin:0 auto;
+  max-width:280px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.mob-dock-item {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.mob-dock-icon {
+  width:50px; height:50px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center; font-size:22px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+  position:relative; overflow:hidden;
+}
+.mob-dock-icon::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:55%;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.2),rgba(255,255,255,0));
+}
+
+/* Home indicator */
+#mob-home-bar {
+  height:28px; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; position:relative; z-index:10;
+}
+#mob-home-pill {
+  width:130px; height:5px; border-radius:3px;
+  background:rgba(255,255,255,0.35);
+}
+
+/* App panel */
+#mob-panel {
+  position:absolute; inset:0; z-index:100;
+  display:flex; flex-direction:column;
+  background:var(--bg);
+  transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);
+  will-change:transform;
+}
+#mob-panel.open { transform:translateY(0); }
+#mob-panel-handle-row {
+  height:32px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+#mob-panel-handle { width:36px; height:4px; border-radius:2px; background:rgba(255,255,255,0.2); }
+#mob-panel-header {
+  display:flex; align-items:center; padding:0 16px 12px; gap:12px; flex-shrink:0;
+}
+#mob-panel-close {
+  width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.1);
+  border:none; color:#fff; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+#mob-panel-title { font-size:17px; font-weight:700; color:#fff; flex:1; }
+#mob-panel-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.mob-project-video {
+  width:100%; aspect-ratio:16/9; background:#000;
+  position:relative; overflow:hidden; flex-shrink:0;
+}
+.mob-project-video video { width:100%; height:100%; object-fit:cover; }
+.mob-project-video::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--mpv-accent,var(--blue));
+  box-shadow:0 0 16px var(--mpv-accent,var(--blue));
+}
+.mob-project-info { padding:16px; }
+.mob-project-cat { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:4px; }
+.mob-project-name { font-size:22px; font-weight:700; letter-spacing:-0.02em; margin-bottom:10px; }
+.mob-project-desc { font-size:13.5px; line-height:1.7; color:var(--txt2); margin-bottom:14px; }
+.mob-project-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:20px; }
+.mob-project-tag { font-family:var(--mono); font-size:10px; padding:4px 9px; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:var(--txt3); }
+.mob-project-open {
+  display:block; width:100%; padding:14px; border-radius:14px; text-align:center;
+  font-size:15px; font-weight:700; color:#fff; border:none; cursor:pointer;
+  transition:opacity 0.15s; margin-bottom:8px;
+}
+.mob-project-open:active { opacity:0.8; }
+
+/* Notification center */
+#mob-notif {
+  position:absolute; top:0; left:0; right:0; z-index:200;
+  background:rgba(6,6,15,0.92);
+  backdrop-filter:blur(32px); -webkit-backdrop-filter:blur(32px);
+  padding:48px 16px 20px;
+  transform:translateY(-100%);
+  transition:transform 0.35s cubic-bezier(0.32,0.72,0,1);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+#mob-notif.open { transform:translateY(0); }
+#mob-notif-title { font-size:20px; font-weight:700; margin-bottom:12px; }
+.mob-notif-item {
+  display:flex; align-items:flex-start; gap:12px; padding:12px;
+  background:rgba(255,255,255,0.06); border-radius:14px; margin-bottom:8px;
+}
+.mob-notif-icon { font-size:20px; flex-shrink:0; }
+.mob-notif-text { flex:1; }
+.mob-notif-app { font-family:var(--mono); font-size:10px; color:var(--txt3); margin-bottom:2px; text-transform:uppercase; letter-spacing:0.08em; }
+.mob-notif-msg { font-size:13px; color:var(--txt); line-height:1.4; }
+.mob-notif-time { font-family:var(--mono); font-size:10px; color:var(--txt3); }
+#mob-notif-close { width:100%; padding:10px; background:rgba(255,255,255,0.07); border:none; border-radius:12px; color:var(--txt2); font-size:13px; font-family:var(--font); cursor:pointer; margin-top:8px; }
+
+/* ═══════════════════════════════════════════════════
    WINDOW SNAP INDICATOR
 ═══════════════════════════════════════════════════ */
 #snap-guide {
@@ -1329,6 +1621,73 @@ button { font-family:inherit; cursor:pointer; }
 
 <!-- grain overlay -->
 <div id="grain"></div>
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE PHONE OS
+═══════════════════════════════════════════════ -->
+<div id="mob-os">
+  <div id="mob-wallpaper">
+    <canvas id="mob-bg"></canvas>
+    <div class="mob-aurora mob-a1"></div>
+    <div class="mob-aurora mob-a2"></div>
+  </div>
+
+  <div id="mob-statusbar">
+    <span id="mob-time">21:28</span>
+    <div id="mob-status-icons">
+      <div class="mob-signal">
+        <div class="mob-signal-bar" style="height:4px"></div>
+        <div class="mob-signal-bar" style="height:6px"></div>
+        <div class="mob-signal-bar" style="height:8px"></div>
+        <div class="mob-signal-bar" style="height:11px"></div>
+      </div>
+      <span class="mob-status-wifi">📶</span>
+      <div class="mob-battery-wrap">
+        <div class="mob-battery-icon"><div class="mob-battery-fill" style="width:92%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mob-home">
+    <div id="mob-greeting">Good day 👋</div>
+    <div id="mob-greeting-sub">Jimi's Portfolio OS</div>
+    <div id="mob-search" onclick="openMobSpotlight()">
+      <span id="mob-search-icon">🔍</span>
+      <span id="mob-search-text">Search apps…</span>
+    </div>
+    <div id="mob-app-scroll"></div>
+  </div>
+
+  <div id="mob-dock-area">
+    <div id="mob-dock-pill"></div>
+  </div>
+  <div id="mob-home-bar"><div id="mob-home-pill"></div></div>
+
+  <!-- Full-screen app panel -->
+  <div id="mob-panel">
+    <div id="mob-panel-handle-row"><div id="mob-panel-handle"></div></div>
+    <div id="mob-panel-header">
+      <button id="mob-panel-close" onclick="closeMobPanel()">✕</button>
+      <span id="mob-panel-title"></span>
+    </div>
+    <div id="mob-panel-body"></div>
+  </div>
+
+  <!-- Notification center (pull down) -->
+  <div id="mob-notif">
+    <div id="mob-notif-title">Notifications</div>
+    <div id="mob-notif-items"></div>
+    <button id="mob-notif-close" onclick="closeMobNotif()">Close</button>
+  </div>
+</div>
+
+<!-- desktop widget clock -->
+<div id="desk-widgets">
+  <div class="desk-widget" onclick="openCalendar()" title="Open Calendar">
+    <div id="widget-clock-face">--:--</div>
+    <div id="widget-clock-date">loading…</div>
+  </div>
+</div>
 
 <!-- snap guide -->
 <div id="snap-guide"></div>
@@ -1556,6 +1915,8 @@ const DOCK_DEF = [
   { id:'terminal',   emoji:'⌨',   label:'Terminal',    bg:'linear-gradient(145deg,#020c0c,#006644)', action:() => openTerminalWithHistory() },
   { id:'notes',      emoji:'📝',  label:'Notes',       bg:'linear-gradient(145deg,#1a1000,#7a5000)', action:() => openNotes()               },
   { id:'calculator', emoji:'🔢',  label:'Calculator',  bg:'linear-gradient(145deg,#1a1a1a,#333)',    action:() => openCalculator()          },
+  { id:'sysmon',     emoji:'📊',  label:'Sys Monitor', bg:'linear-gradient(145deg,#001840,#003080)', action:() => openSystemMonitor()       },
+  { id:'calendar',   emoji:'📅',  label:'Calendar',    bg:'linear-gradient(145deg,#2a0000,#880000)', action:() => openCalendar()             },
   { id:'contact',    emoji:'✉',   label:'Contact',     bg:'linear-gradient(145deg,#1a0028,#8800cc)', action:() => openContact()             },
   { sep:true },
   { id:'github',   emoji:'🐙', label:'GitHub',   bg:'rgba(255,255,255,0.06)',
@@ -1593,9 +1954,14 @@ function bootTick() {
   if (bootPct < 100) { setTimeout(bootTick, 90 + Math.random() * 90); return; }
   bootMsg.textContent = 'System ready.';
   setTimeout(() => {
-    bootEl.classList.add('out');
-    deskEl.classList.add('on');
-    setTimeout(() => { bootEl.style.display = 'none'; initDesktop(); }, 700);
+    if (isMobileDevice()) {
+      bootEl.classList.add('out');
+      setTimeout(() => { bootEl.style.display='none'; initMobileOS(); }, 700);
+    } else {
+      bootEl.classList.add('out');
+      deskEl.classList.add('on');
+      setTimeout(() => { bootEl.style.display = 'none'; initDesktop(); }, 700);
+    }
   }, 500);
 }
 setTimeout(bootTick, 300);
@@ -1670,6 +2036,14 @@ function updateClock() {
   const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const dateEl = document.getElementById('mb-date');
   if (dateEl) dateEl.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  // Desktop clock widget
+  const wc = document.getElementById('widget-clock-face');
+  const wd = document.getElementById('widget-clock-date');
+  if (wc) wc.textContent = `${h}:${m}`;
+  if (wd) wd.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  // Mobile clock
+  const mc = document.getElementById('mob-time');
+  if (mc) mc.textContent = `${h}:${m}`;
 }
 setInterval(updateClock, 5000); updateClock();
 
@@ -2252,7 +2626,8 @@ function makeIcon(p) {
       <span>${p.emoji}</span>
     </div>
     <span class="d-icon-name">${p.title}</span>
-    <div class="d-icon-open-dot"></div>`;
+    <div class="d-icon-open-dot"></div>
+    <div class="d-icon-tip">${p.desc.slice(0,80)}${p.desc.length>80?'…':''}</div>`;
   icon.addEventListener('click', () => openProject(p));
   return icon;
 }
@@ -2394,6 +2769,416 @@ function escHtml(s) {
 /* ═══════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   MOBILE PHONE OS
+═══════════════════════════════════════════════════ */
+const MOB_NOTIFS = [
+  { ico:'📡', app:'LEARNSCROLL',  msg:'New AI content available — try "black holes"' },
+  { ico:'🔥', app:'JUST DO IT',   msg:'Check in for today — what\'s your energy level?' },
+  { ico:'🐍', app:'SNAKE',        msg:'Can you beat your high score?' },
+  { ico:'⌨',  app:'JHOS TERMINAL',msg:'Type `help` for hidden commands and Easter eggs' },
+  { ico:'🎨', app:'JHOS',         msg:'Tip: long-press app icons to rearrange them' },
+];
+
+function isMobileDevice() {
+  return window.innerWidth <= 680 || ('ontouchstart' in window && window.innerWidth < 900);
+}
+
+function initMobileOS() {
+  buildMobGrid();
+  buildMobDock();
+  initMobTouch();
+  initMobCanvas();
+  updateMobGreeting();
+  populateMobNotifs();
+  setInterval(updateClock, 5000);
+  updateClock();
+}
+
+function updateMobGreeting() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const el = document.getElementById('mob-greeting');
+  if (el) el.textContent = greet + ' 👋';
+}
+
+function buildMobGrid() {
+  const scroll = document.getElementById('mob-app-scroll');
+  if (!scroll) return;
+
+  const sections = [
+    { label: 'AI APPS',          ids: ['learnscroll','faceoff','jdi'] },
+    { label: 'PRODUCTIVITY',     ids: ['lifemanager','mealplanner','weather','typing','dashboard','pomodoro'] },
+    { label: 'GAMES',            ids: ['tower','crossword','spaceinvaders','snake','g2048','quiz','platformer'] },
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    html += `<div class="mob-app-section-label">${sec.label}</div><div class="mob-app-row">`;
+    sec.ids.forEach(id => {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) return;
+      html += `<div class="mob-app-item" data-pid="${p.id}">
+        <div class="mob-app-icon" style="background:linear-gradient(145deg,${p.bg[0]},${p.bg[1]})">${p.emoji}</div>
+        <span class="mob-app-label">${p.title}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  // System apps row
+  html += `<div class="mob-app-section-label">SYSTEM</div><div class="mob-app-row">`;
+  [
+    { id:'mob-about',  emoji:'👤', label:'About',       bg:'linear-gradient(145deg,#0a2064,#1a6cff)', action:'openMobAbout' },
+    { id:'mob-term',   emoji:'⌨',  label:'Terminal',    bg:'linear-gradient(145deg,#020c0c,#006644)', action:'openMobTermInfo' },
+    { id:'mob-calc',   emoji:'🔢', label:'Calculator',  bg:'linear-gradient(145deg,#1a1a1a,#333)',    action:'openMobCalc' },
+    { id:'mob-sysmon', emoji:'📊', label:'System',      bg:'linear-gradient(145deg,#001840,#003080)', action:'openMobSysInfo' },
+  ].forEach(item => {
+    html += `<div class="mob-app-item" data-sys="${item.action}">
+      <div class="mob-app-icon" style="background:${item.bg}">${item.emoji}</div>
+      <span class="mob-app-label">${item.label}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  scroll.innerHTML = html;
+
+  // Bind clicks
+  scroll.querySelectorAll('.mob-app-item[data-pid]').forEach(el => {
+    el.addEventListener('click', () => {
+      const p = PROJECTS.find(x => x.id === el.dataset.pid);
+      if (p) openMobProject(p);
+    });
+  });
+  scroll.querySelectorAll('.mob-app-item[data-sys]').forEach(el => {
+    el.addEventListener('click', () => {
+      const fn = window[el.dataset.sys];
+      if (fn) fn();
+    });
+  });
+}
+
+function buildMobDock() {
+  const dock = document.getElementById('mob-dock-pill');
+  if (!dock) return;
+  const items = [
+    { emoji:'🗂',  label:'Finder',  bg:'linear-gradient(145deg,#003060,#0055aa)', action:'openMobFinder' },
+    { emoji:'📝',  label:'Notes',   bg:'linear-gradient(145deg,#1a1000,#7a5000)', action:'openMobNoteInfo' },
+    { emoji:'📅',  label:'Calendar',bg:'linear-gradient(145deg,#2a0000,#880000)', action:'openMobCalendarInfo' },
+    { emoji:'✉',   label:'Contact', bg:'linear-gradient(145deg,#1a0028,#8800cc)', action:'openMobContactInfo' },
+  ];
+  dock.innerHTML = items.map(item => `
+    <div class="mob-dock-item" data-sys="${item.action}">
+      <div class="mob-dock-icon" style="background:${item.bg}">${item.emoji}</div>
+    </div>`).join('');
+  dock.querySelectorAll('.mob-dock-item').forEach(el => {
+    el.addEventListener('click', () => { const fn = window[el.dataset.sys]; if (fn) fn(); });
+  });
+}
+
+function openMobProject(p) {
+  const panel = document.getElementById('mob-panel');
+  const title = document.getElementById('mob-panel-title');
+  const body  = document.getElementById('mob-panel-body');
+  if (!panel || !title || !body) return;
+
+  title.textContent = p.title;
+  body.innerHTML = `
+    <div class="mob-project-video" style="--mpv-accent:${p.accent}">
+      <video src="${p.video||''}" autoplay muted loop playsinline style="${!p.video?'display:none':''}"></video>
+      ${!p.video?`<div style="height:140px;display:flex;align-items:center;justify-content:center;font-size:48px">${p.emoji}</div>`:''}
+    </div>
+    <div class="mob-project-info">
+      <div class="mob-project-cat" style="color:${p.accent}">${p.cat}</div>
+      <div class="mob-project-name">${p.title}</div>
+      <div class="mob-project-desc">${p.desc}</div>
+      <div class="mob-project-tags">${p.tags.map(t=>`<span class="mob-project-tag">${t}</span>`).join('')}</div>
+      <a class="mob-project-open" href="${p.href}" ${p.ext?'target=_blank rel=noopener':''} style="background:${p.accent}">
+        Open ${p.title} ${p.ext?'↗':'→'}
+      </a>
+      <button class="mob-project-open" onclick="closeMobPanel()" style="background:rgba(255,255,255,0.1);margin-top:4px">
+        ← Back
+      </button>
+    </div>`;
+
+  const vid = body.querySelector('video');
+  if (vid) vid.play().catch(()=>{});
+
+  requestAnimationFrame(() => panel.classList.add('open'));
+  document.getElementById('mob-home').style.pointerEvents = 'none';
+}
+
+function closeMobPanel() {
+  const panel = document.getElementById('mob-panel');
+  if (!panel) return;
+  panel.classList.remove('open');
+  document.getElementById('mob-home').style.pointerEvents = '';
+  // Pause video
+  const vid = panel.querySelector('video');
+  if (vid) vid.pause();
+}
+
+function openMobAbout() {
+  showMobInfo('👤 About Jimi', `
+    <div style="padding:20px">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0a2064,#7700cc);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 0 40px rgba(100,0,200,0.3)">👨‍💻</div>
+        <div style="font-size:22px;font-weight:700">Jimi Hughes</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--blue);margin-top:4px">CREATOR · AI ENGINEER · DEVELOPER</div>
+        <div style="font-size:12px;color:var(--txt3);margin-top:4px">📍 United Kingdom</div>
+      </div>
+      <p style="font-size:13px;line-height:1.75;color:var(--txt2);margin-bottom:14px">UK-based developer building things I actually want to use. AI, automation, clean interfaces — trading dashboards, content pipelines, browser games.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${['JavaScript','Python','Node.js','React','Groq AI','Power Automate'].map(s=>`<span style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:5px 10px;font-size:12px">${s}</span>`).join('')}
+      </div>
+    </div>`);
+}
+
+function openMobFinder() {
+  showMobInfo('🗂 All Projects', `
+    <div style="padding:12px">
+      ${PROJECTS.map(p=>`
+        <div onclick="openMobProjectById('${p.id}')" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;cursor:pointer;transition:background 0.1s" ontouchstart="this.style.background='rgba(255,255,255,0.07)'" ontouchend="this.style.background=''">
+          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,${p.bg[0]},${p.bg[1]});display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${p.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600">${p.title}</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--txt3)">${p.cat}</div>
+          </div>
+          <span style="color:var(--txt3);font-size:14px">›</span>
+        </div>`).join('')}
+    </div>`);
+}
+
+function openMobProjectById(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (p) { closeMobPanel(); setTimeout(() => openMobProject(p), 100); }
+}
+
+function openMobTermInfo() {
+  showMobInfo('⌨ Terminal — Tip', `<div style="padding:20px">
+    <p style="font-size:13px;line-height:1.75;color:var(--txt2);margin-bottom:12px">The full terminal is available on desktop with 30+ commands.</p>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:16px">On mobile, here are some fun facts:</p>
+    ${FORTUNE_QUOTES.slice(0,3).map(q=>`<div style="background:rgba(255,255,255,0.05);border-left:3px solid var(--blue);border-radius:4px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--txt2);line-height:1.6">${q}</div>`).join('')}
+  </div>`);
+}
+
+function openMobCalc() {
+  showMobInfo('🔢 Calculator', `<div id="mob-calc-inner">
+    <div style="background:#111;padding:16px 20px;text-align:right">
+      <div id="mob-calc-expr" style="font-family:var(--mono);font-size:12px;color:rgba(255,255,255,0.3);min-height:18px"></div>
+      <div id="mob-calc-val" style="font-family:var(--mono);font-size:42px;font-weight:200;color:#fff">0</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222">
+      ${[['C','#333','c'],['±','#333','pm'],['%','#333','pct'],['÷','#ff9f0a','op-/'],
+         ['7','#2c2c2e','7'],['8','#2c2c2e','8'],['9','#2c2c2e','9'],['×','#ff9f0a','op-*'],
+         ['4','#2c2c2e','4'],['5','#2c2c2e','5'],['6','#2c2c2e','6'],['−','#ff9f0a','op--'],
+         ['1','#2c2c2e','1'],['2','#2c2c2e','2'],['3','#2c2c2e','3'],['+','#ff9f0a','op-+'],
+         ['0','#2c2c2e','0',true],['.','#2c2c2e','.'],['=','#ff9f0a','eq']
+        ].map(([l,bg,a,wide])=>`<div data-act="${a}" style="background:${bg};display:flex;align-items:center;justify-content:${wide?'flex-start':'center'};padding:${wide?'0 28px':'0'};font-family:var(--mono);font-size:22px;color:#fff;cursor:pointer;min-height:64px;${wide?'grid-column:span 2':''}" ontouchstart="this.style.filter='brightness(1.5)'" ontouchend="this.style.filter=''">${l}</div>`).join('')}
+    </div>
+  </div>`);
+
+  // Wire calc
+  setTimeout(() => {
+    const panel = document.getElementById('mob-panel');
+    if (!panel) return;
+    let val='0',expr='',op=null,prev=null,fresh=false;
+    const valEl = panel.querySelector('#mob-calc-val'), exprEl = panel.querySelector('#mob-calc-expr');
+    const upd = () => { if(valEl) valEl.textContent=parseFloat(val).toLocaleString(); if(exprEl) exprEl.textContent=expr; };
+    panel.querySelectorAll('[data-act]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a=btn.dataset.act;
+        if(a==='c'){val='0';expr='';op=null;prev=null;fresh=false;}
+        else if(a==='pm'){val=String(-parseFloat(val));}
+        else if(a==='pct'){val=String(parseFloat(val)/100);}
+        else if(a==='eq'){if(op&&prev!==null){const r={'+':'+','-':'-','*':'*','/':'/'}[op];if(r){expr=`${prev} ${op} ${val} =`;val=String(eval(`${parseFloat(prev)}${r}${parseFloat(val)}`));op=null;prev=null;fresh=true;}}}
+        else if(a.startsWith('op-')){prev=val;op=a.slice(3);expr=`${val} ${op}`;fresh=true;}
+        else if(a==='.'){if(!val.includes('.'))val+='.'}
+        else{if(fresh||val==='0'){val=a;fresh=false;}else val+=a;}
+        upd();
+      });
+    });
+  }, 100);
+}
+
+function openMobSysInfo() {
+  showMobInfo('📊 System Info', `<div style="padding:20px">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:48px;margin-bottom:8px">🖥</div>
+      <div style="font-size:18px;font-weight:700">JHOS Mobile 2.0</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--blue)">"Ridiculously Deep"</div>
+    </div>
+    ${[['Kernel','V8 / JavaScriptCore'],['Platform',navigator.platform||'Mobile'],['Projects','16 deployed'],['Resolution',window.innerWidth+'×'+window.innerHeight],['Connection',navigator.onLine?'Online ✓':'Offline ✗'],['Viewport','Mobile UI'],].map(([l,v])=>`
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07)">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.1em">${l}</span>
+        <span style="font-size:13px;font-weight:600">${v}</span>
+      </div>`).join('')}
+  </div>`);
+}
+
+function openMobNoteInfo() {
+  const n = notesData[0];
+  showMobInfo('📝 Notes', `<div style="padding:20px">
+    <p style="font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:14px">Notes saves automatically between visits. You have <strong>${notesData.length} note${notesData.length!==1?'s':''}</strong> stored.</p>
+    ${notesData.slice(0,3).map(note=>`
+      <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;margin-bottom:8px">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px">${escHtml(note.title)||'Untitled'}</div>
+        <div style="font-size:12px;color:var(--txt3);line-height:1.5">${escHtml(note.body.slice(0,80))||'Empty'}${note.body.length>80?'…':''}</div>
+      </div>`).join('')}
+    <p style="font-size:11px;color:var(--txt3);margin-top:10px;font-family:var(--mono)">Full editor available on desktop</p>
+  </div>`);
+}
+
+function openMobCalendarInfo() {
+  const d = new Date();
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const events = Object.entries(FAKE_EVENTS).map(([day,evs])=>({day:parseInt(day),evs}));
+  showMobInfo('📅 Calendar', `<div style="padding:20px">
+    <div style="font-size:22px;font-weight:700;margin-bottom:16px">${months[d.getMonth()]} ${d.getFullYear()}</div>
+    ${events.slice(0,5).map(({day,evs})=>evs.map(e=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;margin-bottom:7px">
+        <div style="width:36px;height:36px;border-radius:8px;background:${e.col}22;border:1px solid ${e.col}44;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:14px;font-weight:700;color:${e.col};flex-shrink:0">${day}</div>
+        <div>
+          <div style="font-size:13px;font-weight:600">${e.title}</div>
+          <div style="font-size:11px;color:var(--txt3);font-family:var(--mono)">${e.time}</div>
+        </div>
+      </div>`).join('')).join('')}
+  </div>`);
+}
+
+function openMobContactInfo() {
+  showMobInfo('✉ Contact Jimi', `<div style="padding:20px">
+    <p style="font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:16px">Open to freelance projects, collabs, and interesting conversations.</p>
+    ${[['✉','Email','jimifh0111@gmail.com','mailto:jimifh0111@gmail.com'],
+       ['🐙','GitHub','github.com/JimiHughes','https://github.com/JimiHughes'],
+       ['🔗','LinkedIn','linkedin.com/in/jimi-hughes…','https://www.linkedin.com/in/jimi-hughes-a0b33737b']
+      ].map(([ico,lbl,val,href])=>`
+      <a href="${href}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;margin-bottom:8px;text-decoration:none;color:inherit">
+        <span style="font-size:20px">${ico}</span>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">${lbl}</div><div style="font-size:11px;color:var(--txt3);font-family:var(--mono)">${val}</div></div>
+        <span style="color:var(--txt3)">→</span>
+      </a>`).join('')}
+  </div>`);
+}
+
+function showMobInfo(title, bodyHtml) {
+  const panel = document.getElementById('mob-panel');
+  const titleEl = document.getElementById('mob-panel-title');
+  const body = document.getElementById('mob-panel-body');
+  if (!panel || !titleEl || !body) return;
+  titleEl.textContent = title;
+  body.innerHTML = bodyHtml;
+  requestAnimationFrame(() => panel.classList.add('open'));
+  document.getElementById('mob-home').style.pointerEvents = 'none';
+}
+
+function openMobSpotlight() {
+  // Show a simple search overlay on mobile
+  const panel = document.getElementById('mob-panel');
+  const titleEl = document.getElementById('mob-panel-title');
+  const body = document.getElementById('mob-panel-body');
+  titleEl.textContent = '🔍 Search';
+  body.innerHTML = `
+    <div style="padding:16px">
+      <input id="mob-sp-input" style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;font-size:16px;color:#fff;outline:none;font-family:var(--font);margin-bottom:12px" placeholder="Search apps…" autocomplete="off">
+      <div id="mob-sp-results"></div>
+    </div>`;
+  requestAnimationFrame(() => panel.classList.add('open'));
+  document.getElementById('mob-home').style.pointerEvents = 'none';
+  setTimeout(() => {
+    const inp = document.getElementById('mob-sp-input');
+    if (inp) {
+      inp.focus();
+      inp.addEventListener('input', () => {
+        const q = inp.value.toLowerCase();
+        const res = document.getElementById('mob-sp-results');
+        const matches = PROJECTS.filter(p => p.title.toLowerCase().includes(q) || p.tags.some(t=>t.toLowerCase().includes(q)));
+        res.innerHTML = matches.slice(0,8).map(p=>`
+          <div onclick="closeMobPanel();setTimeout(()=>openMobProject(PROJECTS.find(x=>x.id==='${p.id}')),150)" style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;background:rgba(255,255,255,0.05);margin-bottom:6px" ontouchstart="this.style.background='rgba(255,255,255,0.1)'" ontouchend="this.style.background='rgba(255,255,255,0.05)'">
+            <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(145deg,${p.bg[0]},${p.bg[1]});display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${p.emoji}</div>
+            <div><div style="font-size:14px;font-weight:600">${p.title}</div><div style="font-size:11px;color:var(--txt3);font-family:var(--mono)">${p.cat}</div></div>
+          </div>`).join('');
+      });
+    }
+  }, 300);
+}
+
+function populateMobNotifs() {
+  const list = document.getElementById('mob-notif-items');
+  if (!list) return;
+  list.innerHTML = MOB_NOTIFS.map(n => `
+    <div class="mob-notif-item">
+      <span class="mob-notif-icon">${n.ico}</span>
+      <div class="mob-notif-text">
+        <div class="mob-notif-app">${n.app}</div>
+        <div class="mob-notif-msg">${n.msg}</div>
+      </div>
+      <span class="mob-notif-time">now</span>
+    </div>`).join('');
+}
+
+function initMobTouch() {
+  // Swipe down from top to open notifications
+  let touchStartY = 0, touchStartX = 0;
+  const os = document.getElementById('mob-os');
+  if (!os) return;
+
+  os.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  os.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dx = Math.abs(e.changedTouches[0].clientX - touchStartX);
+
+    // Swipe down from top edge → notifications
+    if (dy > 60 && dx < 40 && touchStartY < 60 && !document.getElementById('mob-panel').classList.contains('open')) {
+      document.getElementById('mob-notif').classList.add('open');
+    }
+    // Swipe down on open panel → close it
+    if (dy > 80 && dx < 60 && document.getElementById('mob-panel').classList.contains('open')) {
+      closeMobPanel();
+    }
+  }, { passive: true });
+}
+
+function closeMobNotif() {
+  document.getElementById('mob-notif')?.classList.remove('open');
+}
+
+function initMobCanvas() {
+  const cv = document.getElementById('mob-bg');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let W, H, pts;
+
+  function resize() {
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+    pts = Array.from({length:40}, () => ({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.18,
+      r:Math.random()*1.4+0.3, hue:Math.random()>.85?260:210,
+    }));
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function frame() {
+    ctx.clearRect(0,0,W,H);
+    for (const p of pts) {
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${p.hue},80%,70%,0.2)`; ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
 let _ready = false;
 function initDesktop() {
   if (_ready) return; _ready = true;
@@ -2410,6 +3195,8 @@ function initDesktop() {
   scheduleAmbient();
   // Lock screen click handler
   document.getElementById('lock-screen').addEventListener('click', unlockScreen);
+  // Desktop clock widget
+  document.getElementById('desk-widgets').style.display = 'flex';
   // Start welcome tour for first-time visitors
   setTimeout(startTour, 1800);
   if (!isMobile()) setTimeout(openAbout, 950);
@@ -3631,6 +4418,185 @@ function processExtendedCmd(raw, out) {
     return true;
   }
   return false;
+}
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM MONITOR APP
+═══════════════════════════════════════════════════ */
+function openSystemMonitor() {
+  const html = `<div class="smon-wrap" id="smon-wrap">
+    <div>
+      <div class="smon-section-h">CPU Usage</div>
+      <div class="smon-graph-wrap"><canvas class="smon-graph" id="smon-cpu-graph"></canvas></div>
+    </div>
+    <div>
+      <div class="smon-section-h">Memory &amp; Resources</div>
+      ${[['CPU',   '#3b82f6','42%'],['Memory','#a855f7','68%'],['GPU',   '#10b981','18%'],['Network','#f59e0b','31%']].map(([l,c,v])=>`
+        <div class="smon-bar-row">
+          <span class="smon-bar-label">${l}</span>
+          <div class="smon-bar-track"><div class="smon-bar-fill" style="width:${v};background:${c}" data-target="${v}"></div></div>
+          <span class="smon-bar-val">${v}</span>
+        </div>`).join('')}
+    </div>
+    <div>
+      <div class="smon-section-h">Processes (${PROJECTS.length + 6})</div>
+      ${[...PROJECTS.map(p=>({n:p.id,c:(Math.random()*4+0.1).toFixed(1)+'%'})),
+         {n:'jhos-kernel',c:'0.1%'},{n:'particle-engine',c:'1.2%'},{n:'window-manager',c:'0.3%'},
+         {n:'terminal',c:'0.8%'},{n:'spotlight',c:'0.4%'},{n:'ambient-engine',c:'0.2%'}
+        ].map(p=>`
+        <div class="smon-proc-row">
+          <span class="smon-proc-name">${p.n}</span>
+          <span class="smon-proc-cpu">${p.c}</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
+
+  const win = makeWin({ id:'sysmon', title:'System Monitor', w:420, h:520, content:html, emoji:'📊', accent:'#3b82f6' });
+  if (!win) return; SFX.open();
+
+  setTimeout(() => {
+    const canvas = win.querySelector('#smon-cpu-graph');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth * 2;
+    canvas.height = 70 * 2;
+    canvas.style.width = '100%';
+    canvas.style.height = '70px';
+
+    const history = Array.from({length:40}, () => 20 + Math.random()*60);
+    let raf;
+
+    function drawGraph() {
+      if (!openWins['sysmon']) { cancelAnimationFrame(raf); return; }
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Add new point
+      history.push(30 + Math.random()*50 + Math.sin(Date.now()/1000)*15);
+      if (history.length > 40) history.shift();
+
+      // Draw gradient fill
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, 'rgba(59,130,246,0.4)');
+      grad.addColorStop(1, 'rgba(59,130,246,0)');
+
+      const step = W / (history.length - 1);
+      ctx.beginPath();
+      ctx.moveTo(0, H - (history[0]/100)*H);
+      history.forEach((v, i) => {
+        const x = i * step;
+        const y = H - (v/100)*H;
+        if (i === 0) ctx.moveTo(x, y);
+        else {
+          const px = (i-1)*step;
+          const py = H-(history[i-1]/100)*H;
+          ctx.bezierCurveTo(px+step/2, py, x-step/2, y, x, y);
+        }
+      });
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+      ctx.fillStyle = grad; ctx.fill();
+
+      ctx.beginPath();
+      history.forEach((v, i) => {
+        const x = i * step, y = H - (v/100)*H;
+        if (i === 0) ctx.moveTo(x, y);
+        else { const px=(i-1)*step,py=H-(history[i-1]/100)*H; ctx.bezierCurveTo(px+step/2,py,x-step/2,y,x,y); }
+      });
+      ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2; ctx.stroke();
+
+      // Update bar values slightly
+      win.querySelectorAll('.smon-bar-fill').forEach(el => {
+        const t = parseFloat(el.dataset.target) + (Math.random()-0.5)*8;
+        const clamped = Math.max(5, Math.min(95, t));
+        el.style.width = clamped + '%';
+        el.closest('.smon-bar-row').querySelector('.smon-bar-val').textContent = Math.round(clamped) + '%';
+      });
+
+      raf = requestAnimationFrame(() => setTimeout(drawGraph, 800));
+    }
+    drawGraph();
+  }, 100);
+}
+
+/* ═══════════════════════════════════════════════════
+   CALENDAR APP
+═══════════════════════════════════════════════════ */
+const FAKE_EVENTS = {
+  3:  [{ title:'Deployed Learnscroll',    time:'10:00', col:'#3b82f6' }],
+  7:  [{ title:'v2.0 OS Update',         time:'14:30', col:'#a855f7' }],
+  12: [{ title:'New Snake highscore 🐍', time:'22:15', col:'#10b981' }],
+  15: [{ title:'Just Do It launch',       time:'09:00', col:'#ff6b35' }],
+  20: [{ title:'Portfolio redesign',      time:'All day',col:'#1a6cff' }],
+  25: [{ title:'Coding session',          time:'18:00', col:'#f59e0b' }],
+};
+let calViewDate = new Date();
+
+function openCalendar(date) {
+  if (date) calViewDate = new Date(date);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const d = calViewDate;
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const firstDay = new Date(d.getFullYear(), d.getMonth(), 1).getDay();
+  const daysInMonth = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  const today = new Date();
+  const selectedDay = d.getDate();
+
+  let gridHtml = '';
+  for (let i = 0; i < firstDay; i++) {
+    const prevDay = new Date(d.getFullYear(), d.getMonth(), 0).getDate() - firstDay + 1 + i;
+    gridHtml += `<div class="cal-day other-month">${prevDay}</div>`;
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    const isToday = i===today.getDate() && d.getMonth()===today.getMonth() && d.getFullYear()===today.getFullYear();
+    const hasEv = FAKE_EVENTS[i];
+    gridHtml += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" data-day="${i}" onclick="calSelectDay(${i})">${i}</div>`;
+  }
+  const rem = (firstDay + daysInMonth) % 7;
+  if (rem > 0) for (let i=1; i<=7-rem; i++) gridHtml+=`<div class="cal-day other-month">${i}</div>`;
+
+  const eventsForDay = FAKE_EVENTS[selectedDay] || [];
+  const evHtml = eventsForDay.length ? eventsForDay.map(e=>`
+    <div class="cal-event">
+      <div class="cal-event-dot" style="background:${e.col}"></div>
+      <div><div class="cal-event-title">${e.title}</div><div class="cal-event-time">⏰ ${e.time}</div></div>
+    </div>`).join('') : `<div class="cal-event"><div class="cal-event-dot" style="background:var(--txt3)"></div><div><div class="cal-event-title" style="color:var(--txt3)">No events today</div></div></div>`;
+
+  const html = `
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <div class="cal-month-name">${months[d.getMonth()]} ${d.getFullYear()}</div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+          <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+        </div>
+      </div>
+      <div class="cal-weekdays">${days.map(dy=>`<div class="cal-wd">${dy}</div>`).join('')}</div>
+      <div class="cal-grid">${gridHtml}</div>
+      <div class="cal-event-list">
+        <div class="smon-section-h" style="margin-top:12px">${selectedDay} ${months[d.getMonth()]}</div>
+        ${evHtml}
+      </div>
+    </div>`;
+
+  if (openWins['calendar']) {
+    const body = openWins['calendar'].el.querySelector('.win-body');
+    if (body) { body.innerHTML = html; return; }
+  }
+  makeWin({ id:'calendar', title:'Calendar', w:340, h:520, content:html, emoji:'📅', accent:'#ef4444' });
+  SFX.open();
+}
+
+function calNav(dir) {
+  calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth()+dir, 1);
+  renderCalendar();
+}
+function calSelectDay(day) {
+  calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth(), day);
+  renderCalendar();
 }
 
 // Patch processCmd to try extended commands first
