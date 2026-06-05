@@ -608,6 +608,315 @@ button { font-family:inherit; cursor:pointer; }
   #menubar { padding:0 10px; }
   .mb-btn { display:none; }
 }
+
+/* ═══════════════════════════════════════════════════
+   AURORA BACKGROUND BLOBS
+═══════════════════════════════════════════════════ */
+.aurora-blob {
+  position:absolute; border-radius:50%; pointer-events:none; z-index:0;
+  will-change:transform;
+}
+.aurora-1 {
+  width:75vw; height:55vh;
+  background:radial-gradient(ellipse,rgba(26,108,255,0.09) 0%,transparent 68%);
+  filter:blur(90px);
+  top:-20%; left:-15%;
+  animation:aurora-drift-1 20s ease-in-out infinite alternate;
+}
+.aurora-2 {
+  width:65vw; height:60vh;
+  background:radial-gradient(ellipse,rgba(147,51,234,0.07) 0%,transparent 68%);
+  filter:blur(110px);
+  top:15%; right:-20%;
+  animation:aurora-drift-2 25s ease-in-out infinite alternate;
+}
+.aurora-3 {
+  width:55vw; height:45vh;
+  background:radial-gradient(ellipse,rgba(16,185,129,0.05) 0%,transparent 68%);
+  filter:blur(100px);
+  bottom:-10%; left:25%;
+  animation:aurora-drift-3 18s ease-in-out infinite alternate;
+}
+.aurora-4 {
+  width:40vw; height:40vh;
+  background:radial-gradient(ellipse,rgba(255,107,53,0.04) 0%,transparent 70%);
+  filter:blur(80px);
+  top:40%; left:40%;
+  animation:aurora-drift-4 30s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift-1 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(8%,6%) scale(1.1)} }
+@keyframes aurora-drift-2 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-10%,8%) scale(1.12)} }
+@keyframes aurora-drift-3 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(6%,-8%) scale(0.95)} }
+@keyframes aurora-drift-4 { 0%{transform:translate(0,0) scale(1.05)} 100%{transform:translate(-8%,5%) scale(0.92)} }
+
+/* ═══════════════════════════════════════════════════
+   SPOTLIGHT SEARCH
+═══════════════════════════════════════════════════ */
+#spotlight {
+  position:fixed; inset:0; z-index:5000;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  display:flex; align-items:flex-start; justify-content:center;
+  padding-top:14vh;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.2s ease;
+}
+#spotlight.on { opacity:1; pointer-events:all; }
+#spotlight-box {
+  width:600px; max-width:92vw;
+  background:rgba(8,8,22,0.95);
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:18px; overflow:hidden;
+  box-shadow:0 48px 120px rgba(0,0,0,0.85),0 0 0 1px rgba(255,255,255,0.04),0 0 80px rgba(26,108,255,0.08);
+  transform:scale(0.95) translateY(-10px);
+  transition:transform 0.22s var(--ease);
+}
+#spotlight.on #spotlight-box { transform:scale(1) translateY(0); }
+#sp-input-row {
+  display:flex; align-items:center; gap:14px;
+  padding:18px 22px; border-bottom:1px solid rgba(255,255,255,0.07);
+}
+#sp-input-row svg { flex-shrink:0; opacity:0.4; }
+#sp-input {
+  flex:1; background:none; border:none; outline:none;
+  font-family:var(--font); font-size:18px; font-weight:400;
+  color:var(--txt); caret-color:var(--blue);
+}
+#sp-input::placeholder { color:var(--txt3); }
+#sp-input-row .sp-kbd {
+  font-family:var(--mono); font-size:10px; color:var(--txt3);
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+  border-radius:5px; padding:2px 7px; flex-shrink:0;
+}
+#sp-results { max-height:380px; overflow-y:auto; padding:8px; }
+.sp-sec {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--txt3); padding:10px 14px 5px;
+}
+.sp-item {
+  display:flex; align-items:center; gap:13px;
+  padding:10px 14px; border-radius:11px; cursor:pointer;
+  transition:background 0.1s;
+}
+.sp-item:hover,.sp-item.sp-sel { background:rgba(255,255,255,0.07); }
+.sp-item.sp-sel { background:rgba(26,108,255,0.14); }
+.sp-ico {
+  width:38px; height:38px; border-radius:10px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:19px;
+}
+.sp-text { flex:1; min-width:0; }
+.sp-name { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sp-sub  { font-size:11px; color:var(--txt3); margin-top:1px; }
+.sp-enter {
+  font-family:var(--mono); font-size:10px; color:var(--txt3);
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+  border-radius:5px; padding:2px 7px; flex-shrink:0; opacity:0; transition:opacity 0.15s;
+}
+.sp-item.sp-sel .sp-enter { opacity:1; }
+#sp-empty {
+  padding:30px; text-align:center;
+  font-size:13px; color:var(--txt3); font-family:var(--mono);
+}
+
+/* ═══════════════════════════════════════════════════
+   RIGHT-CLICK CONTEXT MENU
+═══════════════════════════════════════════════════ */
+#ctx-menu {
+  position:fixed; z-index:4500;
+  background:rgba(10,10,24,0.96);
+  backdrop-filter:blur(32px); -webkit-backdrop-filter:blur(32px);
+  border:1px solid rgba(255,255,255,0.12); border-radius:13px;
+  padding:6px; min-width:210px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.75),0 0 0 1px rgba(255,255,255,0.04);
+  display:none;
+  animation:ctx-pop 0.13s var(--ease);
+  transform-origin:top left;
+}
+@keyframes ctx-pop { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
+.ctx-item {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 13px; border-radius:8px; cursor:pointer;
+  font-size:13px; font-weight:500; color:var(--txt2);
+  transition:background 0.1s,color 0.1s;
+  user-select:none;
+}
+.ctx-item:hover { background:rgba(255,255,255,0.09); color:var(--txt); }
+.ctx-item.ctx-danger:hover { background:rgba(255,95,87,0.12); color:var(--red); }
+.ctx-item-icon { font-size:14px; flex-shrink:0; width:18px; text-align:center; }
+.ctx-shortcut { font-family:var(--mono); font-size:10px; color:var(--txt3); margin-left:auto; padding-left:16px; }
+.ctx-sep { height:1px; background:rgba(255,255,255,0.07); margin:4px 0; }
+
+/* ═══════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+═══════════════════════════════════════════════════ */
+#toast-stack {
+  position:fixed; bottom:90px; right:18px; z-index:6000;
+  display:flex; flex-direction:column; gap:8px; pointer-events:none;
+  align-items:flex-end;
+}
+.toast {
+  display:flex; align-items:center; gap:10px; padding:11px 16px;
+  background:rgba(10,10,26,0.96);
+  backdrop-filter:blur(32px); -webkit-backdrop-filter:blur(32px);
+  border:1px solid rgba(255,255,255,0.1); border-radius:13px;
+  font-size:13px; font-weight:500; color:var(--txt);
+  box-shadow:0 8px 32px rgba(0,0,0,0.55);
+  animation:toast-in 0.3s var(--ease);
+  pointer-events:all; cursor:default;
+  min-width:180px; max-width:300px;
+  position:relative; overflow:hidden;
+}
+.toast::after {
+  content:''; position:absolute; bottom:0; left:0; height:2px;
+  background:var(--toast-accent,var(--blue));
+  width:100%; transform-origin:left;
+  animation:toast-bar var(--toast-dur,3s) linear forwards;
+}
+@keyframes toast-bar { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+.toast.toast-out { animation:toast-out 0.25s ease forwards; }
+@keyframes toast-in  { from{opacity:0;transform:translateX(18px) scale(0.95)} to{opacity:1;transform:translateX(0) scale(1)} }
+@keyframes toast-out { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(22px)} }
+.toast-ico { font-size:16px; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════════
+   SCREENSAVER
+═══════════════════════════════════════════════════ */
+#screensaver {
+  position:fixed; inset:0; z-index:9000;
+  background:#000; cursor:none;
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+}
+#screensaver.on { display:flex; }
+#ss-canvas { position:absolute; inset:0; }
+#ss-clock {
+  position:relative; z-index:1;
+  font-family:var(--mono); font-size:72px; font-weight:200; letter-spacing:-0.04em;
+  color:rgba(255,255,255,0.82); text-shadow:0 0 80px rgba(26,108,255,0.6);
+  pointer-events:none; user-select:none;
+  animation:ss-float 8s ease-in-out infinite;
+}
+#ss-date {
+  position:relative; z-index:1;
+  font-family:var(--mono); font-size:16px; font-weight:400;
+  color:rgba(255,255,255,0.3); margin-top:10px; letter-spacing:0.1em;
+  pointer-events:none; user-select:none;
+}
+#ss-hint {
+  position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+  font-family:var(--mono); font-size:11px; color:rgba(255,255,255,0.2);
+  letter-spacing:0.08em; pointer-events:none; z-index:1;
+  animation:ss-hint-fade 4s ease-in-out infinite;
+}
+@keyframes ss-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes ss-hint-fade { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
+
+/* ═══════════════════════════════════════════════════
+   MISSION CONTROL (all windows overview)
+═══════════════════════════════════════════════════ */
+#mission-ctrl {
+  position:fixed; inset:0; z-index:3500;
+  background:rgba(0,0,0,0.72);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  display:none; align-items:center; justify-content:center;
+  flex-direction:column; gap:16px;
+  padding:60px 40px 100px;
+}
+#mission-ctrl.on { display:flex; }
+#mc-label {
+  font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--txt3); margin-bottom:8px;
+}
+#mc-grid {
+  display:flex; gap:16px; flex-wrap:wrap; align-items:center; justify-content:center;
+  max-width:1100px;
+}
+.mc-thumb {
+  width:220px; border-radius:12px; overflow:hidden;
+  border:2px solid rgba(255,255,255,0.1);
+  cursor:pointer; transition:transform 0.2s var(--spring), border-color 0.2s;
+  background:var(--surf);
+  animation:mc-in 0.28s var(--ease) both;
+}
+.mc-thumb:hover { transform:scale(1.05); border-color:rgba(255,255,255,0.35); }
+@keyframes mc-in { from{opacity:0;transform:scale(0.85) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.mc-thumb-bar {
+  height:22px; background:rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  display:flex; align-items:center; padding:0 8px; gap:5px;
+}
+.mc-tb-dot { width:8px; height:8px; border-radius:2px; background:rgba(255,255,255,0.12); }
+.mc-thumb-title { font-size:9px; color:var(--txt3); padding:0 8px; font-family:var(--mono); flex:1; text-align:center; }
+.mc-thumb-body {
+  height:130px; overflow:hidden; display:flex; align-items:flex-start; justify-content:center;
+  background:var(--surf2); padding:8px; font-size:10px; color:var(--txt3);
+}
+#mc-hint {
+  font-family:var(--mono); font-size:11px; color:var(--txt3);
+  letter-spacing:0.06em; margin-top:8px;
+}
+
+/* ═══════════════════════════════════════════════════
+   MENUBAR EXTRAS
+═══════════════════════════════════════════════════ */
+.mb-divider { width:1px; height:14px; background:rgba(255,255,255,0.1); margin:0 4px; }
+.mb-status-icon {
+  font-size:11px; color:var(--txt2); cursor:default;
+  font-family:var(--mono); letter-spacing:0.04em;
+  padding:2px 6px; border-radius:4px;
+  transition:background 0.15s, color 0.15s;
+}
+.mb-status-icon:hover { background:rgba(255,255,255,0.07); color:var(--txt); }
+.mb-date { font-family:var(--mono); font-size:11px; color:var(--txt2); margin-right:4px; }
+
+/* ═══════════════════════════════════════════════════
+   KEYBOARD SHORTCUT HINT
+═══════════════════════════════════════════════════ */
+#kb-hint {
+  position:absolute; bottom:80px; right:16px; z-index:50;
+  font-family:var(--mono); font-size:10px; color:rgba(255,255,255,0.2);
+  letter-spacing:0.06em; pointer-events:none; user-select:none;
+  animation:fade-in 1.5s ease 4s both;
+}
+#kb-hint kbd {
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+  border-radius:4px; padding:1px 5px; font-family:var(--mono); font-size:10px;
+}
+
+/* ═══════════════════════════════════════════════════
+   WINDOW ACCENT FOCUS GLOW
+═══════════════════════════════════════════════════ */
+.win[data-accent]:not(.inactive) {
+  box-shadow:var(--win-shadow-focus),0 0 60px var(--win-accent-glow,rgba(26,108,255,0.08));
+}
+
+/* ═══════════════════════════════════════════════════
+   QUICK LAUNCH RIPPLE
+═══════════════════════════════════════════════════ */
+@keyframes icon-launch {
+  0%   { transform:scale(1) translateY(-5px); }
+  30%  { transform:scale(0.88) translateY(2px); }
+  60%  { transform:scale(1.06) translateY(-7px); }
+  80%  { transform:scale(0.97) translateY(-3px); }
+  100% { transform:scale(1.12) translateY(-5px); }
+}
+.d-icon.launching .d-icon-img { animation:icon-launch 0.45s var(--ease); }
+
+/* ═══════════════════════════════════════════════════
+   GRAIN TEXTURE OVERLAY
+═══════════════════════════════════════════════════ */
+#grain {
+  position:fixed; inset:0; z-index:2; pointer-events:none;
+  opacity:0.028;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* ═══════════════════════════════════════════════════
+   WINDOW EMOJI IN TITLEBAR
+═══════════════════════════════════════════════════ */
+.win-tb-emoji { font-size:13px; line-height:1; flex-shrink:0; }
+
   </style>
 </head>
 <body>
@@ -633,6 +942,11 @@ button { font-family:inherit; cursor:pointer; }
      DESKTOP
 ═══════════════════════════════════════════════ -->
 <div id="desktop">
+  <!-- aurora background -->
+  <div class="aurora-blob aurora-1"></div>
+  <div class="aurora-blob aurora-2"></div>
+  <div class="aurora-blob aurora-3"></div>
+  <div class="aurora-blob aurora-4"></div>
   <canvas id="bg-canvas"></canvas>
 
   <div id="menubar">
@@ -648,6 +962,10 @@ button { font-family:inherit; cursor:pointer; }
       <button class="mb-btn" onclick="openContact()">Contact</button>
     </div>
     <div id="mb-right">
+      <span class="mb-status-icon" id="mb-battery" title="Battery">🔋 100%</span>
+      <span class="mb-status-icon" id="mb-wifi" title="Network">📶</span>
+      <span class="mb-divider"></span>
+      <span class="mb-date" id="mb-date"></span>
       <span id="mb-clock"></span>
     </div>
   </div>
@@ -657,6 +975,7 @@ button { font-family:inherit; cursor:pointer; }
 
   <div id="taskbar"></div>
   <div id="dock"><div id="dock-pill"></div></div>
+  <div id="kb-hint"><kbd>⌘K</kbd> spotlight &nbsp;·&nbsp; <kbd>⌘T</kbd> terminal &nbsp;·&nbsp; right-click desktop</div>
 
   <div id="mob-overlay" onclick="closeMobSheet(event)">
     <div id="mob-sheet">
@@ -666,8 +985,82 @@ button { font-family:inherit; cursor:pointer; }
   </div>
 </div>
 
+<!-- grain overlay -->
+<div id="grain"></div>
+
+<!-- spotlight search -->
+<div id="spotlight">
+  <div id="spotlight-box">
+    <div id="sp-input-row">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 13l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="sp-input" type="text" placeholder="Search apps, run commands…" autocomplete="off" spellcheck="false">
+      <span class="sp-kbd">ESC</span>
+    </div>
+    <div id="sp-results"></div>
+  </div>
+</div>
+
+<!-- context menu -->
+<div id="ctx-menu">
+  <div class="ctx-item" onclick="openTerminal();hideCtx()"><span class="ctx-item-icon">⌨</span>Terminal<span class="ctx-shortcut">⌘T</span></div>
+  <div class="ctx-item" onclick="openSpotlight();hideCtx()"><span class="ctx-item-icon">🔍</span>Spotlight<span class="ctx-shortcut">⌘K</span></div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="openAbout();hideCtx()"><span class="ctx-item-icon">👤</span>About Jimi</div>
+  <div class="ctx-item" onclick="openContact();hideCtx()"><span class="ctx-item-icon">✉</span>Contact</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="showMissionCtrl();hideCtx()"><span class="ctx-item-icon">⊞</span>Mission Control<span class="ctx-shortcut">⌘↑</span></div>
+  <div class="ctx-item" onclick="cycleTheme();hideCtx()"><span class="ctx-item-icon">🎨</span>Change Accent</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item ctx-danger" onclick="triggerScreensaver();hideCtx()"><span class="ctx-item-icon">💤</span>Screensaver</div>
+</div>
+
+<!-- toast stack -->
+<div id="toast-stack"></div>
+
+<!-- screensaver -->
+<div id="screensaver">
+  <canvas id="ss-canvas"></canvas>
+  <div id="ss-clock"></div>
+  <div id="ss-date"></div>
+  <div id="ss-hint">Click or press any key to wake</div>
+</div>
+
+<!-- mission control -->
+<div id="mission-ctrl" onclick="hideMissionCtrl(event)">
+  <div id="mc-label">Mission Control — All Windows</div>
+  <div id="mc-grid"></div>
+  <div id="mc-hint">Click a window to focus · Click backdrop to close</div>
+</div>
+
 <script>
 'use strict';
+
+/* ═══════════════════════════════════════════════════
+   SOUND SYSTEM  (Web Audio API — no files needed)
+═══════════════════════════════════════════════════ */
+const SFX = (() => {
+  let ac = null;
+  const get = () => { if (!ac) ac = new (window.AudioContext||window.webkitAudioContext)(); return ac; };
+  function tone(freq, endFreq, type, vol, dur) {
+    try {
+      const ctx = get(); const t = ctx.currentTime;
+      const osc = ctx.createOscillator(); const g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = type||'sine'; osc.frequency.setValueAtTime(freq, t);
+      if (endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, t+dur*0.7);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      osc.start(t); osc.stop(t+dur);
+    } catch(e) {}
+  }
+  return {
+    open:    () => tone(440, 880,  'sine',     0.05, 0.22),
+    close:   () => tone(660, 330,  'sine',     0.04, 0.18),
+    notify:  () => { tone(880,1100,'sine',0.035,0.15); setTimeout(()=>tone(1100,880,'sine',0.025,0.12),100); },
+    error:   () => tone(200, 160,  'square',   0.03, 0.12),
+    launch:  () => tone(330, 660,  'triangle', 0.04, 0.28),
+    spotlight:()=> tone(700, 1000, 'sine',     0.03, 0.15),
+  };
+})();
 
 /* ═══════════════════════════════════════════════════
    DATA
@@ -889,6 +1282,10 @@ function updateClock() {
   const h = String(d.getHours()).padStart(2,'0');
   const m = String(d.getMinutes()).padStart(2,'0');
   document.getElementById('mb-clock').textContent = `${h}:${m}`;
+  const days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dateEl = document.getElementById('mb-date');
+  if (dateEl) dateEl.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
 }
 setInterval(updateClock, 5000); updateClock();
 
@@ -907,7 +1304,7 @@ function bringFront(el) {
   });
 }
 
-function makeWin({ id, title, w=500, h=480, content }) {
+function makeWin({ id, title, w=500, h=480, content, emoji='', accent='', glow='' }) {
   if (openWins[id]) {
     const wn = openWins[id];
     if (wn.minimised) restoreWin(id);
@@ -923,6 +1320,10 @@ function makeWin({ id, title, w=500, h=480, content }) {
   el.style.left = Math.max(20, (lw-w)/2 + offs*28) + 'px';
   el.style.top  = Math.max(10, (lh-h)/2 + (offs%4)*22) + 'px';
 
+  if (accent) {
+    el.dataset.accent = accent;
+    el.style.setProperty('--win-accent-glow', glow || accent+'28');
+  }
   el.innerHTML = `
     <div class="win-tb">
       <div class="win-btns">
@@ -936,6 +1337,7 @@ function makeWin({ id, title, w=500, h=480, content }) {
           <svg viewBox="0 0 7 7"><path d="M1 2.5V1h1.5M5.5 1H7v1.5M1 4.5V6h1.5M5.5 6H7V4.5"/></svg>
         </button>
       </div>
+      ${emoji ? `<span class="win-tb-emoji">${emoji}</span>` : ''}
       <div class="win-title">${title}</div>
       <div class="win-tb-end"></div>
     </div>
@@ -973,6 +1375,7 @@ function makeWin({ id, title, w=500, h=480, content }) {
 
 function closeWin(id) {
   const wn = openWins[id]; if (!wn) return;
+  SFX.close();
   const vid = wn.el.querySelector('video'); if (vid) vid.pause();
   wn.el.classList.add('anim-close');
   removeTaskbarItem(id);
@@ -1072,7 +1475,14 @@ function closeMobSheet(e) {
 ═══════════════════════════════════════════════════ */
 function openProject(p) {
   if (isMobile()) { openMobSheet(projectHTML(p)); return; }
-  makeWin({ id:p.id, title:p.title, w:500, h:p.video?490:300, content:projectHTML(p) });
+  const el = makeWin({ id:p.id, title:p.title, w:500, h:p.video?490:300, content:projectHTML(p), emoji:p.emoji, accent:p.accent, glow:p.glow });
+  if (el) {
+    SFX.launch();
+    showToast(p.emoji + '  ' + p.title, p.accent);
+    // launch bounce on icon
+    const ico = document.querySelector(`.d-icon[data-pid="${p.id}"]`);
+    if (ico) { ico.classList.add('launching'); setTimeout(()=>ico.classList.remove('launching'),500); }
+  }
 }
 
 function projectHTML(p) {
@@ -1607,8 +2017,378 @@ function initDesktop() {
   buildDesktop();
   buildDock();
   staggerIcons();
+  initSpotlight();
+  initContextMenu();
+  initKeyboardShortcuts();
+  initScreensaver();
+  initKonami();
   if (!isMobile()) setTimeout(openAbout, 950);
 }
+
+/* ═══════════════════════════════════════════════════
+   TOAST SYSTEM
+═══════════════════════════════════════════════════ */
+function showToast(msg, accent, dur=3000) {
+  const stack = document.getElementById('toast-stack');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.setProperty('--toast-accent', accent||'var(--blue)');
+  el.style.setProperty('--toast-dur', (dur/1000)+'s');
+  el.innerHTML = `<span class="toast-ico">${msg.split('  ')[0]||'ℹ'}</span><span>${msg.split('  ')[1]||msg}</span>`;
+  stack.appendChild(el);
+  SFX.notify();
+  setTimeout(() => {
+    el.classList.add('toast-out');
+    setTimeout(() => el.remove(), 260);
+  }, dur);
+}
+
+/* ═══════════════════════════════════════════════════
+   SPOTLIGHT SEARCH
+═══════════════════════════════════════════════════ */
+let spSel = -1;
+let spItems = [];
+
+function openSpotlight() {
+  SFX.spotlight();
+  document.getElementById('spotlight').classList.add('on');
+  document.getElementById('sp-input').value = '';
+  document.getElementById('sp-input').focus();
+  renderSpResults('');
+  resetIdleTimer();
+}
+function closeSpotlight() {
+  document.getElementById('spotlight').classList.remove('on');
+  document.getElementById('sp-input').blur();
+}
+function initSpotlight() {
+  const overlay = document.getElementById('spotlight');
+  const input   = document.getElementById('sp-input');
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeSpotlight(); });
+  input.addEventListener('input', () => renderSpResults(input.value));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeSpotlight(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); spSelMove(1); }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); spSelMove(-1); }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const sel = spItems[spSel];
+      if (sel) { sel.action(); closeSpotlight(); }
+      else if (spItems.length) { spItems[0].action(); closeSpotlight(); }
+    }
+  });
+}
+function renderSpResults(q) {
+  const res = document.getElementById('sp-results');
+  q = q.trim().toLowerCase();
+  spItems = [];
+  spSel = -1;
+
+  // Projects
+  const matchedProjects = PROJECTS.filter(p =>
+    !q || p.title.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) ||
+    p.tags.some(t => t.toLowerCase().includes(q)) || p.desc.toLowerCase().includes(q)
+  );
+
+  // Commands
+  const CMDS = [
+    { name:'About Jimi', sub:'Open about window',         icon:'👤',  action: openAbout },
+    { name:'Terminal',   sub:'Open terminal',             icon:'⌨',   action: openTerminal },
+    { name:'Contact',    sub:'Get in touch',              icon:'✉',   action: openContact },
+    { name:'Matrix',     sub:'Hidden command',            icon:'🟢',  action: ()=>{ openTerminal(); setTimeout(()=>{ const inp=document.getElementById('tw-inp'); if(inp){inp.value='matrix'; inp.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true})); }},200); } },
+    { name:'Mission Control',sub:'View all windows',      icon:'⊞',   action: showMissionCtrl },
+    { name:'Screensaver', sub:'Start screensaver',        icon:'💤',  action: triggerScreensaver },
+  ];
+  const matchedCmds = CMDS.filter(c => !q || c.name.toLowerCase().includes(q) || c.sub.toLowerCase().includes(q));
+
+  if (!matchedProjects.length && !matchedCmds.length) {
+    res.innerHTML = `<div id="sp-empty">No results for "<strong>${escHtml(q)}</strong>"</div>`;
+    return;
+  }
+
+  let html = '';
+  if (matchedProjects.length) {
+    html += `<div class="sp-sec">Apps &amp; Games</div>`;
+    matchedProjects.slice(0,8).forEach((p,i) => {
+      const idx = spItems.length;
+      spItems.push({ action: () => openProject(p) });
+      html += `<div class="sp-item" data-spidx="${idx}">
+        <div class="sp-ico" style="background:linear-gradient(135deg,${p.bg[0]},${p.bg[1]})">${p.emoji}</div>
+        <div class="sp-text"><div class="sp-name">${p.title}</div><div class="sp-sub">${p.cat} · ${p.tags.slice(0,2).join(', ')}</div></div>
+        <span class="sp-enter">↵</span>
+      </div>`;
+    });
+  }
+  if (matchedCmds.length) {
+    html += `<div class="sp-sec">Commands</div>`;
+    matchedCmds.slice(0,4).forEach(c => {
+      const idx = spItems.length;
+      spItems.push({ action: c.action });
+      html += `<div class="sp-item" data-spidx="${idx}">
+        <div class="sp-ico" style="background:rgba(255,255,255,0.07)">${c.icon}</div>
+        <div class="sp-text"><div class="sp-name">${c.name}</div><div class="sp-sub">${c.sub}</div></div>
+        <span class="sp-enter">↵</span>
+      </div>`;
+    });
+  }
+  res.innerHTML = html;
+
+  // bind clicks
+  res.querySelectorAll('.sp-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { spSel = +el.dataset.spidx; highlightSp(); });
+    el.addEventListener('click', () => {
+      const item = spItems[+el.dataset.spidx];
+      if (item) { item.action(); closeSpotlight(); }
+    });
+  });
+}
+function spSelMove(dir) {
+  spSel = Math.max(-1, Math.min(spItems.length-1, spSel+dir));
+  highlightSp();
+}
+function highlightSp() {
+  document.querySelectorAll('#sp-results .sp-item').forEach(el => {
+    el.classList.toggle('sp-sel', +el.dataset.spidx === spSel);
+  });
+  const active = document.querySelector('#sp-results .sp-item.sp-sel');
+  if (active) active.scrollIntoView({ block:'nearest' });
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTEXT MENU
+═══════════════════════════════════════════════════ */
+function initContextMenu() {
+  const menu = document.getElementById('ctx-menu');
+  document.getElementById('d-area').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    showCtx(e.clientX, e.clientY);
+  });
+  document.addEventListener('click', e => {
+    if (!menu.contains(e.target)) hideCtx();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hideCtx(); });
+}
+function showCtx(x, y) {
+  const menu = document.getElementById('ctx-menu');
+  menu.style.display = 'block';
+  menu.style.left = Math.min(x, window.innerWidth  - 220) + 'px';
+  menu.style.top  = Math.min(y, window.innerHeight - 260) + 'px';
+  menu.style.animation = 'none'; menu.offsetHeight; menu.style.animation = '';
+}
+function hideCtx() {
+  document.getElementById('ctx-menu').style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════════════════════ */
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', e => {
+    const meta = e.metaKey || e.ctrlKey;
+
+    // ⌘K — spotlight
+    if (meta && e.key === 'k') { e.preventDefault(); openSpotlight(); return; }
+
+    // ⌘T — terminal
+    if (meta && e.key === 't') { e.preventDefault(); openTerminal(); return; }
+
+    // ⌘W — close focused window
+    if (meta && e.key === 'w') {
+      e.preventDefault();
+      const wins = [...document.querySelectorAll('.win')];
+      const top = wins.reduce((a,b) => (+b.style.zIndex||0)>(+a.style.zIndex||0)?b:a, wins[0]||null);
+      if (top) {
+        const id = Object.keys(openWins).find(k => openWins[k].el === top);
+        if (id) closeWin(id);
+      }
+      return;
+    }
+
+    // ⌘M — minimise focused window
+    if (meta && e.key === 'm') {
+      e.preventDefault();
+      const wins = [...document.querySelectorAll('.win')];
+      const top = wins.reduce((a,b) => (+b.style.zIndex||0)>(+a.style.zIndex||0)?b:a, wins[0]||null);
+      if (top) {
+        const id = Object.keys(openWins).find(k => openWins[k].el === top);
+        if (id) minimiseWin(id);
+      }
+      return;
+    }
+
+    // ⌘↑ — mission control
+    if (meta && e.key === 'ArrowUp') { e.preventDefault(); showMissionCtrl(); return; }
+
+    // Escape — close spotlight or mission control
+    if (e.key === 'Escape') {
+      closeSpotlight();
+      hideMissionCtrl();
+      hideCtx();
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   MISSION CONTROL
+═══════════════════════════════════════════════════ */
+function showMissionCtrl() {
+  const wins = Object.entries(openWins).filter(([,wn])=>!wn.minimised);
+  if (!wins.length) { showToast('⊞  No open windows','var(--blue)'); return; }
+  const mc = document.getElementById('mission-ctrl');
+  const grid = document.getElementById('mc-grid');
+  grid.innerHTML = '';
+  wins.forEach(([id, wn], i) => {
+    const title = wn.el.querySelector('.win-title')?.textContent?.trim() || id;
+    const emoji = wn.el.querySelector('.win-tb-emoji')?.textContent || '';
+    const thumb = document.createElement('div');
+    thumb.className = 'mc-thumb';
+    thumb.style.animationDelay = i*0.05+'s';
+    thumb.innerHTML = `
+      <div class="mc-thumb-bar">
+        <div class="mc-tb-dot"></div><div class="mc-tb-dot"></div><div class="mc-tb-dot"></div>
+        <div class="mc-thumb-title">${emoji} ${title}</div>
+      </div>
+      <div class="mc-thumb-body"><span>${emoji}<br><small>${title}</small></span></div>`;
+    thumb.addEventListener('click', e => {
+      e.stopPropagation();
+      hideMissionCtrl();
+      if (wn.minimised) restoreWin(id); else bringFront(wn.el);
+    });
+    grid.appendChild(thumb);
+  });
+  mc.classList.add('on');
+}
+function hideMissionCtrl(e) {
+  if (e && e.target !== document.getElementById('mission-ctrl')) return;
+  document.getElementById('mission-ctrl').classList.remove('on');
+}
+
+/* ═══════════════════════════════════════════════════
+   SCREENSAVER
+═══════════════════════════════════════════════════ */
+let ssTimer = null, ssActive = false;
+
+function initScreensaver() {
+  resetIdleTimer();
+  ['mousemove','mousedown','keydown','touchstart','scroll'].forEach(ev =>
+    document.addEventListener(ev, resetIdleTimer, { passive:true })
+  );
+  const ss = document.getElementById('screensaver');
+  ss.addEventListener('click', wakeFromSS);
+  document.addEventListener('keydown', e => { if (ssActive) { wakeFromSS(); e.preventDefault(); } });
+}
+
+function resetIdleTimer() {
+  if (ssActive) return;
+  clearTimeout(ssTimer);
+  ssTimer = setTimeout(triggerScreensaver, 90000); // 90s idle
+}
+
+function triggerScreensaver() {
+  if (ssActive) return;
+  ssActive = true;
+  const ss = document.getElementById('screensaver');
+  ss.classList.add('on');
+  startSSCanvas();
+  updateSSClock();
+  ssClockTimer = setInterval(updateSSClock, 1000);
+}
+
+let ssClockTimer = null, ssRaf = null;
+
+function updateSSClock() {
+  const d = new Date();
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
+  const s = String(d.getSeconds()).padStart(2,'0');
+  const clockEl = document.getElementById('ss-clock');
+  const dateEl  = document.getElementById('ss-date');
+  if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  if (dateEl) dateEl.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+function wakeFromSS() {
+  if (!ssActive) return;
+  ssActive = false;
+  clearInterval(ssClockTimer);
+  if (ssRaf) { cancelAnimationFrame(ssRaf); ssRaf = null; }
+  document.getElementById('screensaver').classList.remove('on');
+  resetIdleTimer();
+}
+
+function startSSCanvas() {
+  const cv = document.getElementById('ss-canvas');
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  const ctx = cv.getContext('2d');
+  const stars = Array.from({length:200}, () => ({
+    x: Math.random()*cv.width, y: Math.random()*cv.height,
+    vx:(Math.random()-.5)*0.5, vy:-Math.random()*1.2-0.3,
+    r: Math.random()*1.5+0.2, alpha:Math.random()
+  }));
+  function draw() {
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(0,0,cv.width,cv.height);
+    stars.forEach(s => {
+      s.x += s.vx; s.y += s.vy;
+      if (s.y < -2) { s.y = cv.height+2; s.x = Math.random()*cv.width; }
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${120+Math.random()*80},${150+Math.random()*80},255,${0.4+s.alpha*0.4})`;
+      ctx.fill();
+    });
+    ssRaf = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME CYCLER
+═══════════════════════════════════════════════════ */
+const THEMES = ['#1a6cff','#a855f7','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4','#ff6b35'];
+let themeIdx = 0;
+function cycleTheme() {
+  themeIdx = (themeIdx+1) % THEMES.length;
+  const c = THEMES[themeIdx];
+  document.documentElement.style.setProperty('--blue', c);
+  document.documentElement.style.setProperty('--blue-d', c+'28');
+  showToast('🎨  Accent changed', c);
+}
+
+/* ═══════════════════════════════════════════════════
+   KONAMI CODE
+═══════════════════════════════════════════════════ */
+function initKonami() {
+  const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let pos = 0;
+  document.addEventListener('keydown', e => {
+    if (e.key === seq[pos]) { pos++; } else { pos = 0; }
+    if (pos === seq.length) {
+      pos = 0;
+      // Jiggle all icons
+      document.querySelectorAll('.d-icon-img').forEach((ic,i) => {
+        ic.style.animation = 'none'; ic.offsetHeight;
+        ic.style.animation = `konami-jiggle 0.5s ease ${i*30}ms`;
+      });
+      showToast('🕹  +30 lives. You found it!', '#a855f7', 4000);
+      SFX.notify();
+    }
+  });
+}
+
+// Add konami jiggle keyframe dynamically
+(function(){
+  const s = document.createElement('style');
+  s.textContent = `@keyframes konami-jiggle {
+    0%,100%{transform:rotate(0deg)}
+    20%{transform:rotate(-4deg) scale(1.08)}
+    40%{transform:rotate(4deg) scale(1.1)}
+    60%{transform:rotate(-3deg) scale(1.06)}
+    80%{transform:rotate(3deg) scale(1.04)}
+  }`;
+  document.head.appendChild(s);
+})();
+
 </script>
 </body>
 </html>
