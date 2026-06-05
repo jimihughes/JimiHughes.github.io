@@ -526,14 +526,14 @@ button { font-family:inherit; cursor:pointer; }
   flex:1; overflow-y:auto; padding:12px 14px;
   background:#010108; font-family:var(--mono); font-size:12px; line-height:1.78; color:#a0a0c0;
 }
-.tw-out .t-prompt { color:#10b981; }
+.tw-out .t-prompt { color:var(--term-fg,#33ff66); }
 .tw-out .t-cmd    { color:#e8e8f8; }
 .tw-out .t-hi     { color:var(--blue); }
 .tw-out .t-bold   { color:#fff; font-weight:600; }
 .tw-out .t-muted  { color:rgba(160,160,200,0.4); }
 .tw-out .t-err    { color:#ff6b6b; }
 .tw-out .t-dim    { color:rgba(160,160,200,0.35); }
-.tw-out .t-green  { color:#10b981; }
+.tw-out .t-green  { color:var(--term-fg,#33ff66); }
 .tw-out .t-yellow { color:#febc2e; }
 .tw-out .t-purple { color:#a855f7; }
 .tw-out .t-orange { color:#ff6b35; }
@@ -1017,41 +1017,126 @@ button { font-family:inherit; cursor:pointer; }
 /* ═══════════════════════════════════════════════════
    SYSTEM PREFERENCES
 ═══════════════════════════════════════════════════ */
+/* Sidebar layout */
+.prefs-layout { display:flex; height:100%; }
+.prefs-sidebar {
+  width:148px; flex-shrink:0;
+  background:rgba(0,0,0,0.22); border-right:1px solid var(--bd);
+  padding:10px 6px; display:flex; flex-direction:column; gap:2px; overflow-y:auto;
+}
+.prefs-sitem {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 10px; border-radius:8px; cursor:pointer;
+  font-size:12px; color:var(--txt2); transition:background 0.15s, color 0.15s;
+  user-select:none;
+}
+.prefs-sitem:hover { background:rgba(255,255,255,0.06); }
+.prefs-sitem.active { background:rgba(var(--blue-rgb,26,108,255),0.18); color:#fff; }
+.prefs-sitem-icon { font-size:15px; width:20px; text-align:center; }
 .prefs-body { padding:20px; overflow-y:auto; flex:1; }
+.prefs-pane { display:none; }
+.prefs-pane.visible { display:block; }
 .prefs-section { margin-bottom:22px; }
 .prefs-h { font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--txt3); margin-bottom:10px; }
-.prefs-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--bd); }
+.prefs-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--bd); gap:12px; }
+.prefs-row:last-child { border-bottom:none; }
 .prefs-label { font-size:13px; font-weight:500; color:var(--txt2); }
 .prefs-sub { font-size:11px; color:var(--txt3); margin-top:1px; }
-.theme-swatches { display:flex; gap:8px; flex-wrap:wrap; }
+.theme-swatches { display:flex; gap:6px; flex-wrap:wrap; }
 .theme-swatch {
-  width:26px; height:26px; border-radius:8px; cursor:pointer;
+  width:24px; height:24px; border-radius:7px; cursor:pointer;
   border:2px solid transparent; transition:transform 0.15s, border-color 0.15s;
+  position:relative;
 }
 .theme-swatch:hover { transform:scale(1.2); }
-.theme-swatch.active { border-color:rgba(255,255,255,0.6); transform:scale(1.15); }
+.theme-swatch.active { border-color:rgba(255,255,255,0.7); transform:scale(1.15); }
+.theme-swatch.active::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; }
 .prefs-toggle {
-  width:38px; height:21px; border-radius:11px; cursor:pointer;
+  width:40px; height:22px; border-radius:11px; cursor:pointer;
   background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
-  position:relative; transition:background 0.2s;
+  position:relative; transition:background 0.22s;
   flex-shrink:0;
 }
-.prefs-toggle.on { background:var(--blue); }
+.prefs-toggle.on { background:var(--blue); border-color:var(--blue); }
 .prefs-toggle::after {
-  content:''; position:absolute; width:15px; height:15px;
+  content:''; position:absolute; width:16px; height:16px;
   border-radius:50%; background:#fff;
   top:2px; left:2px; transition:left 0.2s;
-  box-shadow:0 1px 4px rgba(0,0,0,0.3);
+  box-shadow:0 1px 4px rgba(0,0,0,0.35);
 }
-.prefs-toggle.on::after { left:19px; }
+.prefs-toggle.on::after { left:20px; }
 .wallpaper-options { display:flex; gap:8px; flex-wrap:wrap; }
 .wp-option {
-  width:70px; height:44px; border-radius:8px; cursor:pointer;
+  width:72px; height:46px; border-radius:9px; cursor:pointer;
   border:2px solid transparent; transition:transform 0.15s, border-color 0.15s;
   position:relative; overflow:hidden;
 }
 .wp-option:hover { transform:scale(1.05); }
 .wp-option.active { border-color:rgba(255,255,255,0.7); }
+.wp-option.active::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:14px; color:rgba(255,255,255,0.9); text-shadow:0 1px 3px rgba(0,0,0,0.5); }
+/* Chip group */
+.prefs-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.prefs-chip {
+  padding:5px 12px; border-radius:20px; font-size:11px; font-family:var(--mono);
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+  color:var(--txt2); cursor:pointer; transition:all 0.15s;
+}
+.prefs-chip:hover { background:rgba(255,255,255,0.12); color:#fff; }
+.prefs-chip.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+/* Slider */
+.prefs-slider {
+  -webkit-appearance:none; width:120px; height:4px; border-radius:2px;
+  background:rgba(255,255,255,0.12); outline:none; cursor:pointer;
+}
+.prefs-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+  background:var(--blue); box-shadow:0 0 8px var(--blue); cursor:pointer;
+}
+/* About panel */
+.about-logo { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.about-logo-icon { width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#0a2a80,var(--blue)); display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 0 24px rgba(26,108,255,0.4); }
+.about-stat { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--bd); font-size:12px; }
+.about-stat:last-child { border:none; }
+.about-stat-k { color:var(--txt3); font-family:var(--mono); }
+.about-stat-v { color:var(--txt2); }
+/* Shortcut table */
+.shortcut-row { display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--bd); }
+.shortcut-row:last-child { border:none; }
+.shortcut-desc { font-size:12px; color:var(--txt2); }
+.shortcut-key { font-family:var(--mono); font-size:10px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:5px; padding:2px 8px; color:var(--txt3); white-space:nowrap; }
+/* Sticky notes */
+.sticky {
+  position:absolute; width:200px; min-height:140px;
+  border-radius:10px; padding:10px 12px;
+  font-family:var(--mono); font-size:12px; line-height:1.55; color:rgba(0,0,0,0.75);
+  box-shadow:0 6px 24px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3);
+  cursor:default; z-index:45; resize:both; overflow:hidden;
+  display:flex; flex-direction:column; min-width:140px;
+}
+.sticky-bar { height:20px; display:flex; align-items:center; justify-content:space-between; cursor:move; margin-bottom:6px; flex-shrink:0; }
+.sticky-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; opacity:0.6; }
+.sticky-close { width:14px; height:14px; border-radius:50%; background:rgba(0,0,0,0.2); border:none; cursor:pointer; font-size:9px; display:flex; align-items:center; justify-content:center; opacity:0.6; }
+.sticky-close:hover { opacity:1; background:rgba(0,0,0,0.35); }
+.sticky-text { flex:1; background:transparent; border:none; outline:none; resize:none; font-family:inherit; font-size:inherit; color:inherit; line-height:inherit; width:100%; }
+/* Dock context menu */
+#dock-ctx {
+  position:fixed; z-index:9000;
+  background:rgba(14,14,28,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.12); border-radius:12px;
+  padding:4px; min-width:160px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.7);
+  transform:scale(0.92) translateY(4px); opacity:0;
+  transition:transform 0.14s var(--spring), opacity 0.14s;
+  pointer-events:none;
+}
+#dock-ctx.show { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+.dctx-item {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 12px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--txt2);
+  transition:background 0.1s;
+}
+.dctx-item:hover { background:rgba(255,255,255,0.08); color:#fff; }
+.dctx-sep { height:1px; background:var(--bd); margin:3px 6px; }
 
 /* ═══════════════════════════════════════════════════
    ICON DEPTH EFFECT (desktop + mobile)
@@ -1750,9 +1835,17 @@ button { font-family:inherit; cursor:pointer; }
   <div class="ctx-item" onclick="showMissionCtrl();hideCtx()"><span class="ctx-item-icon">⊞</span>Mission Control<span class="ctx-shortcut">Alt+M</span></div>
   <div class="ctx-item" onclick="openPreferences();hideCtx()"><span class="ctx-item-icon">⚙</span>Preferences<span class="ctx-shortcut">Alt+P</span></div>
   <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="newStickyNote();hideCtx()"><span class="ctx-item-icon">🗒</span>New Sticky Note</div>
+  <div class="ctx-sep"></div>
   <div class="ctx-item ctx-danger" onclick="lockScreen();hideCtx()"><span class="ctx-item-icon">🔒</span>Lock Screen<span class="ctx-shortcut">Alt+L</span></div>
   <div class="ctx-item ctx-danger" onclick="triggerScreensaver();hideCtx()"><span class="ctx-item-icon">💤</span>Screensaver</div>
 </div>
+
+<!-- sticky notes layer -->
+<div id="stickies-layer"></div>
+
+<!-- dock context menu -->
+<div id="dock-ctx"></div>
 
 <!-- toast stack -->
 <div id="toast-stack"></div>
@@ -2029,9 +2122,14 @@ function initCanvas() {
 ═══════════════════════════════════════════════════ */
 function updateClock() {
   const d = new Date();
-  const h = String(d.getHours()).padStart(2,'0');
+  const raw = d.getHours();
+  const use12 = window._clockFmt === '12h';
+  let hNum = use12 ? (raw % 12 || 12) : raw;
+  const h = String(hNum).padStart(2,'0');
   const m = String(d.getMinutes()).padStart(2,'0');
-  document.getElementById('mb-clock').textContent = `${h}:${m}`;
+  const ampm = use12 ? (raw < 12 ? ' AM' : ' PM') : '';
+  const timeStr = `${h}:${m}${ampm}`;
+  document.getElementById('mb-clock').textContent = timeStr;
   const days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const dateEl = document.getElementById('mb-date');
@@ -2039,11 +2137,11 @@ function updateClock() {
   // Desktop clock widget
   const wc = document.getElementById('widget-clock-face');
   const wd = document.getElementById('widget-clock-date');
-  if (wc) wc.textContent = `${h}:${m}`;
+  if (wc) wc.textContent = timeStr;
   if (wd) wd.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
   // Mobile clock
   const mc = document.getElementById('mob-time');
-  if (mc) mc.textContent = `${h}:${m}`;
+  if (mc) mc.textContent = timeStr;
 }
 setInterval(updateClock, 5000); updateClock();
 
@@ -2690,6 +2788,8 @@ function buildDock() {
       if (wn?.minimised) restoreWin(d.id);
       else d.action();
     });
+    el.dataset.fn = d.id;
+    el.addEventListener('contextmenu', e => showDockCtx(e, el));
     pill.appendChild(el);
   });
 
@@ -3182,6 +3282,7 @@ function initMobCanvas() {
 let _ready = false;
 function initDesktop() {
   if (_ready) return; _ready = true;
+  loadSavedPrefs();
   initCanvas();
   buildDesktop();
   buildDock();
@@ -3193,6 +3294,7 @@ function initDesktop() {
   initKonami();
   initWindowSnap();
   scheduleAmbient();
+  loadStickies();
   // Lock screen click handler
   document.getElementById('lock-screen').addEventListener('click', unlockScreen);
   // Desktop clock widget
@@ -3200,6 +3302,11 @@ function initDesktop() {
   // Start welcome tour for first-time visitors
   setTimeout(startTour, 1800);
   if (!isMobile()) setTimeout(openAbout, 950);
+  // Auto-lock activity reset
+  ['mousemove','keydown','click'].forEach(ev =>
+    document.addEventListener(ev, resetAutoLockTimer, { passive:true })
+  );
+  resetAutoLockTimer();
 }
 
 /* ═══════════════════════════════════════════════════
@@ -3666,86 +3773,493 @@ const ACCENT_THEMES = [
   { name:'Green',   col:'#10b981' }, { name:'Orange', col:'#ff6b35' },
   { name:'Red',     col:'#ef4444' }, { name:'Pink',   col:'#ec4899' },
   { name:'Cyan',    col:'#06b6d4' }, { name:'Gold',   col:'#f59e0b' },
+  { name:'Rose',    col:'#f43f5e' }, { name:'Indigo',  col:'#6366f1' },
+  { name:'Teal',    col:'#14b8a6' }, { name:'Amber',   col:'#d97706' },
 ];
-let prefsSounds = true;
 
-function openPreferences() {
-  const currentAccent = getComputedStyle(document.documentElement).getPropertyValue('--blue').trim();
+const WALLPAPERS = [
+  { label:'Aurora',  bg:'linear-gradient(135deg,#06060f,#0a0a20)', key:'aurora' },
+  { label:'Deep',    bg:'linear-gradient(135deg,#030310,#0d0530)', key:'deep' },
+  { label:'Forest',  bg:'linear-gradient(135deg,#011208,#031a08)', key:'forest' },
+  { label:'Dusk',    bg:'linear-gradient(135deg,#140010,#0a0030)', key:'dusk' },
+  { label:'Ocean',   bg:'linear-gradient(135deg,#001a2e,#003559)', key:'ocean' },
+  { label:'Sunset',  bg:'linear-gradient(135deg,#1a0a00,#3d1a00)', key:'sunset' },
+];
+
+const PREFS_DEFAULTS = {
+  accent:'#1a6cff', wallpaper:'aurora', sounds:true, toasts:true,
+  cursorGlow:true, animSpeed:'normal', clockFmt:'24h',
+  iconSize:'md', termTheme:'green', autoLock:'never',
+};
+let PREFS = { ...PREFS_DEFAULTS };
+
+function loadSavedPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('jhos-prefs') || '{}');
+    PREFS = { ...PREFS_DEFAULTS, ...saved };
+  } catch {}
+  applyPrefs(PREFS, false);
+}
+
+function savePrefs() {
+  localStorage.setItem('jhos-prefs', JSON.stringify(PREFS));
+}
+
+function applyPrefs(p, animate=true) {
+  // Accent
+  document.documentElement.style.setProperty('--blue', p.accent);
+  document.documentElement.style.setProperty('--blue-d', p.accent+'28');
+  // Wallpaper
+  const wp = WALLPAPERS.find(w=>w.key===p.wallpaper) || WALLPAPERS[0];
+  document.getElementById('desktop').style.background = wp.bg;
+  // Cursor glow
+  const glow = document.getElementById('cursor-glow');
+  if (glow) glow.style.display = p.cursorGlow ? '' : 'none';
+  // Animation speed
+  const dur = p.animSpeed==='fast'?'0.1s': p.animSpeed==='slow'?'0.55s':'0.25s';
+  document.documentElement.style.setProperty('--ease-dur', dur);
+  // Icon size
+  const sz = p.iconSize==='sm'?48: p.iconSize==='lg'?72:58;
+  document.querySelectorAll('.d-icon-img').forEach(el => { el.style.width=sz+'px'; el.style.height=sz+'px'; });
+  // Terminal theme
+  const termCols = { green:'#33ff66', amber:'#ffb000', white:'#e4e4f0', blue:'#60a5fa', pink:'#f472b6' };
+  document.documentElement.style.setProperty('--term-fg', termCols[p.termTheme]||termCols.green);
+  // Clock format — widget will pick up automatically on next tick
+  window._clockFmt = p.clockFmt;
+}
+
+// Make prefs-aware sound wrapper
+const origSFX_open = SFX && SFX.open;
+function playSFX(name) { if (PREFS.sounds && SFX && SFX[name]) SFX[name](); }
+
+function openPreferences(startPane='appearance') {
+  const p = PREFS;
+
+  const sidebar = [
+    { key:'appearance', icon:'🎨', label:'Appearance' },
+    { key:'desktop',    icon:'🖥',  label:'Desktop' },
+    { key:'terminal',   icon:'⌨',  label:'Terminal' },
+    { key:'system',     icon:'⚙',  label:'System' },
+    { key:'shortcuts',  icon:'⌨',  label:'Shortcuts' },
+    { key:'about',      icon:'ℹ',  label:'About JHOS' },
+  ].map(s =>
+    `<div class="prefs-sitem${s.key===startPane?' active':''}" data-pane="${s.key}">
+       <span class="prefs-sitem-icon">${s.icon}</span>${s.label}
+     </div>`
+  ).join('');
+
   const swatches = ACCENT_THEMES.map(t =>
-    `<div class="theme-swatch${t.col===currentAccent?' active':''}" style="background:${t.col}" title="${t.name}" data-col="${t.col}"></div>`
+    `<div class="theme-swatch${t.col===p.accent?' active':''}" style="background:${t.col}" title="${t.name}" data-col="${t.col}"></div>`
   ).join('');
-  const wallpapers = [
-    { label:'Dark',   bg:'linear-gradient(135deg,#06060f,#0a0a20)' },
-    { label:'Deep',   bg:'linear-gradient(135deg,#030310,#0d0530)' },
-    { label:'Forest', bg:'linear-gradient(135deg,#011208,#031a08)' },
-    { label:'Dusk',   bg:'linear-gradient(135deg,#140010,#0a0030)' },
+
+  const wpOpts = WALLPAPERS.map(w =>
+    `<div class="wp-option${w.key===p.wallpaper?' active':''}" style="background:${w.bg}" data-wp="${w.key}">
+       <div style="position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;color:rgba(255,255,255,0.5);font-family:monospace">${w.label}</div>
+     </div>`
+  ).join('');
+
+  const animChips = ['fast','normal','slow'].map(s =>
+    `<div class="prefs-chip${p.animSpeed===s?' active':''}" data-anim="${s}">${s.charAt(0).toUpperCase()+s.slice(1)}</div>`
+  ).join('');
+
+  const iconChips = [['sm','Small'],['md','Medium'],['lg','Large']].map(([k,l]) =>
+    `<div class="prefs-chip${p.iconSize===k?' active':''}" data-icon-size="${k}">${l}</div>`
+  ).join('');
+
+  const termChips = [['green','Green'],['amber','Amber'],['white','White'],['blue','Blue'],['pink','Pink']].map(([k,l]) =>
+    `<div class="prefs-chip${p.termTheme===k?' active':''}" data-term="${k}">${l}</div>`
+  ).join('');
+
+  const autoLockOpts = [['never','Never'],['60','1 min'],['300','5 min'],['600','10 min']].map(([v,l]) =>
+    `<option value="${v}"${p.autoLock===v?' selected':''}>${l}</option>`
+  ).join('');
+
+  const shortcuts = [
+    ['/','Open Spotlight'],['`','Open Terminal'],['Alt+L','Lock screen'],
+    ['Alt+M','Mission Control'],['Alt+P','System Preferences'],['Alt+F','Finder'],
+    ['Alt+T','Terminal'],['Alt+N','Notes'],['Esc','Close overlay / cancel'],
+    ['↑↑↓↓←→←→BA','Konami code (try it 😏)'],
   ];
-  const wpOpts = wallpapers.map((w,i) =>
-    `<div class="wp-option${i===0?' active':''}" style="background:${w.bg}" title="${w.label}" data-wp="${w.bg}"><div style="position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;color:rgba(255,255,255,0.4);font-family:monospace">${w.label}</div></div>`
-  ).join('');
 
-  const html = `
+  const uptime = (() => {
+    const s = Math.floor(performance.now()/1000);
+    const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+    return `${h}h ${m}m ${sec}s`;
+  })();
+
+  const html = `<div class="prefs-layout">
+    <div class="prefs-sidebar">${sidebar}</div>
     <div class="prefs-body">
-      <div class="prefs-section">
-        <div class="prefs-h">Appearance</div>
-        <div class="prefs-row">
-          <div><div class="prefs-label">Accent Colour</div><div class="prefs-sub">Applies to windows, buttons, and highlights</div></div>
-          <div class="theme-swatches">${swatches}</div>
-        </div>
-        <div class="prefs-row">
-          <div><div class="prefs-label">Wallpaper</div><div class="prefs-sub">Desktop background style</div></div>
-          <div class="wallpaper-options">${wpOpts}</div>
-        </div>
-      </div>
-      <div class="prefs-section">
-        <div class="prefs-h">System</div>
-        <div class="prefs-row">
-          <div><div class="prefs-label">Sound Effects</div><div class="prefs-sub">UI sounds on interactions</div></div>
-          <div class="prefs-toggle${prefsSounds?' on':''}" id="pref-sound-toggle"></div>
-        </div>
-        <div class="prefs-row">
-          <div><div class="prefs-label">Screensaver</div><div class="prefs-sub">Activates after 90 seconds idle</div></div>
-          <button style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--txt2);cursor:pointer" onclick="triggerScreensaver()">Preview</button>
-        </div>
-        <div class="prefs-row">
-          <div><div class="prefs-label">Lock Screen</div><div class="prefs-sub">⌘L to lock instantly</div></div>
-          <button style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--txt2);cursor:pointer" onclick="lockScreen()">Lock Now</button>
-        </div>
-      </div>
-      <div class="prefs-section">
-        <div class="prefs-h">Keyboard Shortcuts</div>
-        ${[['⌘K','Spotlight search'],['⌘T','Open Terminal'],['⌘W','Close window'],['⌘M','Minimise window'],['⌘↑','Mission Control'],['⌘Tab','App Switcher'],['⌘L','Lock screen'],['⌘?','This preferences'],['Esc','Close overlay']].map(([k,d])=>
-          `<div class="prefs-row"><div class="prefs-label">${d}</div><span style="font-family:var(--mono);font-size:11px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:2px 8px;color:var(--txt3)">${k}</span></div>`
-        ).join('')}
-      </div>
-    </div>`;
-  const win = makeWin({ id:'prefs', title:'System Preferences', w:480, h:580, content:html, emoji:'⚙', accent:'#6b7280' });
-  if (!win) return;
 
-  // Wire up swatches
+      <div class="prefs-pane${startPane==='appearance'?' visible':''}" data-pane="appearance">
+        <div class="prefs-section">
+          <div class="prefs-h">Accent Colour</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Choose colour</div><div class="prefs-sub">Applied to windows, highlights, and buttons</div></div>
+            <div class="theme-swatches">${swatches}</div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Wallpaper</div>
+          <div class="prefs-row" style="flex-wrap:wrap; gap:10px;">
+            <div class="wallpaper-options" style="margin-top:4px">${wpOpts}</div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Animation Speed</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Transition speed</div><div class="prefs-sub">How fast windows and overlays animate</div></div>
+            <div class="prefs-chips">${animChips}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prefs-pane${startPane==='desktop'?' visible':''}" data-pane="desktop">
+        <div class="prefs-section">
+          <div class="prefs-h">Icons</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Icon size</div><div class="prefs-sub">Resize desktop and dock icons</div></div>
+            <div class="prefs-chips">${iconChips}</div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Clock</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Clock format</div><div class="prefs-sub">Widget and menu bar clock</div></div>
+            <div class="prefs-chips">
+              <div class="prefs-chip${p.clockFmt==='12h'?' active':''}" data-clock="12h">12h</div>
+              <div class="prefs-chip${p.clockFmt==='24h'?' active':''}" data-clock="24h">24h</div>
+            </div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Visual Effects</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Cursor glow</div><div class="prefs-sub">Soft light that follows your cursor</div></div>
+            <div class="prefs-toggle${p.cursorGlow?' on':''}" data-toggle="cursorGlow"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prefs-pane${startPane==='terminal'?' visible':''}" data-pane="terminal">
+        <div class="prefs-section">
+          <div class="prefs-h">Terminal Colour</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Text colour</div><div class="prefs-sub">Colour of terminal output text</div></div>
+            <div class="prefs-chips">${termChips}</div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Preview</div>
+          <div style="background:#000;border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--term-fg,#33ff66)">
+            <div><span style="opacity:0.5">jhos@portfolio:~$</span> whoami</div>
+            <div>jimi_hughes</div>
+            <div><span style="opacity:0.5">jhos@portfolio:~$</span> skills</div>
+            <div>→ AI / Web / Apps / Games</div>
+            <div><span style="opacity:0.5">jhos@portfolio:~$</span> _</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prefs-pane${startPane==='system'?' visible':''}" data-pane="system">
+        <div class="prefs-section">
+          <div class="prefs-h">Notifications</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Sound effects</div><div class="prefs-sub">UI sounds when opening and closing windows</div></div>
+            <div class="prefs-toggle${p.sounds?' on':''}" data-toggle="sounds"></div>
+          </div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Toast notifications</div><div class="prefs-sub">Banner that shows in the corner</div></div>
+            <div class="prefs-toggle${p.toasts?' on':''}" data-toggle="toasts"></div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Security</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Auto-lock timer</div><div class="prefs-sub">Lock screen after idle</div></div>
+            <select data-autolock style="font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--txt2);cursor:pointer;outline:none">${autoLockOpts}</select>
+          </div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Lock screen now</div><div class="prefs-sub">Alt+L to lock instantly anytime</div></div>
+            <button style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--txt2);cursor:pointer" onclick="lockScreen()">Lock Now</button>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Screensaver</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Preview screensaver</div><div class="prefs-sub">Activates after 90 seconds idle</div></div>
+            <button style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--txt2);cursor:pointer" onclick="triggerScreensaver()">Preview</button>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">Data</div>
+          <div class="prefs-row">
+            <div><div class="prefs-label">Reset all preferences</div><div class="prefs-sub">Restore defaults and clear saved settings</div></div>
+            <button id="pref-reset-btn" style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:7px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#ef4444;cursor:pointer">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="prefs-pane${startPane==='shortcuts'?' visible':''}" data-pane="shortcuts">
+        <div class="prefs-section">
+          <div class="prefs-h">Keyboard Shortcuts</div>
+          ${shortcuts.map(([k,d]) =>
+            `<div class="shortcut-row"><span class="shortcut-desc">${d}</span><span class="shortcut-key">${k}</span></div>`
+          ).join('')}
+        </div>
+        <div class="prefs-section" style="margin-top:8px">
+          <div class="prefs-h">Tips</div>
+          <div style="font-size:11px;color:var(--txt3);line-height:1.8;font-family:var(--mono)">
+            Right-click the desktop for more options.<br>
+            Right-click a dock icon to pin/remove it.<br>
+            Drag windows to snap them left or right.<br>
+            Type <span style="color:var(--blue)">help</span> in Terminal for all commands.
+          </div>
+        </div>
+      </div>
+
+      <div class="prefs-pane${startPane==='about'?' visible':''}" data-pane="about">
+        <div class="about-logo">
+          <div class="about-logo-icon">🖥</div>
+          <div>
+            <div style="font-size:16px;font-weight:600">JHOS</div>
+            <div style="font-size:11px;color:var(--txt3);font-family:var(--mono)">Portfolio Operating System</div>
+          </div>
+        </div>
+        <div class="prefs-section">
+          <div class="prefs-h">System Info</div>
+          ${[
+            ['Version',     '2.4.0'],
+            ['Build',       'Handcrafted HTML/CSS/JS'],
+            ['Developer',   'Jimi Hughes'],
+            ['Projects',    '16 deployed apps'],
+            ['Terminal',    '30+ commands'],
+            ['Session uptime', uptime],
+            ['Storage',     'localStorage (persistent)'],
+          ].map(([k,v]) => `<div class="about-stat"><span class="about-stat-k">${k}</span><span class="about-stat-v">${v}</span></div>`).join('')}
+        </div>
+        <div style="text-align:center;margin-top:16px">
+          <a href="https://github.com/jimihughes" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--txt3);border:1px solid var(--bd);border-radius:8px;padding:6px 16px;display:inline-block;transition:color 0.15s,border-color 0.15s">github.com/jimihughes ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+
+  const win = makeWin({ id:'prefs', title:'System Preferences', w:600, h:520, content:html, emoji:'⚙', accent:'#6b7280' });
+  if (!win) { focusWin(document.getElementById('win-prefs')); return; }
+
   setTimeout(() => {
+    const body = win.querySelector('.prefs-body');
+    // Sidebar navigation
+    win.querySelectorAll('.prefs-sitem').forEach(si => {
+      si.addEventListener('click', () => {
+        win.querySelectorAll('.prefs-sitem').forEach(x => x.classList.remove('active'));
+        si.classList.add('active');
+        const key = si.dataset.pane;
+        win.querySelectorAll('.prefs-pane').forEach(p => p.classList.toggle('visible', p.dataset.pane===key));
+      });
+    });
+    // Accent swatches
     win.querySelectorAll('.theme-swatch').forEach(el => {
       el.addEventListener('click', () => {
         const c = el.dataset.col;
-        document.documentElement.style.setProperty('--blue', c);
-        document.documentElement.style.setProperty('--blue-d', c+'28');
-        win.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s === el));
-        showToast('🎨  Accent → ' + ACCENT_THEMES.find(t=>t.col===c)?.name, c, 2000);
+        PREFS.accent = c;
+        savePrefs(); applyPrefs(PREFS);
+        win.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s===el));
+        showToast('🎨  Accent → ' + (ACCENT_THEMES.find(t=>t.col===c)?.name||c), c, 2000);
       });
     });
+    // Wallpaper
     win.querySelectorAll('.wp-option').forEach(el => {
       el.addEventListener('click', () => {
-        document.getElementById('desktop').style.background = el.dataset.wp;
+        PREFS.wallpaper = el.dataset.wp;
+        savePrefs(); applyPrefs(PREFS);
         win.querySelectorAll('.wp-option').forEach(w => w.classList.toggle('active', w===el));
       });
     });
-    const toggle = win.querySelector('#pref-sound-toggle');
-    if (toggle) toggle.addEventListener('click', () => {
-      prefsSounds = !prefsSounds;
-      toggle.classList.toggle('on', prefsSounds);
+    // Toggles
+    win.querySelectorAll('.prefs-toggle[data-toggle]').forEach(el => {
+      el.addEventListener('click', () => {
+        const key = el.dataset.toggle;
+        PREFS[key] = !PREFS[key];
+        el.classList.toggle('on', PREFS[key]);
+        savePrefs(); applyPrefs(PREFS);
+      });
+    });
+    // Chip groups
+    win.querySelectorAll('.prefs-chip[data-anim]').forEach(el => {
+      el.addEventListener('click', () => {
+        PREFS.animSpeed = el.dataset.anim;
+        savePrefs(); applyPrefs(PREFS);
+        win.querySelectorAll('.prefs-chip[data-anim]').forEach(c => c.classList.toggle('active', c===el));
+      });
+    });
+    win.querySelectorAll('.prefs-chip[data-icon-size]').forEach(el => {
+      el.addEventListener('click', () => {
+        PREFS.iconSize = el.dataset.iconSize;
+        savePrefs(); applyPrefs(PREFS);
+        win.querySelectorAll('.prefs-chip[data-icon-size]').forEach(c => c.classList.toggle('active', c===el));
+        showToast('🖥  Icon size → ' + el.dataset.iconSize, PREFS.accent, 1800);
+      });
+    });
+    win.querySelectorAll('.prefs-chip[data-term]').forEach(el => {
+      el.addEventListener('click', () => {
+        PREFS.termTheme = el.dataset.term;
+        savePrefs(); applyPrefs(PREFS);
+        win.querySelectorAll('.prefs-chip[data-term]').forEach(c => c.classList.toggle('active', c===el));
+      });
+    });
+    win.querySelectorAll('.prefs-chip[data-clock]').forEach(el => {
+      el.addEventListener('click', () => {
+        PREFS.clockFmt = el.dataset.clock;
+        savePrefs(); applyPrefs(PREFS);
+        win.querySelectorAll('.prefs-chip[data-clock]').forEach(c => c.classList.toggle('active', c===el));
+      });
+    });
+    // Auto-lock
+    const alSel = win.querySelector('[data-autolock]');
+    if (alSel) alSel.addEventListener('change', () => {
+      PREFS.autoLock = alSel.value;
+      savePrefs(); resetAutoLockTimer();
+    });
+    // Reset button
+    const resetBtn = win.querySelector('#pref-reset-btn');
+    if (resetBtn) resetBtn.addEventListener('click', () => {
+      if (!confirm('Reset all preferences to defaults?')) return;
+      PREFS = { ...PREFS_DEFAULTS };
+      savePrefs(); applyPrefs(PREFS);
+      // Close and reopen to refresh
+      win.querySelector('.win-close')?.click();
+      setTimeout(() => openPreferences(), 200);
+      showToast('⚙  Preferences reset to defaults', '#6b7280', 2500);
     });
   }, 80);
 }
+
+/* ═══════════════════════════════════════════════════
+   AUTO-LOCK TIMER
+═══════════════════════════════════════════════════ */
+let _autoLockTimer = null;
+function resetAutoLockTimer() {
+  clearTimeout(_autoLockTimer);
+  const secs = parseInt(PREFS.autoLock);
+  if (!secs || isNaN(secs)) return;
+  _autoLockTimer = setTimeout(() => lockScreen(), secs * 1000);
+}
+
+/* ═══════════════════════════════════════════════════
+   STICKY NOTES
+═══════════════════════════════════════════════════ */
+const STICKY_COLORS = ['#fef08a','#86efac','#93c5fd','#f9a8d4','#fda4af','#c4b5fd'];
+let stickies = [];
+
+function loadStickies() {
+  try { stickies = JSON.parse(localStorage.getItem('jhos-stickies')||'[]'); } catch { stickies = []; }
+  stickies.forEach(s => renderSticky(s));
+}
+
+function saveStickies() {
+  localStorage.setItem('jhos-stickies', JSON.stringify(stickies));
+}
+
+function newStickyNote(x, y) {
+  const col = STICKY_COLORS[Math.floor(Math.random()*STICKY_COLORS.length)];
+  const id = 'sticky-' + Date.now();
+  const note = { id, x: x||180+Math.random()*300, y: y||120+Math.random()*200, color:col, text:'', w:200, h:160 };
+  stickies.push(note);
+  saveStickies();
+  renderSticky(note);
+  setTimeout(() => document.getElementById(id)?.querySelector('.sticky-text')?.focus(), 50);
+  showToast('🗒  New sticky note', col, 1500);
+}
+
+function renderSticky(note) {
+  const el = document.createElement('div');
+  el.className = 'sticky';
+  el.id = note.id;
+  el.style.cssText = `left:${note.x}px;top:${note.y}px;background:${note.color};width:${note.w||200}px;height:${note.h||160}px;`;
+  el.innerHTML = `
+    <div class="sticky-bar" data-drag>
+      <span class="sticky-title">Note</span>
+      <button class="sticky-close" title="Delete">✕</button>
+    </div>
+    <textarea class="sticky-text" placeholder="Type here…" spellcheck="false">${note.text||''}</textarea>`;
+  document.getElementById('stickies-layer').appendChild(el);
+
+  // Drag
+  const bar = el.querySelector('[data-drag]');
+  let ox=0, oy=0, dragging=false;
+  bar.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('sticky-close')) return;
+    dragging=true; ox=e.clientX-note.x; oy=e.clientY-note.y;
+    el.style.zIndex=60;
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    note.x=e.clientX-ox; note.y=e.clientY-oy;
+    el.style.left=note.x+'px'; el.style.top=note.y+'px';
+  });
+  document.addEventListener('mouseup', () => { if(dragging){dragging=false;saveStickies();} });
+
+  // Text save
+  el.querySelector('.sticky-text').addEventListener('input', e => {
+    note.text = e.target.value; saveStickies();
+  });
+
+  // Delete
+  el.querySelector('.sticky-close').addEventListener('click', () => {
+    el.remove();
+    stickies = stickies.filter(s=>s.id!==note.id);
+    saveStickies();
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   DOCK RIGHT-CLICK MENU
+═══════════════════════════════════════════════════ */
+let dockCtxTarget = null;
+const dockCtxEl = document.getElementById('dock-ctx');
+
+function showDockCtx(e, iconEl) {
+  e.preventDefault(); e.stopPropagation();
+  dockCtxTarget = iconEl;
+  const rect = iconEl.getBoundingClientRect();
+  dockCtxEl.innerHTML = `
+    <div class="dctx-item" data-action="open">▶  Open</div>
+    <div class="dctx-sep"></div>
+    <div class="dctx-item" data-action="remove">✕  Remove from Dock</div>
+  `;
+  dockCtxEl.style.left = rect.left + 'px';
+  dockCtxEl.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+  dockCtxEl.style.top = 'auto';
+  dockCtxEl.classList.add('show');
+
+  dockCtxEl.querySelectorAll('.dctx-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.dataset.action === 'open') {
+        const fn = iconEl.dataset.fn;
+        if (fn && window[fn]) window[fn]();
+      } else if (item.dataset.action === 'remove') {
+        iconEl.style.transition = 'transform 0.2s,opacity 0.2s';
+        iconEl.style.transform = 'scale(0)'; iconEl.style.opacity = '0';
+        setTimeout(() => iconEl.remove(), 200);
+        showToast('🗂  Removed from Dock — Finder → Dock to re-add', '#6b7280', 3000);
+      }
+      hideDockCtx();
+    });
+  });
+}
+
+function hideDockCtx() {
+  dockCtxEl.classList.remove('show');
+  dockCtxTarget = null;
+}
+
+document.addEventListener('click', e => {
+  if (!dockCtxEl.contains(e.target)) hideDockCtx();
+});
 
 /* ═══════════════════════════════════════════════════
    WINDOW SNAPPING
