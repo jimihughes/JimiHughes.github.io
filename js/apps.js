@@ -313,8 +313,7 @@ const APPS = {
         </div>`,
         contact: () => `<div class="app-h">// ~/contact</div><div class="files-grid">
           <div class="fitem" onclick="WM.open('contact')"><span class="fitem-icon">📬</span><span class="fitem-name">Contact.exe</span></div>
-          <div class="fitem" onclick="window.open('https://github.com/jimihughes','_blank')"><span class="fitem-icon">🐙</span><span class="fitem-name">GitHub.url</span></div>
-          <div class="fitem" onclick="window.open('https://www.linkedin.com/','_blank')"><span class="fitem-icon">💼</span><span class="fitem-name">LinkedIn.url</span></div>
+          <div class="fitem" onclick="window.open('https://www.linkedin.com/in/jimi-hughes-a0b33737b','_blank')"><span class="fitem-icon">💼</span><span class="fitem-name">LinkedIn.url</span></div>
         </div>`,
       };
       function show(dir) {
@@ -358,7 +357,7 @@ const APPS = {
         if (!name || !msg) { status.textContent = '! error: name and message required'; status.style.color = 'var(--red)'; return; }
         status.style.color = 'var(--green)';
         status.textContent = '✓ opening mail client...';
-        location.href = `mailto:jimi@jimihughes.com?subject=${encodeURIComponent('JimiOS contact from ' + name)}&body=${encodeURIComponent(msg + '\n\n— ' + name + (email ? ' <' + email + '>' : ''))}`;
+        location.href = `mailto:jimifh0111@gmail.com?subject=${encodeURIComponent('JimiOS contact from ' + name)}&body=${encodeURIComponent(msg + '\n\n— ' + name + (email ? ' <' + email + '>' : ''))}`;
       });
       setTimeout(() => winEl.querySelector('#ct-name').focus(), 350);
     },
@@ -392,7 +391,7 @@ const APPS = {
         { label:'🔢 2048', url:'2048/', inline:true },
         { label:'🏃 Pixel Runner', url:'platformer/', inline:true },
         { label:'👾 Space Invaders', url:'space-invaders/', inline:true },
-        { label:'🐙 GitHub', url:'https://github.com/jimihughes', inline:false },
+        { label:'💼 LinkedIn', url:'https://www.linkedin.com/in/jimi-hughes-a0b33737b', inline:false },
         { label:'📡 Learnscroll', url:'https://learn-scroll.onrender.com', inline:false },
       ];
       const frame = winEl.querySelector('#browser-frame');
@@ -454,7 +453,7 @@ const APPS = {
       <h2>## philosophy</h2>
       <p>Done is better than perfect, but <strong>delightful</strong> is better than done. Every project here is live, clickable, and slightly over-engineered on purpose.</p>
       <h2>## contact</h2>
-      <p>Open <code>Contact.exe</code> from the desktop, or find me on <a href="https://github.com/jimihughes" target="_blank" rel="noopener">GitHub</a>.</p>
+      <p>Open <code>Contact.exe</code> from the desktop, or find me on <a href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">LinkedIn</a>.</p>
     </div>`,
   },
 
