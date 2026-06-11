@@ -11,7 +11,7 @@ const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;
 /* ---------- shared project data (reuses repo assets) ---------- */
 const AI_PROJECTS = [
   { name:'ApexBot', cat:'Algorithmic Trading', video:null, img:null, emoji:'📊',
-    desc:'Autonomous trading bot — multi-timeframe signal engine, moving-average confluence, risk-managed execution. Open the ApexBot Terminal app to watch it live.',
+    desc:'Autonomous trading bot — multi-timeframe signal engine, moving-average confluence, risk-managed execution. Open the ApexBot Terminal app for a live simulation of the strategy.',
     tags:['Python','Pandas','Signals','Backtesting'], action:`WM.open('apexbot')`, actionLabel:'Open Terminal' },
   { name:'Learnscroll', cat:'AI Learning Feed', video:'videos/learnscroll.mp4',
     desc:'Pick any topic, get an infinite scroll of AI-generated facts, myths and mind-blows. Learning, disguised as doom-scrolling.',
@@ -22,18 +22,18 @@ const AI_PROJECTS = [
   { name:'Just Do It', cat:'AI Productivity PWA', video:'videos/just-do-it.mp4',
     desc:'Tell it your time and energy — it tells you exactly what to tackle, with AI micro-step breakdowns. Offline-first, installable.',
     tags:['Groq AI','PWA','Offline'], href:'just-do-it/' },
-  { name:'AI Video Pipeline', cat:'Content Automation', img:'images/dashboard.png', emoji:'🎬',
-    desc:'Faceless video factory: AI scripts → synthesized voiceover → auto-generated charts → encoded video. Zero hands after the prompt.',
-    tags:['Groq AI','ElevenLabs','MoviePy','Python'] },
+  { name:'AI Video Pipeline', cat:'Content Automation', emoji:'🎬',
+    desc:'Finance video factory: Groq writes the script, ElevenLabs voices it, Matplotlib renders the charts, MoviePy cuts the final video. One prompt in, finished video out.',
+    tags:['Groq AI','ElevenLabs','Matplotlib','MoviePy'] },
   { name:'Meal Planner', cat:'AI Nutrition', video:'videos/meal-planner.mp4',
     desc:'AI-generated weekly meal plans with macros and shopping lists, tuned to your goals.',
     tags:['AI','Web'], href:'meal-planner/' },
 ];
 
 const GAMES = [
-  { name:'Multiplayer Quiz', cat:'Featured · Realtime Multiplayer', video:'videos/quiz.mp4', featured:true,
-    desc:'Realtime multiplayer quiz platform — lobbies, live scoreboards, streak bonuses. Node, Express, Socket.io and React doing what they do best. This one gets people competitive fast.',
-    tags:['Socket.io','React','Node','Express'], href:'quiz/' },
+  { name:'Quiz Game', cat:'Featured · Trivia', video:'videos/quiz.mp4', featured:true,
+    desc:'Pick a category and race the clock — 10 questions, streak scoring, instant feedback, and a timer that makes you sweat more than it should. Clean, fast, surprisingly competitive.',
+    tags:['JavaScript','Quiz Engine','Web'], href:'quiz/' },
   { name:'Pixel Runner', cat:'Platformer', video:'videos/platformer.mp4', desc:'Run, jump, dodge lava. Hand-rolled physics on canvas.', tags:['Canvas','JS'], href:'platformer/' },
   { name:'Defend the Tower', cat:'Survival Shooter', video:'videos/defend-the-tower.mp4', desc:'Hold the castle against escalating waves. XP, upgrades, chaos.', tags:['GDevelop'], href:'https://gd.games/jimib0bjim/defend-the-tower' },
   { name:'Space Invaders', cat:'Arcade', video:'videos/space-invaders.mp4', desc:'The classic, rebuilt from scratch with juice and particles.', tags:['Canvas','JS'], href:'space-invaders/' },
@@ -43,9 +43,13 @@ const GAMES = [
   { name:'Speed Typing', cat:'Skill Test', video:'videos/typing-test.mp4', desc:'60-second WPM test with character-level accuracy feedback.', tags:['JS'], href:'typing-test/' },
 ];
 
+function posterFor(video) {
+  return 'images/posters/' + video.split('/').pop().replace('.mp4', '.jpg');
+}
+
 function projectCard(p) {
   const media = p.video
-    ? `<video class="card-media" src="${p.video}" muted loop playsinline preload="metadata"></video>`
+    ? `<video class="card-media" src="${p.video}" poster="${posterFor(p.video)}" muted loop playsinline preload="none"></video>`
     : p.img
       ? `<img class="card-media" src="${p.img}" alt="${esc(p.name)}" loading="lazy">`
       : `<div class="card-media" style="display:flex;align-items:center;justify-content:center;font-size:44px">${p.emoji||'📦'}</div>`;
@@ -92,7 +96,7 @@ const APPS = {
   /* ──────────────── GAME CENTRE ──────────────── */
   'games': {
     id:'games', name:'Game Centre', icon:'🎮', accent:'#b044ff', w:860, h:620,
-    desc:'Playable games — multiplayer quiz, arcade rebuilds, puzzles.',
+    desc:'Playable games — trivia, arcade rebuilds, puzzles.',
     preview:'videos/platformer.mp4',
     render: () => `<div class="app-pad">
       <div class="app-h">// game library — all playable in browser</div>
@@ -104,7 +108,7 @@ const APPS = {
   /* ──────────────── APEXBOT TERMINAL ──────────────── */
   'apexbot': {
     id:'apexbot', name:'ApexBot Terminal', icon:'📊', accent:'#2bd97c', w:900, h:580,
-    desc:'Live trading terminal — candles, moving averages, signal feed.',
+    desc:'Trading terminal simulation — live candles, moving averages, signal feed.',
     preview:null, previewEmoji:'📊',
     render: () => `<div class="apex">
       <div class="apex-top" id="apex-ticks"></div>
@@ -296,7 +300,7 @@ const APPS = {
         </div>
         <p style="font-size:12.5px;color:var(--txt-2);line-height:1.7;margin-top:16px;max-width:420px">
           Jimi Hughes — creator &amp; AI engineer. I build things that ship: trading bots,
-          multiplayer games, AI pipelines, and the operating system you're standing in.
+          games, AI pipelines, and the operating system you're standing in.
         </p>`,
         skills: () => `<div class="app-h">// system resources — skill utilisation</div>
         <div class="skillbars">
@@ -441,7 +445,7 @@ const APPS = {
       <p style="color:var(--accent);font-family:var(--mono);font-size:12px">creator · AI engineer · builder of slightly-too-ambitious side projects</p>
       <hr>
       <h2>## whoami</h2>
-      <p>I build things that ship. Trading bots that watch markets while I sleep, multiplayer games that make friends shout at each other, AI pipelines that turn a single prompt into finished video — and this operating system, which started as "I'll just put my projects on a page."</p>
+      <p>I build things that ship. Trading bots that watch markets while I sleep, games that eat entire afternoons, AI pipelines that turn a single prompt into finished video — and this operating system, which started as "I'll just put my projects on a page."</p>
       <h2>## currently</h2>
       <ul>
         <li>Running <strong>ApexBot</strong> — an algorithmic trading system (open the terminal app, it's live)</li>
@@ -520,7 +524,7 @@ const APPS = {
             </div>
           </div>
           <div class="set-row">
-            <div><div class="set-label">Keyboard</div><div class="set-sub">Alt+Tab cycles windows · Esc closes menus · Enter opens selected icon</div></div>
+            <div><div class="set-label">Keyboard</div><div class="set-sub">\` cycles windows · / opens launcher · ? shows all shortcuts · Esc closes menus</div></div>
           </div>
         </div>
         <div class="set-pane" data-pane="about">

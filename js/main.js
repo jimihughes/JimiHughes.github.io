@@ -308,7 +308,7 @@ function buildDesktopIcons() {
         if (WM.wins.has(d.app)) return;
         const r = el.getBoundingClientRect();
         const media = app.preview
-          ? `<video class="holo-media" src="${app.preview}" muted loop autoplay playsinline></video>`
+          ? `<video class="holo-media" src="${app.preview}" poster="${'images/posters/' + app.preview.split('/').pop().replace('.mp4','.jpg')}" muted loop autoplay playsinline></video>`
           : `<div class="holo-media" style="display:flex;align-items:center;justify-content:center;font-size:48px">${app.previewEmoji || app.icon}</div>`;
         holo.innerHTML = media + `<div class="holo-name">${app.name}</div><div class="holo-desc">${app.desc || ''}</div>`;
         let hx = r.left + r.width/2 - 120;
@@ -435,7 +435,7 @@ function initStartMenu() {
 const FAKE_NOTIFS = [
   { icon:'🚀', title:'Deploy complete', body:'jimihughes.com → GitHub Pages build passed.', t:'2m ago' },
   { icon:'📊', title:'ApexBot', body:'BUY signal fired on BTC/USD — SMA confluence detected.', t:'7m ago' },
-  { icon:'🧠', title:'Quiz Server', body:'3 players waiting in lobby #42. It\'s getting heated.', t:'18m ago' },
+  { icon:'🧠', title:'Quiz Game', body:'New high score on Science — 9/10 with a 6-streak.', t:'18m ago' },
   { icon:'📡', title:'Learnscroll', body:'Someone just scrolled 200 facts about octopuses.', t:'1h ago' },
   { icon:'🔮', title:'System', body:'Konami code remains undiscovered by this visitor.', t:'now' },
 ];
@@ -486,20 +486,53 @@ function initCtxMenu() {
   document.addEventListener('click', () => menu.classList.remove('open'));
 }
 
-/* ════════════════ KEYBOARD ════════════════ */
+/* ════════════════ KEYBOARD ════════════════
+   No modifier combos — macOS/Windows own those. Single keys only,
+   ignored while the user is typing in a field. */
+function isTyping() {
+  const el = document.activeElement;
+  return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+}
+
 function initKeys() {
   document.addEventListener('keydown', e => {
-    if (e.altKey && e.key === 'Tab') { e.preventDefault(); WM.cycle(); }
     if (e.key === 'Escape') {
       document.getElementById('start-menu').classList.remove('open');
       document.getElementById('notif-panel').classList.remove('open');
       document.getElementById('ctx-menu').classList.remove('open');
+      document.getElementById('kbd-help')?.classList.remove('open');
+      if (isTyping()) document.activeElement.blur();
+      return;
     }
-    if (e.key === 'Meta' || (e.altKey && e.code === 'Space')) {
-      // Alt+Space opens launcher
-      if (e.altKey) { e.preventDefault(); JOS.toggleStartMenu(); }
-    }
+    if (isTyping() || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '`') { e.preventDefault(); WM.cycle(); }
+    else if (e.key === '/') { e.preventDefault(); JOS.toggleStartMenu(true); }
+    else if (e.key === '?') { e.preventDefault(); toggleKbdHelp(); }
+    else if (e.key === 'w' && WM.topId()) { /* reserved: no close on w — too easy to hit */ }
   });
+}
+
+/* ──────── shortcuts help overlay (?) ──────── */
+function toggleKbdHelp(force) {
+  let el = document.getElementById('kbd-help');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'kbd-help';
+    el.innerHTML = `
+      <div id="kbd-help-box">
+        <div class="kbd-help-title">⌨ Keyboard Shortcuts</div>
+        ${[['`','Cycle through open windows'],['/','Open app launcher + search'],['?','This help'],
+           ['Esc','Close menus / overlays'],['double-click','Open a desktop icon'],
+           ['drag to edge','Snap window left / right / maximize'],
+           ['↑↑↓↓←→←→ B A','Something secret'],['sudo hire jimi','Type it during boot 😏']]
+          .map(([k,d]) => `<div class="kbd-row"><span class="kbd-key">${k}</span><span>${d}</span></div>`).join('')}
+        <div class="kbd-help-hint">Esc or click anywhere to close</div>
+      </div>`;
+    document.body.appendChild(el);
+    el.addEventListener('click', () => el.classList.remove('open'));
+  }
+  const open = force !== undefined ? force : !el.classList.contains('open');
+  el.classList.toggle('open', open);
 }
 
 /* ════════════════ KONAMI ════════════════ */
@@ -570,7 +603,9 @@ function isMobile() {
   return innerWidth <= 768 || (matchMedia('(pointer:coarse)').matches && innerWidth <= 1024);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+let _booted = false;
+function initJimiOS() {
+  if (_booted) return; _booted = true;
   if (isMobile()) return;       // CSS shows #mobile-gate
   JOS.applyPrefs();
   JOS.startWallpaper(JOS.prefs.wallpaper);
@@ -589,4 +624,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScreensaver();
   renderTaskbar();
   runBoot();
-});
+}
+// robust to any load timing (incl. bfcache restores that skip DOMContentLoaded)
+if (document.readyState !== 'loading') initJimiOS();
+else document.addEventListener('DOMContentLoaded', initJimiOS);
+window.addEventListener('pageshow', () => initJimiOS());

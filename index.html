@@ -45,6 +45,7 @@
   <button id="tb-start"><span class="logo">J</span><span>JimiOS</span></button>
   <div id="tb-apps"></div>
   <div id="tb-tray">
+    <button class="tray-btn" id="tray-help" title="Keyboard shortcuts (?)">⌨</button>
     <button class="tray-btn" id="tray-sound" title="Toggle UI sounds">🔊</button>
     <button class="tray-btn" id="tray-theme" title="Toggle theme">◐</button>
     <button class="tray-btn" id="tray-notif" title="Notifications">🔔<span class="dot"></span></button>
@@ -54,7 +55,7 @@
 
 <!-- start menu -->
 <div id="start-menu">
-  <input id="sm-search" placeholder="Search apps… (Alt+Space)" spellcheck="false" autocomplete="off">
+  <input id="sm-search" placeholder="Search apps… (press /)" spellcheck="false" autocomplete="off">
   <div class="sm-h">Applications</div>
   <div id="sm-apps"></div>
   <div id="sm-quick">
@@ -86,7 +87,7 @@
   <div id="mg-sub">Mobile device detected.<br>JimiOS is a full desktop operating system — it runs best on a bigger screen. Meanwhile:</div>
   <div class="mg-links">
     <a class="mg-link" href="https://www.linkedin.com/in/jimi-hughes-a0b33737b" target="_blank" rel="noopener">💼 LinkedIn</a>
-    <a class="mg-link" href="quiz/">🧠 Play the Multiplayer Quiz</a>
+    <a class="mg-link" href="quiz/">🧠 Play the Quiz</a>
     <a class="mg-link" href="mailto:jimifh0111@gmail.com">📬 Email me</a>
   </div>
 </div>
@@ -99,6 +100,7 @@
 document.getElementById('tray-theme').addEventListener('click', () => {
   JOS.setTheme(JOS.prefs.theme === 'dark' ? 'light' : 'dark');
 });
+document.getElementById('tray-help').addEventListener('click', () => toggleKbdHelp());
 document.getElementById('tray-sound').addEventListener('click', function() {
   const on = JOS.togglePref('sounds');
   this.textContent = on ? '🔊' : '🔇';
